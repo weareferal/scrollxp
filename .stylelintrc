@@ -1,0 +1,12 @@
+{
+  "extends": "stylelint-config-twbs-bootstrap/scss",
+  "rules": {
+    "selector-class-pattern": "^(?:(?:o|c|u|t|s|is|has|_|js|qa)-)?[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*(?:__[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*)?(?:--[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*)?(?:\\[.+\\])?$",
+    "declaration-no-important": null,
+    "scss/dollar-variable-default": null,
+    "color-hex-length": "long",
+    "block-no-empty": null,
+    "value-list-comma-newline-after": "always-multi-line",
+    "value-list-comma-space-after": "always-single-line"
+  }
+}

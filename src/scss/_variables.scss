@@ -1,0 +1,25 @@
+/* Default */
+
+$default-font-size: 16px;
+
+/* Colors */
+
+$color-white:      #ffffff;
+$color-black:      #010101;
+
+/* Font Weights */
+
+$weight-normal:      400;
+$weight-medium:      500;
+$weight-semi-bold:   600;
+$weight-bold:        700;
+
+/* Breakpoints */
+
+$breakpoints: (
+  sm: em($sm * 1px, $default-font-size),
+  md: em($md * 1px, $default-font-size),
+  lg: em($lg * 1px, $default-font-size),
+  xl: em($xl * 1px, $default-font-size),
+  xxl: em($xxl * 1px, $default-font-size)
+);

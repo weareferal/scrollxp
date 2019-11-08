@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "/Users/thiago/Projects/divide"
+		}
+	],
+	"settings": {
+		"path-autocomplete.pathMappings": {
+			"$root": "${folder}/"
+		},
+		"javascript.implicitProjectConfig.experimentalDecorators": true
+	}
+}
