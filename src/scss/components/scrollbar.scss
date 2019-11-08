@@ -1,0 +1,26 @@
+// Customize the smooth-scrollbar elements
+// https://idiotwu.github.io/smooth-scrollbar/
+
+.scrollbar-track {
+  display: none !important;
+
+  @include media(">=md") {
+    display: block !important;
+    background-color: transparent !important;
+  }
+}
+
+.scrollbar-thumb {
+  display: none !important;
+
+  @include media(">=md") {
+    display: block !important;
+    background-color: $color-black !important;
+    border-radius: 0 !important;
+  }
+}
+
+.scrollbar-track-x,
+.scrollbar-thumb-x {
+  display: none !important;
+}
