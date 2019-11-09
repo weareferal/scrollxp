@@ -6,18 +6,34 @@ import ScrollController from './scroll-controller';
 @component('toggleButton')
 class ToggleButton {
   constructor(element) {
-    element.addEventListener('click', () => {
-      const hasSmoothScrolling = findComponent(ScrollController).toggleSmoothScrolling();
+    this.element = element;
+
+    this.element.addEventListener('click', this.toggle.bind(this));
+    this.updateState();
+  }
+
+  toggle() {
+    const scrollController = findComponent(ScrollController);
+    if (scrollController) {
+      scrollController.toggleSmoothScrolling();
+      this.updateState();
+    }
+  }
+
+  updateState() {
+    const scrollController = findComponent(ScrollController);
+    if (scrollController) {
+      const hasSmoothScrolling = scrollController.hasSmoothScrolling();
       if (hasSmoothScrolling) {
-        element.querySelector('span').innerText = 'On';
-        element.querySelector('span').classList.remove('off');
-        element.querySelector('span').classList.add('on');
+        this.element.querySelector('span').innerText = 'On';
+        this.element.querySelector('span').classList.remove('off');
+        this.element.querySelector('span').classList.add('on');
       } else {
-        element.querySelector('span').innerText = 'Off';
-        element.querySelector('span').classList.remove('on');
-        element.querySelector('span').classList.add('off');
+        this.element.querySelector('span').innerText = 'Off';
+        this.element.querySelector('span').classList.remove('on');
+        this.element.querySelector('span').classList.add('off');
       }
-    });
+    }
   }
 };
 

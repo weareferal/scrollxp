@@ -14,6 +14,7 @@ class ScrollController {
   constructor(element) {
     this.controller = new Controller({
       container: element,
+      smoothScrolling: false,
       addIndicators: true
     });
 
@@ -28,14 +29,20 @@ class ScrollController {
     );
   }
 
+  bindAnchors(anchors) {
+    this.controller.bindAnchors(anchors);
+  }
+
   toggleSmoothScrolling() {
     if (this.controller.hasSmoothScrolling()) {
-      this.controller.removeSmoothScrolling();
-      return false;
+      this.controller.initCommonScrolling();
     } else {
-      this.controller.addSmoothScrolling();
-      return true;
+      this.controller.initSmoothScrolling();
     }
+  }
+
+  hasSmoothScrolling() {
+    return this.controller.hasSmoothScrolling();
   }
 };
 

@@ -31,7 +31,12 @@ export function getComponent(domElement) {
 };
 
 export function findComponent(componentClass) {
-  return getData(document.querySelector(`[data-component="${componentClass.componentName}"]`)).component;
+  const obj = getData(document.querySelector(`[data-component="${componentClass.componentName}"]`));
+  if (!obj) {
+    console.error(`[App] Couldn\'t find instance of ${componentClass.componentName} component. Check declaration order.`);
+    return;
+  }
+  return obj.component;
 };
 
 // https://davidwalsh.name/css-animation-callback

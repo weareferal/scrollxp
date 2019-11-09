@@ -9,17 +9,29 @@
 </head>
 <body>
   <main class="page" data-component="scrollController">
-    <section class="section">
-      <h1 id="section1">Section 1</h1>
+    <section class="section" id="section1">
+      <h1>Section 1</h1>
       <div class="square"></div>
     </section>
-    <section class="section">
-      <h1 id="section2">Section 2</h1>
+    <section class="section" id="section2">
+      <h1>Section 2</h1>
     </section>
-    <section class="section">
-      <h1 id="section3">Section 3</h1>
+    <section class="section" id="section3">
+      <h1>Section 3</h1>
     </section>
   </main>
+
+  <ul class="menu" data-component="menu">
+    <li class="menu__item">
+      <a class="menu__link" href="#section1">Section 1</a>
+    </li>
+    <li class="menu__item">
+      <a class="menu__link" href="#section2">Section 2</a>
+    </li>
+    <li class="menu__item">
+      <a class="menu__link" href="#section3">Section 3</a>
+    </li>
+  </ul>
 
   <button class="toggle-button" data-component="toggleButton">
     Smooth Scrolling <span class="off">Off</span>
