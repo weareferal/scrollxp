@@ -1,15 +1,20 @@
 .toggle-button {
-  position: fixed;
-  bottom: rem(10px);
-  left: rem(10px);
-  z-index: 2;
-  padding: rem(10px);
-  font-weight: $weight-bold;
-  color: $color-white;
-  cursor: pointer;
-  background-color: $color-black;
-  border: 0;
-  outline: 0;
+  display: none;
+
+  @include media(">=sm") {
+    position: fixed;
+    bottom: rem(10px);
+    left: rem(10px);
+    z-index: 2;
+    display: block;
+    padding: rem(10px);
+    font-weight: $weight-bold;
+    color: $color-white;
+    cursor: pointer;
+    background-color: $color-black;
+    border: 0;
+    outline: 0;
+  }
 }
 
 .toggle-button > span {

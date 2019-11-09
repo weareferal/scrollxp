@@ -12,7 +12,7 @@ class Controller {
     this.element = options.container || window;
     this.options = options;
 
-    this.scenes = [];
+    this._scenes = [];
 
     if (this.options.smoothScrolling) {
       this.initSmoothScrolling();
@@ -22,12 +22,10 @@ class Controller {
   }
 
   initCommonScrolling() {
-    console.log('[Controller] Removed smooth scrolling');
-
-    this.smoothScrolling = false;
-
     this._removeAllScenes();
     this._destroyController();
+
+    this._smoothScrolling = false;
 
     delete this.options.smoothScrolling;
 
@@ -44,15 +42,15 @@ class Controller {
 
     this._removeScrollbars();
     this._addAllScenes();
+
+    console.debug('[Controller] Created common scrolling');
   }
 
   initSmoothScrolling() {
-    console.log('[Controller] Added smooth scrolling');
-
-    this.smoothScrolling = true;
-
     this._removeAllScenes();
     this._destroyController();
+
+    this._smoothScrolling = true;
 
     delete this.options.smoothScrolling;
 
@@ -60,6 +58,8 @@ class Controller {
   
     this._createScrollbars();
     this._addAllScenes();
+
+    console.debug('[Controller] Created smooth scrolling');
   }
 
   bindAnchors(anchors) {
@@ -73,7 +73,7 @@ class Controller {
           if (this.hasSmoothScrolling()) {
             const element = this.element.querySelector(id);
             if (element) {
-              this.scrollbar.scrollIntoView(element);
+              this._scrollbar.scrollIntoView(element);
             }
           } else {
             this.controller.scrollTo(id);
@@ -98,50 +98,55 @@ class Controller {
   addScene(scene) {
     scene.addTo(this);
 
-    this.scenes.push(scene);
+    this._scenes.push(scene);
   }
 
   removeScene(scene) {
     scene.remove();
 
-    this.scenes = this.scenes.filter(function (current) {
+    this._scenes = this._scenes.filter(function (current) {
       return current !== scene;
     });
   }
 
   hasSmoothScrolling() {
-    return this.smoothScrolling;
+    return this._smoothScrolling;
   }
 
   _createScrollbars() {
-    this.scrollbar = Scrollbar.init(this.element, {
+    this._scrollbar = Scrollbar.init(this.element, {
       damping: 0.05
     });
 
-    this.scrollbar.addListener(this._refreshScenes.bind(this));
+    this._scrollbar.addListener(this._refreshScenes.bind(this));
   }
 
   _removeScrollbars() {
-    if (this.scrollbar) {
-      this.scrollbar.removeListener(this._refreshScenes.bind(this));
-      this.scrollbar.destroy();
+    if (this._scrollbar) {
+      this._scrollbar.removeListener(this._refreshScenes.bind(this));
+      this._scrollbar.destroy();
     }
   }
 
   _addAllScenes() {
-    this.scenes.forEach(scene => scene.addTo(this));
+    this._scenes.forEach(scene => scene.addTo(this));
   }
 
   _removeAllScenes() {
-    this.scenes.forEach(scene => scene.remove());
+    this._scenes.forEach(scene => scene.remove());
   }
 
   _refreshScenes() {
-    this.scenes.forEach(scene => scene.refresh());
+    this._scenes.forEach(scene => scene.refresh());
   }
 
   _destroyController() {
     if (this.controller) {
+      if (this.hasSmoothScrolling()) {
+        console.debug('[Controller] Removed smooth scrolling');
+      } else {
+        console.debug('[Controller] Removed common scrolling');
+      }
       this.controller.destroy(true);
     }
   }

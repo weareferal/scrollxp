@@ -7,14 +7,18 @@ import 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap';
 
 import Controller from '../scroll/controller';
 import Scene from '../scroll/scene';
+import { BreakpointListener } from '../utils';
+import breakpoints from '../../breakpoints';
 
 
 @component('scrollController')
 class ScrollController {
   constructor(element) {
+    this.smoothScrolling = false;
+
     this.controller = new Controller({
       container: element,
-      smoothScrolling: false,
+      smoothScrolling: this.smoothScrolling,
       addIndicators: true
     });
 
@@ -27,6 +31,17 @@ class ScrollController {
         x: 200
       })
     );
+
+    // Disable smooth scrolling on mobile
+    new BreakpointListener(({ screenSize, hasChanged }) => {
+      if (hasChanged && this.smoothScrolling) {
+        if (screenSize === 'xs') {
+          this.controller.initCommonScrolling();
+        } else {
+          this.controller.initSmoothScrolling();
+        }
+      }
+    }, breakpoints);
   }
 
   bindAnchors(anchors) {
@@ -36,8 +51,10 @@ class ScrollController {
   toggleSmoothScrolling() {
     if (this.controller.hasSmoothScrolling()) {
       this.controller.initCommonScrolling();
+      this.smoothScrolling = false;
     } else {
       this.controller.initSmoothScrolling();
+      this.smoothScrolling = true;
     }
   }
 
