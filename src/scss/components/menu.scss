@@ -1,11 +1,18 @@
 .menu {
-  position: fixed;
-  top: rem(30px);
-  left: rem(30px);
-  z-index: 2;
-  padding: rem(20px) rem(35px) rem(20px) rem(40px);
-  list-style-type: disc;
-  border: 1px dashed $color-black;
+  display: none;
+
+  @include media(">=sm") {
+    position: fixed;
+    top: rem(10px);
+    bottom: rem(70px);
+    left: rem(10px);
+    z-index: 2;
+    display: block;
+    width: rem(230px);
+    padding: rem(20px) rem(35px) rem(20px) rem(40px);
+    list-style-type: disc;
+    border: 1px dashed $color-black;
+  }
 }
 
 .menu__item {

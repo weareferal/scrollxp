@@ -1,6 +1,21 @@
 .section {
   width: 100%;
   height: 100vh;
-  padding-top: 10vh;
-  padding-left: 20vw;
+  padding-top: rem(20px);
+  padding-right: rem(10px);
+  padding-left: rem(10px);
+
+  @include media(">=sm") {
+    padding-top: 10vh;
+    padding-right: 5vw;
+    padding-left: 20vw;
+  }
+}
+
+.section--parallax {
+  height: 150vh;
+}
+
+.section__title {
+  margin-bottom: rem(20px);
 }

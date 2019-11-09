@@ -13,6 +13,7 @@ class Controller {
     this.options = options;
 
     this._scenes = [];
+    this._scrollbarListeners = [];
 
     if (this.options.smoothScrolling) {
       this.initSmoothScrolling();
@@ -97,7 +98,6 @@ class Controller {
 
   addScene(scene) {
     scene.addTo(this);
-
     this._scenes.push(scene);
   }
 
@@ -109,6 +109,24 @@ class Controller {
     });
   }
 
+  addScrollbarListener(listener) {
+    if (this._scrollbar) {
+      this._scrollbar.addListener(listener);
+
+      this._scrollbarListeners.push(listener);
+    }
+  }
+
+  removeScrollbarListener(listener) {
+    if (this._scrollbar) {
+      this._scrollbar.removeListener(listener);
+
+      this._scrollbarListeners = this._scrollbarListeners.filter(function (current) {
+        return current !== listener;
+      });
+    }
+  }
+
   hasSmoothScrolling() {
     return this._smoothScrolling;
   }
@@ -118,12 +136,13 @@ class Controller {
       damping: 0.05
     });
 
-    this._scrollbar.addListener(this._refreshScenes.bind(this));
+    this.addScrollbarListener(() => this._scenes.forEach(scene => scene.refresh()));
   }
 
   _removeScrollbars() {
     if (this._scrollbar) {
-      this._scrollbar.removeListener(this._refreshScenes.bind(this));
+      this._scrollbarListeners.forEach(listener => this._scrollbar.removeListener(listener));
+      this._scrollbarListeners = [];
       this._scrollbar.destroy();
     }
   }
@@ -134,10 +153,6 @@ class Controller {
 
   _removeAllScenes() {
     this._scenes.forEach(scene => scene.remove());
-  }
-
-  _refreshScenes() {
-    this._scenes.forEach(scene => scene.refresh());
   }
 
   _destroyController() {
