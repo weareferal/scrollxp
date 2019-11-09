@@ -21,12 +21,11 @@ class ScrollController {
     this.smoothScrolling = false;
 
     this.parallaxScenes = [];
-    this.parallaxListeners = [];
 
     this.controller = new Controller({
       container: this.element,
       smoothScrolling: this.smoothScrolling,
-      addIndicators: true
+      addIndicators: false
     });
 
     new BreakpointListener(({ screenSize, hasChanged }) => {
@@ -53,74 +52,65 @@ class ScrollController {
   }
 
   buildParallaxScenes() {
-    const updateItems = (items, offsetY) => {
-      items.forEach(item => {
-        if (item.momentum > 0) {
-          TweenMax.to(item.element, item.momentum, {
-            y: offsetY/item.speed,
-            ease: item.ease
-          });
-        } else {
-          TweenMax.set(item.element, {
-            y: offsetY/item.speed
-          });
+    const globalElements = [];
+    const sceneElements = [];
+
+    const elements = this.element.querySelectorAll('[data-parallax]');
+
+    elements.forEach(element => {
+      const isEnabled = eval(this.getParallaxProperty(element, 'enabled', true));
+
+      if (isEnabled) {
+        const speed = this.getParallaxProperty(element, 'speed', 1);
+        const momentum = this.getParallaxProperty(element, 'momentum', .3);
+        const ease = eval(this.getParallaxProperty(element, 'ease', 'Power0.easeNone'));
+
+        let item = {
+          element: element,
+          speed: speed,
+          momentum: momentum,
+          ease: ease
+        };
+
+        const parallaxType = this.getParallaxProperty(element, 'parallax', 'global');
+
+        // Global items
+        if (parallaxType === 'global') {
+          globalElements.push(item);
         }
-      });
-    };
+        // Scene items
+        else if (parallaxType === 'scene') {
+          const trigger = this.getParallaxProperty(element, 'trigger', element.parentNode);
+          const duration = this.getParallaxProperty(element, 'duration', '100%');
+          const hook = this.getParallaxProperty(element, 'hook', 'onCenter');
+          const indicator = this.getParallaxProperty(element, 'indicator', null);
 
-    const parallaxElements = (() => {
-      const result = [];
-
-      const elements = this.element.querySelectorAll('[data-parallax]');
-      elements.forEach(element => {
-        const isEnabled = eval(this.getParallaxProperty(element, 'enabled', true));
-        if (isEnabled) {
-          const speed = this.getParallaxProperty(element, 'speed', 1);
-          const momentum = this.getParallaxProperty(element, 'momentum', .3);
-          const ease = eval(this.getParallaxProperty(element, 'ease', 'Power0.easeNone'));
-          result.push({
-            element: element,
-            speed: speed,
-            momentum: momentum,
-            ease: ease
+          item = Object.assign(item, {
+            trigger: trigger,
+            duration: duration,
+            hook: hook,
+            indicator: indicator
           });
-        } else {
-          TweenMax.set(element, { clearProps: 'all' });
+
+          sceneElements.push(item);
         }
-      });
-
-      return result;
-    })();
-
-    if (parallaxElements.length > 0) {
-      // Smooth Scrolling
-      if (this.controller.hasSmoothScrolling()) {
-        const listener = (instance) => updateItems(parallaxElements, instance.offset.y);
-
-        this.parallaxListeners.push(listener);
-        this.controller.addScrollbarListener(listener);
+      } else {
+        TweenMax.set(element, { clearProps: 'all' });
       }
-      // Common Scrolling
-      else {
-        const scene = new Scene({
-          triggerElement: this.content,
-          triggerHook: 'onLeave',
-          duration: this.content.offsetHeight
-        })
-        .on('update', instance => updateItems(parallaxElements, instance.scrollPos));
+    });
 
-        this.parallaxScenes.push(scene);
-        this.controller.addScene(scene);
-      }
+    if (globalElements.length > 0) {
+      this._buildGlobalParallax(globalElements);
+    }
+
+    if (sceneElements.length > 0) {
+      this._buildScenesParallax(sceneElements);
     }
   }
 
   resetScenes() {
     this.parallaxScenes.forEach(scene => this.controller.removeScene(scene));
     this.parallaxScenes = [];
-
-    this.parallaxListeners.forEach(listener => this.controller.removeScrollbarListener(listener));
-    this.parallaxListeners = [];
   }
 
   bindAnchors(anchors) {
@@ -212,6 +202,63 @@ class ScrollController {
              item.getAttribute(`data-${key}`) ||
              defaultValue;
     }
+  }
+
+  _buildGlobalParallax(items) {
+    const scene = new Scene({
+      triggerElement: this.content,
+      triggerHook: 'onLeave',
+      duration: this.content.offsetHeight
+    })
+    .on('update', () => this._updateItems(items, this.controller.getScrollPos()));
+
+    this.parallaxScenes.push(scene);
+    this.controller.addScene(scene);
+  }
+
+  _buildScenesParallax(items) {
+    items.forEach(item => {
+      let during = false;
+
+      const scene = new Scene({
+        triggerElement: item.trigger,
+        triggerHook: item.hook,
+        duration: item.duration
+      })
+      .on('update', () => {
+        if (during) {
+          const startPos = scene.triggerElement().offsetTop - (scene.triggerHook() * scene.triggerElement().offsetHeight);
+
+          const delta = this.controller.getScrollPos() - startPos;
+
+          this._updateItems([item], delta);
+        }
+      })
+      .on('enter', () => during = true)
+      .on('leave', () => during = false);
+
+      if (item.indicator) {
+        scene.addIndicators({ name: item.indicator });
+      }
+  
+      this.parallaxScenes.push(scene);
+      this.controller.addScene(scene);
+    });
+  }
+
+  _updateItems(items, offsetY) {
+    items.forEach(item => {
+      if (item.momentum > 0) {
+        TweenMax.to(item.element, item.momentum, {
+          y: offsetY/item.speed,
+          ease: item.ease
+        });
+      } else {
+        TweenMax.set(item.element, {
+          y: offsetY/item.speed
+        });
+      }
+    });
   }
 };
 

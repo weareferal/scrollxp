@@ -127,6 +127,13 @@ class Controller {
     }
   }
 
+  getScrollPos() {
+    if (this.hasSmoothScrolling()) {
+      return this._scrollbar.offset.y;
+    }
+    return this.controller.scrollPos();
+  }
+
   hasSmoothScrolling() {
     return this._smoothScrolling;
   }

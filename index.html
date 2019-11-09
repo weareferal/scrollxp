@@ -40,8 +40,17 @@
           </div>
         </div>
       </section>
-      <section class="section" id="section2">
-        <h1>Section 2</h1>
+      <section class="section" id="parallax-scene">
+        <h1 class="section__title">Parallax Scene</h1>
+        <p>Limited parallax effect. Elements move for a <strong>limited time</strong>, defined by the scroll position.</p>
+        <div class="parallax">
+          <div class="parallax__square parallax__square--aligned-start" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-indicator="[BLOCK 1]" data-parallax-speed="2" data-parallax-momentum="0" data-xs-parallax-enabled="false" data-sm-parallax-enabled="true">
+            speed: 1/2<br>
+            momentum: 0<br>
+            mobile: disabled
+            <span class="parallax__index" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-speed="4" data-parallax-momentum="0">1</span>
+          </div>
+        </div>
       </section>
       <section class="section" id="section3">
         <h1>Section 3</h1>
@@ -54,7 +63,7 @@
       <a class="menu__link" href="#parallax">Parallax</a>
     </li>
     <li class="menu__item">
-      <a class="menu__link" href="#section2">Section 2</a>
+      <a class="menu__link" href="#parallax-scene">Parallax Scene</a>
     </li>
     <li class="menu__item">
       <a class="menu__link" href="#section3">Section 3</a>

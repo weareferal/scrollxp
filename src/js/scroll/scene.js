@@ -57,7 +57,18 @@ class Scene {
   }
 
   triggerElement(newTriggerElement) {
+    if (arguments.length === 0) {
+      return this.scene.triggerElement();
+    }
     this.scene.triggerElement(newTriggerElement);
+    return this;
+  }
+
+  triggerHook(newTriggerHook) {
+    if (arguments.length === 0) {
+      return this.scene.triggerHook();
+    }
+    this.scene.triggerHook(newTriggerHook);
     return this;
   }
 
