@@ -82,12 +82,14 @@ class ScrollController {
         else if (parallaxType === 'scene') {
           const trigger = this.getParallaxProperty(element, 'trigger', element.parentNode);
           const duration = this.getParallaxProperty(element, 'duration', '100%');
+          const offset = this.getParallaxProperty(element, 'offset', 0);
           const hook = this.getParallaxProperty(element, 'hook', 'onCenter');
           const indicator = this.getParallaxProperty(element, 'indicator', null);
 
           item = Object.assign(item, {
             trigger: trigger,
             duration: duration,
+            offset: offset,
             hook: hook,
             indicator: indicator
           });
@@ -223,11 +225,12 @@ class ScrollController {
       const scene = new Scene({
         triggerElement: item.trigger,
         triggerHook: item.hook,
-        duration: item.duration
+        duration: item.duration,
+        offset: item.offset
       })
       .on('update', () => {
         if (during) {
-          const startPos = scene.triggerElement().offsetTop - (scene.triggerHook() * scene.triggerElement().offsetHeight);
+          const startPos = scene.triggerElement().offsetTop - (scene.triggerHook() * scene.duration());
 
           const delta = this.controller.getScrollPos() - startPos;
 

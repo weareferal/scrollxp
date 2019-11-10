@@ -73,6 +73,9 @@ class Scene {
   }
 
   duration(newDuration) {
+    if (arguments.length === 0) {
+      return this.scene.duration();
+    }
     this.scene.duration(newDuration);
     return this;
   }
