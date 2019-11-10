@@ -10,7 +10,7 @@
 <body>
   <main class="page" data-component="scrollController">
     <div class="content">
-      <section class="section section--parallax" id="parallax">
+      <section class="section" id="parallax">
         <h1 class="section__title">Parallax</h1>
         <p>Common parallax effect. Elements move in different speeds, even when they aren't visible in the screen.</p>
         <div class="scene">
@@ -51,7 +51,7 @@
           </div>
         </div>
       </section>
-      <section class="section section--parallax-scene" id="parallax-scene">
+      <section class="section" id="parallax-scene">
         <h1 class="section__title">Parallax Scene</h1>
         <p>Limited parallax effect. Elements move for a <strong>limited time</strong>, defined by the scroll position.</p>
         <div class="scene">
@@ -86,7 +86,7 @@
           </div>
         </div>
       </section>
-      <section class="section section--scene" id="scene">
+      <section class="section" id="scene">
         <h1 class="section__title">Scene</h1>
         <p>The most common scene, with easing now.</p>
         <div class="scene" data-scene data-scene-duration="100%">
@@ -110,6 +110,16 @@
             </div>
         </div>
       </section>
+      <section class="section" id="pinned-scene">
+        <h1 class="section__title">Pinned Scene</h1>
+        <p>This scene keeps fixed in the screen for a while.</p>
+        <div class="scene" data-scene data-scene-trigger="#pinned-scene" data-scene-pin="true" data-scene-duration="100%" data-scene-indicator="[PIN]" data-xs-scene-enabled="false" data-sm-scene-enabled="true">
+          <div class="scene__square">
+            pinned element<br>
+            mobile: disabled
+          </div>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -122,6 +132,9 @@
     </li>
     <li class="menu__item">
       <a class="menu__link" href="#scene">Scene</a>
+    </li>
+    <li class="menu__item">
+      <a class="menu__link" href="#pinned-scene">Pinned Scene</a>
     </li>
   </ul>
 

@@ -137,10 +137,15 @@ class ScrollController {
           scene.addIndicators({ name: indicator });
         }
 
-        const sceneName = this.getSceneProperty(domScene, 'scene', this.default.scene.name);
         const classToggle = this.getSceneProperty(domScene, 'class-toggle', this.default.scene.classToggle);
+        const pin = this.getSceneProperty(domScene, 'pin', this.default.scene.pin);
+        const sceneName = this.getSceneProperty(domScene, 'scene', this.default.scene.name);
+
         if (classToggle) {
           scene.setClassToggle(domScene, classToggle);
+        }
+        else if (pin) {
+          scene.setPin(domScene);
         } else if (sceneName) {
           this._createCustomAnimation(scene, domScene, sceneName);
         } else {
@@ -158,10 +163,16 @@ class ScrollController {
     this.parallaxScenes = [];
 
     this.tweensList.forEach(tween => tween.clear());
-    this.scenesList.forEach(scene => this.controller.removeScene(scene));
+
+    this.scenesList.forEach(scene => {
+      scene.removePin(true);
+      this.controller.removeScene(scene)
+    });
+
     TweenMax.set(this.elementsList, {
       clearProps: 'all'
     });
+
     this.tweensList = [];
     this.scenesList = [];
     this.elementsList = [];
@@ -444,6 +455,7 @@ class ScrollController {
         duration: 0,
         reverse: true,
         classToggle: null,
+        pin: false,
         enabled: true,
         indicator: false
       },
