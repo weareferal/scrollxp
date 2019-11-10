@@ -33,10 +33,7 @@
 }
 
 .parallax__index {
-  position: absolute;
-  top: rem(-20px);
-  right: rem(-20px);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: rem(40px);
@@ -46,4 +43,10 @@
   color: $color-white;
   background-color: $color-black;
   border-radius: 50%;
+}
+
+.parallax__index--right-corner {
+  position: absolute;
+  top: rem(-20px);
+  right: rem(-20px);
 }

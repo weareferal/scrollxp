@@ -63,12 +63,14 @@ class ScrollController {
       if (isEnabled) {
         const speed = this.getParallaxProperty(element, 'speed', 1);
         const momentum = this.getParallaxProperty(element, 'momentum', .3);
+        const stagger = this.getParallaxProperty(element, 'stagger', null);
         const ease = eval(this.getParallaxProperty(element, 'ease', 'Power0.easeNone'));
 
         let item = {
           element: element,
           speed: speed,
           momentum: momentum,
+          stagger: stagger,
           ease: ease
         };
 
@@ -251,15 +253,22 @@ class ScrollController {
 
   _updateItems(items, offsetY) {
     items.forEach(item => {
-      if (item.momentum > 0) {
-        TweenMax.to(item.element, item.momentum, {
+      if (item.stagger) {
+        TweenMax.staggerTo(item.element.children, item.momentum, {
           y: offsetY/item.speed,
           ease: item.ease
-        });
+        }, item.stagger);
       } else {
-        TweenMax.set(item.element, {
-          y: offsetY/item.speed
-        });
+        if (item.momentum > 0) {
+          TweenMax.to(item.element, item.momentum, {
+            y: offsetY/item.speed,
+            ease: item.ease
+          });
+        } else {
+          TweenMax.set(item.element, {
+            y: offsetY/item.speed
+          });
+        }
       }
     });
   }
