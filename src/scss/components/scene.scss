@@ -1,10 +1,15 @@
-.parallax {
+.scene {
   position: relative;
   display: flex;
   flex-direction: column;
 }
 
-.parallax__square {
+.scene__row {
+  display: flex;
+  width: 100vw;
+}
+
+.scene__square {
   position: relative;
   width: rem(100px);
   padding-top: rem(10px);
@@ -20,19 +25,23 @@
   }
 }
 
-.parallax__square--aligned-start {
+.scene__square--less-margin {
+  margin: rem(10px);
+}
+
+.scene__square--aligned-start {
   align-self: flex-start;
 }
 
-.parallax__square--aligned-center {
+.scene__square--aligned-center {
   align-self: center;
 }
 
-.parallax__square--aligned-end {
+.scene__square--aligned-end {
   align-self: flex-end;
 }
 
-.parallax__index {
+.scene__index {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -45,8 +54,8 @@
   border-radius: 50%;
 }
 
-.parallax__index--right-corner {
+.scene__index--right-corner {
   position: absolute;
   top: rem(-20px);
-  right: rem(-20px);
+  right: rem(20px);
 }

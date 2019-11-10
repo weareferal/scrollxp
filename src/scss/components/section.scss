@@ -20,6 +20,14 @@
   height: 200vh;
 }
 
+.section--scene {
+  height: 200vh;
+}
+
 .section__title {
   margin-bottom: rem(20px);
+}
+
+.section > p {
+  margin-bottom: rem(50px);
 }

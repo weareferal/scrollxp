@@ -80,6 +80,14 @@ class Scene {
     return this;
   }
 
+  progress(newProgress) {
+    if (arguments.length === 0) {
+      return this.scene.progress();
+    }
+    this.scene.progress(newProgress);
+    return this;
+  }
+
   refresh() {
     this.scene.refresh();
     return this;

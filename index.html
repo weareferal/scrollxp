@@ -13,81 +13,102 @@
       <section class="section section--parallax" id="parallax">
         <h1 class="section__title">Parallax</h1>
         <p>Common parallax effect. Elements move in different speeds, even when they aren't visible in the screen.</p>
-        <div class="parallax">
-          <div class="parallax__square parallax__square--aligned-start" data-parallax data-parallax-speed="2" data-parallax-momentum="0" data-xs-parallax-enabled="false" data-sm-parallax-enabled="true">
+        <div class="scene">
+          <div class="scene__square scene__square--aligned-start" data-parallax data-parallax-speed="2" data-parallax-momentum="0" data-xs-parallax-enabled="false" data-sm-parallax-enabled="true">
             speed: 1/2<br>
             momentum: 0<br>
             mobile: disabled
-            <span class="parallax__index parallax__index--right-corner" data-parallax data-parallax-speed="4" data-parallax-momentum="0">1</span>
+            <span class="scene__index scene__index--right-corner" data-parallax data-parallax-speed="4" data-parallax-momentum="0" data-xs-parallax-enabled="false" data-sm-parallax-enabled="true">1</span>
           </div>
-          <div class="parallax__square parallax__square--aligned-center" data-parallax data-parallax-speed="3" data-parallax-momentum="0.5" data-xs-parallax-enabled="false" data-sm-parallax-enabled="true">
+          <div class="scene__square scene__square--aligned-center" data-parallax data-parallax-speed="3" data-parallax-momentum="0.5">
             speed: 1/3<br>
             momentum: 0.5<br>
             mobile: enabled
-            <span class="parallax__index parallax__index--right-corner" data-parallax data-parallax-speed="6" data-parallax-momentum="0.5">2</span>
+            <span class="scene__index scene__index--right-corner" data-parallax data-parallax-speed="6" data-parallax-momentum="0.5">2</span>
           </div>
-          <div class="parallax__square parallax__square--aligned-end" data-parallax data-parallax-speed="4" data-parallax-momentum="1">
+          <div class="scene__square scene__square--aligned-end" data-parallax data-parallax-speed="4" data-parallax-momentum="1">
             speed: 1/4<br>
             momentum: 1<br>
             mobile: enabled
-            <span class="parallax__index parallax__index--right-corner" data-parallax data-parallax-speed="8" data-parallax-momentum="1">3</span>
+            <span class="scene__index scene__index--right-corner" data-parallax data-parallax-speed="8" data-parallax-momentum="1">3</span>
           </div>
-          <div class="parallax__square parallax__square--aligned-start" data-parallax data-parallax-speed="-4" data-parallax-momentum="0.3" data-xs-parallax-enabled="false" data-sm-parallax-enabled="true">
+          <div class="scene__square scene__square--aligned-start" data-parallax data-parallax-speed="-4" data-parallax-momentum="0.3" data-xs-parallax-enabled="false" data-sm-parallax-enabled="true">
             speed: -1/4<br>
             momentum: 0.3<br>
             mobile: disabled
-            <span class="parallax__index parallax__index--right-corner" data-parallax data-parallax-speed="-8" data-parallax-momentum="0.3" data-xs-parallax-enabled="false" data-sm-parallax-enabled="true">4</span>
+            <span class="scene__index scene__index--right-corner" data-parallax data-parallax-speed="-8" data-parallax-momentum="0.3" data-xs-parallax-enabled="false" data-sm-parallax-enabled="true">4</span>
           </div>
-          <div class="parallax__stagger" data-parallax data-parallax-speed="-6" data-parallax-momentum="0.5" data-parallax-stagger="0.1">
-            <span class="parallax__index">U</span>
-            <span class="parallax__index">U</span>
-            <span class="parallax__index">O</span>
-            <span class="parallax__index">O</span>
-            <span class="parallax__index">O</span>
-            <span class="parallax__index">W</span>
-            <span class="parallax__index">w</span>
-            <span class="parallax__index">w</span>
-            <span class="parallax__index">w</span>
+          <div class="scene__stagger" data-parallax data-parallax-speed="-6" data-parallax-momentum="0.5" data-parallax-stagger="0.1">
+            <span class="scene__index">U</span>
+            <span class="scene__index">U</span>
+            <span class="scene__index">O</span>
+            <span class="scene__index">O</span>
+            <span class="scene__index">O</span>
+            <span class="scene__index">W</span>
+            <span class="scene__index">w</span>
+            <span class="scene__index">w</span>
+            <span class="scene__index">w</span>
           </div>
         </div>
       </section>
       <section class="section section--parallax-scene" id="parallax-scene">
         <h1 class="section__title">Parallax Scene</h1>
         <p>Limited parallax effect. Elements move for a <strong>limited time</strong>, defined by the scroll position.</p>
-        <div class="parallax">
-          <div class="parallax__square parallax__square--aligned-start" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-indicator="[BLOCK 1]" data-parallax-speed="2" data-parallax-momentum="0" data-xs-parallax-enabled="false" data-sm-parallax-enabled="true">
+        <div class="scene">
+          <div class="scene__square scene__square--aligned-start" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-indicator="[BLOCK 1]" data-parallax-speed="2" data-parallax-momentum="0" data-xs-parallax-enabled="false" data-sm-parallax-enabled="true">
             speed: 1/2<br>
             momentum: 0<br>
             mobile: disabled
-            <span class="parallax__index parallax__index--right-corner" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-speed="4" data-parallax-momentum="0">1</span>
+            <span class="scene__index scene__index--right-corner" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-speed="4" data-parallax-momentum="0">1</span>
           </div>
-          <div class="parallax__square parallax__square--aligned-center" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-offset="300" data-parallax-indicator="[BLOCK 2]" data-parallax-speed="3" data-parallax-momentum="0.5">
+          <div class="scene__square scene__square--aligned-center" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-offset="300" data-parallax-indicator="[BLOCK 2]" data-parallax-speed="3" data-parallax-momentum="0.5">
             speed: 1/3<br>
             momentum: 0.5<br>
             mobile: enabled
-            <span class="parallax__index parallax__index--right-corner" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-offset="300" data-parallax-speed="6" data-parallax-momentum="0.5">2</span>
+            <span class="scene__index scene__index--right-corner" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-offset="300" data-parallax-speed="6" data-parallax-momentum="0.5">2</span>
           </div>
-          <div class="parallax__square parallax__square--aligned-end" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-offset="600" data-parallax-indicator="[BLOCK 3]" data-parallax-speed="4" data-parallax-momentum="1">
+          <div class="scene__square scene__square--aligned-end" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-offset="600" data-parallax-indicator="[BLOCK 3]" data-parallax-speed="4" data-parallax-momentum="1">
             speed: 1/4<br>
             momentum: 1<br>
             mobile: enabled
-            <span class="parallax__index parallax__index--right-corner" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-offset="600" data-parallax-speed="8" data-parallax-momentum="1">3</span>
+            <span class="scene__index scene__index--right-corner" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-offset="600" data-parallax-speed="8" data-parallax-momentum="1">3</span>
           </div>
-          <div class="parallax__stagger" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-offset="900" data-parallax-speed="4" data-parallax-indicator="[UOW]" data-parallax-momentum="0.5" data-parallax-stagger="0.2">
-            <span class="parallax__index">U</span>
-            <span class="parallax__index">U</span>
-            <span class="parallax__index">O</span>
-            <span class="parallax__index">O</span>
-            <span class="parallax__index">O</span>
-            <span class="parallax__index">W</span>
-            <span class="parallax__index">w</span>
-            <span class="parallax__index">w</span>
-            <span class="parallax__index">w</span>
+          <div class="scene__stagger" data-parallax="scene" data-parallax-trigger="#parallax-scene" data-parallax-offset="900" data-parallax-speed="4" data-parallax-indicator="[UOW]" data-parallax-momentum="0.5" data-parallax-stagger="0.2">
+            <span class="scene__index">U</span>
+            <span class="scene__index">U</span>
+            <span class="scene__index">O</span>
+            <span class="scene__index">O</span>
+            <span class="scene__index">O</span>
+            <span class="scene__index">W</span>
+            <span class="scene__index">w</span>
+            <span class="scene__index">w</span>
+            <span class="scene__index">w</span>
           </div>
         </div>
       </section>
-      <section class="section" id="section3">
-        <h1>Section 3</h1>
+      <section class="section section--scene" id="scene">
+        <h1 class="section__title">Scene</h1>
+        <p>The most common scene, with easing now.</p>
+        <div class="scene" data-scene data-scene-duration="100%">
+          <div class="scene__row" data-animate data-animate-from-x-percent="-100" data-animate-to-x-percent="100" data-animate-transition="all .3s ease-out">
+            <div class="scene__square scene__square--less-margin scene__square--aligned-start">
+              ease: ease-out<br>
+              momentum: 0.3
+            </div>
+          </div>
+          <div class="scene__row" data-animate data-animate-from-x-percent="100" data-animate-to-x-percent="-100" data-animate-position="start" data-animate-transition="all 1s ease-out">
+            <div class="scene__square scene__square--less-margin scene__square--aligned-end">
+              ease: ease-out<br>
+              momentum: 1
+            </div>
+          </div>
+          <div class="scene__row" data-animate data-animate-from-x-percent="-100" data-animate-to-x-percent="100" data-animate-position="start">
+              <div class="scene__square scene__square--less-margin scene__square--aligned-start">
+                ease: no ease<br>
+                momentum: 0
+              </div>
+            </div>
+        </div>
       </section>
     </div>
   </main>
@@ -100,7 +121,7 @@
       <a class="menu__link" href="#parallax-scene">Parallax Scene</a>
     </li>
     <li class="menu__item">
-      <a class="menu__link" href="#section3">Section 3</a>
+      <a class="menu__link" href="#scene">Scene</a>
     </li>
   </ul>
 
