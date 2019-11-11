@@ -70,14 +70,20 @@ class Scene {
        * https://github.com/idiotWu/smooth-scrollbar/issues/49#issuecomment-265358197
        */
       if (this.controller.hasSmoothScrolling()) {
-        let elementOffsetY = 0;
+        let elementPosY = 0;
 
         this.pinnedScrollListener = ({ offset }) => {
-          if (elementOffsetY === 0) {
-            elementOffsetY = this.pinnedElement.getBoundingClientRect().top - this.scene.triggerElement().getBoundingClientRect().top;
+          if (elementPosY === 0) {
+            const elementOffsetY = this.pinnedElement.getBoundingClientRect().top;
+            const triggerOffsetY = this.scene.triggerElement().getBoundingClientRect().top;
+            const triggerPosY = this.scene.duration() * this.scene.triggerHook();
+
+            elementPosY = elementOffsetY - triggerOffsetY + triggerPosY;
           }
 
-          const top = elementOffsetY + offset.y;
+          const scrollPosY = offset.y;
+
+          const top = elementPosY + scrollPosY;
           const width = parseInt(this.pinnedElement.getBoundingClientRect().width);
 
           this.pinnedElement.style.position = 'fixed';
