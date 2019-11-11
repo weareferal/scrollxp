@@ -110,7 +110,29 @@ class ScrollView {
   }
 
   bindAnchors(anchors) {
-    this._controller.bindAnchors(anchors);
+    anchors.forEach(anchor => {
+      // Bind scroll to anchor
+      anchor.addEventListener('click', e => {
+        const id = e.currentTarget.getAttribute('href');
+        if (id.length > 0) {
+          e.preventDefault();
+
+          this._controller.scrollTo(id);
+        }
+      });
+      // Bind anchor to scroll
+      const id = anchor.getAttribute('href');
+      const section = this._container.querySelector(id);
+      this._controller.addScene(
+        new ScrollScene({
+          triggerElement: section,
+          triggerHook: 'onLeave',
+          duration: section.offsetHeight
+        })
+        .on('enter', () => anchor.classList.add('is-active'))
+        .on('leave', () => anchor.classList.remove('is-active'))
+      );
+    });
   }
 
   smoothScrolling(newSmoothScrolling) {

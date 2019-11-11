@@ -10,16 +10,16 @@ import ScrollMagic from 'scrollmagic';
  */
 class Scene {
   constructor(options) {
-    this.options = options;
+    this._options = options;
 
-    this.controller = null;
+    this._controller = null;
 
-    this.pinnedElement = null;
-    this.pinnedEnterListener = null;
-    this.pinnedLeaveListener = null;
-    this.pinnedScrollListener = null;
+    this._pinnedElement = null;
+    this._pinnedEnterListener = null;
+    this._pinnedLeaveListener = null;
+    this._pinnedScrollListener = null;
 
-    this.scene = new ScrollMagic.Scene(this.options);
+    this._scene = new ScrollMagic.Scene(this._options);
 
     return this;
   }
@@ -32,39 +32,39 @@ class Scene {
       }
       tween = TweenMax.to(tween, duration, params);
     }
-    this.scene.setTween(tween);
+    this._scene.setTween(tween);
     return this;
   }
 
   setClassToggle(element, classes) {
-    this.scene.setClassToggle(element, classes);
+    this._scene.setClassToggle(element, classes);
     return this;
   }
 
   setPin(element) {
-    this.pinnedElement = element;
+    this._pinnedElement = element;
     return this;
   }
 
   removePin(reset) {
-    this.scene.removePin(reset);
+    this._scene.removePin(reset);
     return this;
   }
 
   on(names, callback) {
-    this.scene.on(names, callback);
+    this._scene.on(names, callback);
     return this;
   }
 
   addIndicators(options) {
-    this.scene.addIndicators(options);
+    this._scene.addIndicators(options);
     return this;
   }
 
   addTo(controller) {
-    this.controller = controller;
+    this._controller = controller;
 
-    if (this.pinnedElement) {
+    if (this._pinnedElement) {
       /**
        * Workaround
        * 
@@ -76,14 +76,14 @@ class Scene {
        * Therefore, we need to apply offsets to make it work properly.
        * https://github.com/idiotWu/smooth-scrollbar/issues/49#issuecomment-265358197
        */
-      if (this.controller.smoothScrolling()) {
+      if (this._controller.smoothScrolling()) {
         let elementPosY = 0;
 
-        this.pinnedScrollListener = ({ offset }) => {
+        this._pinnedScrollListener = ({ offset }) => {
           if (elementPosY === 0) {
-            const elementOffsetY = this.pinnedElement.getBoundingClientRect().top;
-            const triggerOffsetY = this.scene.triggerElement().getBoundingClientRect().top;
-            const triggerPosY = this.scene.duration() * this.scene.triggerHook();
+            const elementOffsetY = this._pinnedElement.getBoundingClientRect().top;
+            const triggerOffsetY = this._scene.triggerElement().getBoundingClientRect().top;
+            const triggerPosY = this._scene.duration() * this._scene.triggerHook();
 
             elementPosY = elementOffsetY - triggerOffsetY + triggerPosY;
           }
@@ -91,29 +91,29 @@ class Scene {
           const scrollPosY = offset.y;
 
           const top = elementPosY + scrollPosY;
-          const width = parseInt(this.pinnedElement.getBoundingClientRect().width);
+          const width = parseInt(this._pinnedElement.getBoundingClientRect().width);
 
-          this.pinnedElement.style.position = 'fixed';
-          this.pinnedElement.style.top = `${top}px`;
-          this.pinnedElement.style.width = `${width}px`;
+          this._pinnedElement.style.position = 'fixed';
+          this._pinnedElement.style.top = `${top}px`;
+          this._pinnedElement.style.width = `${width}px`;
         };
 
-        this.pinnedEnterListener = () => this.controller.addScrollbarListener(this.pinnedScrollListener);
-        this.pinnedLeaveListener = () => this.controller.removeScrollbarListener(this.pinnedScrollListener);
+        this._pinnedEnterListener = () => this._controller.addScrollbarListener(this._pinnedScrollListener);
+        this._pinnedLeaveListener = () => this._controller.removeScrollbarListener(this._pinnedScrollListener);
 
-        this.scene.on('enter', this.pinnedEnterListener);
-        this.scene.on('leave', this.pinnedLeaveListener);
+        this._scene.on('enter', this._pinnedEnterListener);
+        this._scene.on('leave', this._pinnedLeaveListener);
       } else {
-        this.scene.setPin(this.pinnedElement);
+        this._scene.setPin(this._pinnedElement);
       }
     }
 
-    this.scene.addTo(controller.controller);
+    this._scene.addTo(controller.controller());
     return this;
   }
 
   remove() {
-    this.scene.remove();
+    this._scene.remove();
 
     /**
      * Workaround
@@ -123,56 +123,56 @@ class Scene {
      * Since we're adding listeners to emulate the same pin feature that ScrollMagic has, when removing the scene,
      * we need to remove these listeners and reset the element position.
      */
-    if (this.pinnedElement && this.controller && this.controller.smoothScrolling()) {
-      this.scene.off('enter', this.pinnedEnterListener);
-      this.scene.off('leave', this.pinnedLeaveListener);
+    if (this._pinnedElement && this._controller && this._controller.smoothScrolling()) {
+      this._scene.off('enter', this._pinnedEnterListener);
+      this._scene.off('leave', this._pinnedLeaveListener);
 
-      this.controller.removeScrollbarListener(this.pinnedScrollListener);
+      this._controller.removeScrollbarListener(this._pinnedScrollListener);
 
-      this.pinnedElement.style.position = null;
-      this.pinnedElement.style.top = null;
-      this.pinnedElement.style.width = null;
+      this._pinnedElement.style.position = null;
+      this._pinnedElement.style.top = null;
+      this._pinnedElement.style.width = null;
     }
 
-    this.controller = null;
+    this._controller = null;
 
     return this;
   }
 
   triggerElement(newTriggerElement) {
-    if (arguments.length === 0) {
-      return this.scene.triggerElement();
+    if (!arguments.length) {
+      return this._scene.triggerElement();
     }
-    this.scene.triggerElement(newTriggerElement);
+    this._scene.triggerElement(newTriggerElement);
     return this;
   }
 
   triggerHook(newTriggerHook) {
-    if (arguments.length === 0) {
-      return this.scene.triggerHook();
+    if (!arguments.length) {
+      return this._scene.triggerHook();
     }
-    this.scene.triggerHook(newTriggerHook);
+    this._scene.triggerHook(newTriggerHook);
     return this;
   }
 
   duration(newDuration) {
-    if (arguments.length === 0) {
-      return this.scene.duration();
+    if (!arguments.length) {
+      return this._scene.duration();
     }
-    this.scene.duration(newDuration);
+    this._scene.duration(newDuration);
     return this;
   }
 
   progress(newProgress) {
-    if (arguments.length === 0) {
-      return this.scene.progress();
+    if (!arguments.length) {
+      return this._scene.progress();
     }
-    this.scene.progress(newProgress);
+    this._scene.progress(newProgress);
     return this;
   }
 
   refresh() {
-    this.scene.refresh();
+    this._scene.refresh();
     return this;
   }
 };
