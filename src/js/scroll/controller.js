@@ -7,6 +7,14 @@ import 'gsap/ScrollToPlugin';
 import Scene from './scene';
 
 
+/**
+ * Controller
+ * 
+ * This is a wrapper for ScrollMagic controller class. It adds a smooth scrolling option and
+ * some util methods.
+ * 
+ * @param {*} options
+ */
 class Controller {
   constructor(options) {
     this.element = options.container || window;
@@ -19,6 +27,24 @@ class Controller {
       this.initSmoothScrolling();
     } else {
       this.initCommonScrolling();
+    }
+
+    // Scroll to when loading page with hashtag
+    // https://github.com/idiotWu/smooth-scrollbar/issues/128#issuecomment-390980479
+    const hash = location.hash;
+    if (hash) {
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          this.element.scrollTo(0, 0);
+          if (this.hasSmoothScrolling()) {
+            this._scrollbar.scrollIntoView(document.querySelector(hash), {
+              offsetTop: -this._scrollbar.containerEl.scrollTop
+            });
+          } else {
+            this.controller.scrollTo(hash);
+          }
+        }, 0);
+      });
     }
   }
 

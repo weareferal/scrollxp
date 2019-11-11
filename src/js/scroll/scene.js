@@ -1,6 +1,13 @@
 import ScrollMagic from 'scrollmagic';
 
 
+/**
+ * Scene
+ * 
+ * This is a wrapper for ScrollMagic scene class. It makes scene work with smooth scrolling.
+ * 
+ * @param {*} options
+ */
 class Scene {
   constructor(options) {
     this.options = options;

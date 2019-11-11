@@ -143,8 +143,7 @@ class ScrollController {
 
         if (classToggle) {
           scene.setClassToggle(domScene, classToggle);
-        }
-        else if (pin) {
+        } else if (pin) {
           scene.setPin(domScene);
         } else if (sceneName) {
           this._createCustomAnimation(scene, domScene, sceneName);
