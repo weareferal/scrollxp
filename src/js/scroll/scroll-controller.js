@@ -4,18 +4,18 @@ import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators';
 import 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap';
 import 'gsap/ScrollToPlugin';
 
-import Scene from './scene';
+import ScrollScene from './scroll-scene';
 
 
 /**
- * Controller
+ * ScrollController
  * 
  * This is a wrapper for ScrollMagic controller class. It adds a smooth scrolling option and
  * some util methods.
  * 
  * @param {*} options
  */
-class Controller {
+class ScrollController {
   constructor(options) {
     this.element = options.container || window;
     this.options = options;
@@ -111,7 +111,7 @@ class Controller {
       const id = anchor.getAttribute('href');
       const section = this.element.querySelector(id);
       this.addScene(
-        new Scene({
+        new ScrollScene({
           triggerElement: section,
           triggerHook: 'onLeave',
           duration: section.offsetHeight
@@ -200,4 +200,4 @@ class Controller {
   }
 };
 
-export default Controller;
+export default ScrollController;

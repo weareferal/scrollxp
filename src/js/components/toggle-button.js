@@ -1,6 +1,6 @@
 import { component } from '../decorators';
 import { findComponent } from '../utils';
-import ScrollController from './scroll-controller';
+import ScrollContainer from './scroll-container';
 
 
 @component('toggleButton')
@@ -13,17 +13,17 @@ class ToggleButton {
   }
 
   toggle() {
-    const scrollController = findComponent(ScrollController);
-    if (scrollController) {
-      scrollController.toggleSmoothScrolling();
+    const scrollContainer = findComponent(ScrollContainer);
+    if (scrollContainer) {
+      scrollContainer.toggleSmoothScrolling();
       this.updateState();
     }
   }
 
   updateState() {
-    const scrollController = findComponent(ScrollController);
-    if (scrollController) {
-      const hasSmoothScrolling = scrollController.hasSmoothScrolling();
+    const scrollContainer = findComponent(ScrollContainer);
+    if (scrollContainer) {
+      const hasSmoothScrolling = scrollContainer.hasSmoothScrolling();
       if (hasSmoothScrolling) {
         this.element.querySelector('span').innerText = 'On';
         this.element.querySelector('span').classList.remove('off');

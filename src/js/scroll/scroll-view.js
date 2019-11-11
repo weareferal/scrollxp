@@ -1,20 +1,11 @@
-import { component } from '../decorators';
-
-import ScrollMagic from 'scrollmagic';
-import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators';
-import 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap';
-
-
-import Controller from '../scroll/controller';
-import Scene from '../scroll/scene';
-import { BreakpointListener } from '../utils';
-import breakpoints from '../../breakpoints';
+import ScrollController from './scroll-controller';
+import ScrollScene from './scroll-scene';
+import { BreakpointListener, PropertyHelper } from './utils';
 import { TweenMax, TimelineMax } from 'gsap';
 
 
-@component('scrollController')
-class ScrollController {
-  constructor(element) {
+class ScrollView {
+  constructor(element, breakpoints) {
     this.element = element;
     this.content = this.element.children[0];
 
@@ -22,12 +13,13 @@ class ScrollController {
 
     this.default = this._getDefaults();
 
+    this.helper = new PropertyHelper(breakpoints);
+
     this.elementsList = [];
     this.tweensList = [];
-    this.parallaxScenes = [];
     this.scenesList = [];
 
-    this.controller = new Controller({
+    this.controller = new ScrollController({
       container: this.element,
       smoothScrolling: this.smoothScrolling,
       addIndicators: false
@@ -43,7 +35,7 @@ class ScrollController {
             this.controller.initSmoothScrolling();
           }
         }
-        console.log('[ScrollController] Screen size has changed. Rebuiling scenes for:', screenSize);
+        console.debug('[ScrollView] Rebuiling scenes for:', screenSize);
         this.rebuild();
       }
     }, breakpoints);
@@ -64,13 +56,13 @@ class ScrollController {
     const elements = this.element.querySelectorAll('[data-parallax]');
 
     elements.forEach(element => {
-      const isEnabled = eval(this.getParallaxProperty(element, 'enabled', true));
+      const isEnabled = eval(this.helper.getParallaxProperty(element, 'enabled', this.default.parallax.enabled));
 
       if (isEnabled) {
-        const speed = this.getParallaxProperty(element, 'speed', 1);
-        const momentum = this.getParallaxProperty(element, 'momentum', .3);
-        const stagger = this.getParallaxProperty(element, 'stagger', null);
-        const ease = eval(this.getParallaxProperty(element, 'ease', 'Power0.easeNone'));
+        const speed = this.helper.getParallaxProperty(element, 'speed', this.default.parallax.speed);
+        const momentum = this.helper.getParallaxProperty(element, 'momentum', this.default.parallax.momentum);
+        const stagger = this.helper.getParallaxProperty(element, 'stagger', this.default.parallax.stagger);
+        const ease = eval(this.helper.getParallaxProperty(element, 'ease', this.default.parallax.ease));
 
         let item = {
           element: element,
@@ -80,7 +72,7 @@ class ScrollController {
           ease: ease
         };
 
-        const parallaxType = this.getParallaxProperty(element, 'parallax', 'global');
+        const parallaxType = this.helper.getParallaxProperty(element, 'parallax', this.default.parallax.type);
 
         // Global items
         if (parallaxType === 'global') {
@@ -88,11 +80,11 @@ class ScrollController {
         }
         // Scene items
         else if (parallaxType === 'scene') {
-          const trigger = this.getParallaxProperty(element, 'trigger', element.parentNode);
-          const duration = this.getParallaxProperty(element, 'duration', '100%');
-          const offset = this.getParallaxProperty(element, 'offset', 0);
-          const hook = this.getParallaxProperty(element, 'hook', 'onCenter');
-          const indicator = this.getParallaxProperty(element, 'indicator', null);
+          const trigger = this.helper.getParallaxProperty(element, 'trigger', this.default.parallax.trigger);
+          const duration = this.helper.getParallaxProperty(element, 'duration', this.default.parallax.duration);
+          const offset = this.helper.getParallaxProperty(element, 'offset', this.default.parallax.offset);
+          const hook = this.helper.getParallaxProperty(element, 'hook', this.default.parallax.hook);
+          const indicator = this.helper.getParallaxProperty(element, 'indicator', this.default.parallax.indicator);
 
           item = Object.assign(item, {
             trigger: trigger,
@@ -122,24 +114,24 @@ class ScrollController {
     const domScenes = this.element.querySelectorAll('[data-scene]');
 
     domScenes.forEach(domScene => {
-      const isEnabled = eval(this.getSceneProperty(domScene, 'enabled', this.default.scene.enabled));
+      const isEnabled = eval(this.helper.getSceneProperty(domScene, 'enabled', this.default.scene.enabled));
 
       if (isEnabled) {
-        const scene = new Scene({
-          triggerElement: this.getSceneProperty(domScene, 'trigger', domScene),
-          triggerHook: this.getSceneProperty(domScene, 'hook', this.default.scene.triggerHook),
-          duration: this.getSceneProperty(domScene, 'duration', this.default.scene.duration),
-          reverse: this.getSceneProperty(domScene, 'reverse', this.default.scene.reverse)
+        const scene = new ScrollScene({
+          triggerElement: this.helper.getSceneProperty(domScene, 'trigger', domScene),
+          triggerHook: this.helper.getSceneProperty(domScene, 'hook', this.default.scene.triggerHook),
+          duration: this.helper.getSceneProperty(domScene, 'duration', this.default.scene.duration),
+          reverse: this.helper.getSceneProperty(domScene, 'reverse', this.default.scene.reverse)
         });
 
-        const indicator = this.getSceneProperty(domScene, 'indicator', this.default.scene.indicator);
+        const indicator = this.helper.getSceneProperty(domScene, 'indicator', this.default.scene.indicator);
         if (indicator) {
           scene.addIndicators({ name: indicator });
         }
 
-        const classToggle = this.getSceneProperty(domScene, 'class-toggle', this.default.scene.classToggle);
-        const pin = this.getSceneProperty(domScene, 'pin', this.default.scene.pin);
-        const sceneName = this.getSceneProperty(domScene, 'scene', this.default.scene.name);
+        const classToggle = this.helper.getSceneProperty(domScene, 'class-toggle', this.default.scene.classToggle);
+        const pin = this.helper.getSceneProperty(domScene, 'pin', this.default.scene.pin);
+        const sceneName = this.helper.getSceneProperty(domScene, 'scene', this.default.scene.name);
 
         if (classToggle) {
           scene.setClassToggle(domScene, classToggle);
@@ -158,9 +150,6 @@ class ScrollController {
   }
 
   resetScenes() {
-    this.parallaxScenes.forEach(scene => this.controller.removeScene(scene));
-    this.parallaxScenes = [];
-
     this.tweensList.forEach(tween => tween.clear());
 
     this.scenesList.forEach(scene => {
@@ -197,90 +186,15 @@ class ScrollController {
     return this.controller.hasSmoothScrolling();
   }
 
-  getParallaxProperty(item, property, defaultValue) {
-    return this.getDataProperty('parallax', item, property, defaultValue);
-  }
-
-  getInertiaProperty(item, property, defaultValue) {
-    return this.getDataProperty('inertia-scene', item, property, defaultValue);
-  }
-
-  getAnimationProperty(item, property, defaultValue) {
-    return this.getDataProperty('animate', item, property, defaultValue);
-  }
-
-  getSceneProperty(item, property, defaultValue) {
-    return this.getDataProperty('scene', item, property, defaultValue);
-  }
-
-  // TODO: Improve this to be independent from breakpoints, maybe using a recursive function
-  getDataProperty(type, item, property, defaultValue) {
-    const screenWidth = window.innerWidth;
-
-    let key = property === type ? type : `${type}-${property}`;
-
-    // xs
-    if (screenWidth < breakpoints['sm']) {
-      return item.getAttribute(`data-xs-${key}`) ||
-             item.getAttribute(`data-${key}`) ||
-             defaultValue;
-    }
-    // sm
-    else if (screenWidth < breakpoints['md']) {
-      return item.getAttribute(`data-sm-${key}`) ||
-             item.getAttribute(`data-xs-${key}`) ||
-             item.getAttribute(`data-${key}`) ||
-             defaultValue;
-    }
-    // md
-    else if (screenWidth < breakpoints['lg']) {
-      return item.getAttribute(`data-md-${key}`) ||
-             item.getAttribute(`data-sm-${key}`) ||
-             item.getAttribute(`data-xs-${key}`) ||
-             item.getAttribute(`data-${key}`) ||
-             defaultValue;
-    }
-    // lg
-    else if (screenWidth < breakpoints['xl']) {
-      return item.getAttribute(`data-lg-${key}`) ||
-             item.getAttribute(`data-md-${key}`) ||
-             item.getAttribute(`data-sm-${key}`) ||
-             item.getAttribute(`data-xs-${key}`) ||
-             item.getAttribute(`data-${key}`) ||
-             defaultValue;
-    }
-    // xl
-    else if (screenWidth < breakpoints['xxl']) {
-      return item.getAttribute(`data-xl-${key}`) ||
-             item.getAttribute(`data-lg-${key}`) ||
-             item.getAttribute(`data-md-${key}`) ||
-             item.getAttribute(`data-sm-${key}`) ||
-             item.getAttribute(`data-xs-${key}`) ||
-             item.getAttribute(`data-${key}`) ||
-             defaultValue;
-    }
-    // xxl
-    else {
-      return item.getAttribute(`data-xxl-${key}`) ||
-             item.getAttribute(`data-xl-${key}`) ||
-             item.getAttribute(`data-lg-${key}`) ||
-             item.getAttribute(`data-md-${key}`) ||
-             item.getAttribute(`data-sm-${key}`) ||
-             item.getAttribute(`data-xs-${key}`) ||
-             item.getAttribute(`data-${key}`) ||
-             defaultValue;
-    }
-  }
-
   _buildGlobalParallax(items) {
-    const scene = new Scene({
+    const scene = new ScrollScene({
       triggerElement: this.content,
       triggerHook: 'onLeave',
       duration: this.content.offsetHeight
     })
     .on('update', () => this._updateItems(items, this.controller.getScrollPos()));
 
-    this.parallaxScenes.push(scene);
+    this.scenesList.push(scene);
     this.controller.addScene(scene);
   }
 
@@ -288,7 +202,7 @@ class ScrollController {
     items.forEach(item => {
       let during = false;
 
-      const scene = new Scene({
+      const scene = new ScrollScene({
         triggerElement: item.trigger,
         triggerHook: item.hook,
         duration: item.duration,
@@ -310,7 +224,7 @@ class ScrollController {
         scene.addIndicators({ name: item.indicator });
       }
   
-      this.parallaxScenes.push(scene);
+      this.scenesList.push(scene);
       this.controller.addScene(scene);
     });
   }
@@ -342,55 +256,55 @@ class ScrollController {
 
     const items = domScene.querySelectorAll('[data-animate]');
     items.forEach(item => {
-      const animation = this.getAnimationProperty(item, 'animate', this.default.animation.name);
+      const animation = this.helper.getAnimationProperty(item, 'animate', this.default.animation.name);
 
       const animationProps = {
         autoAlpha: {
-          from: this.getAnimationProperty(item, 'from-alpha', this.default.animation.alpha.from),
-          to: this.getAnimationProperty(item, 'to-alpha', this.default.animation.alpha.to)
+          from: this.helper.getAnimationProperty(item, 'from-alpha', this.default.animation.alpha.from),
+          to: this.helper.getAnimationProperty(item, 'to-alpha', this.default.animation.alpha.to)
         },
         x: {
-          from: this.getAnimationProperty(item, 'from-x', this.default.animation.x.from),
-          to: this.getAnimationProperty(item, 'to-x', this.default.animation.x.to)
+          from: this.helper.getAnimationProperty(item, 'from-x', this.default.animation.x.from),
+          to: this.helper.getAnimationProperty(item, 'to-x', this.default.animation.x.to)
         },
         y: {
-          from: this.getAnimationProperty(item, 'from-y', this.default.animation.y.from),
-          to: this.getAnimationProperty(item, 'to-y', this.default.animation.y.to)
+          from: this.helper.getAnimationProperty(item, 'from-y', this.default.animation.y.from),
+          to: this.helper.getAnimationProperty(item, 'to-y', this.default.animation.y.to)
         },
         xPercent: {
-          from: this.getAnimationProperty(item, 'from-x-percent', this.default.animation.xPercent.from),
-          to: this.getAnimationProperty(item, 'to-x-percent', this.default.animation.xPercent.to)
+          from: this.helper.getAnimationProperty(item, 'from-x-percent', this.default.animation.xPercent.from),
+          to: this.helper.getAnimationProperty(item, 'to-x-percent', this.default.animation.xPercent.to)
         },
         yPercent: {
-          from: this.getAnimationProperty(item, 'from-y-percent', this.default.animation.yPercent.from),
-          to: this.getAnimationProperty(item, 'to-y-percent', this.default.animation.yPercent.to)
+          from: this.helper.getAnimationProperty(item, 'from-y-percent', this.default.animation.yPercent.from),
+          to: this.helper.getAnimationProperty(item, 'to-y-percent', this.default.animation.yPercent.to)
         },
         scale: {
-          from: this.getAnimationProperty(item, 'from-scale', this.default.animation.scale.from),
-          to: this.getAnimationProperty(item, 'to-scale', this.default.animation.scale.to)
+          from: this.helper.getAnimationProperty(item, 'from-scale', this.default.animation.scale.from),
+          to: this.helper.getAnimationProperty(item, 'to-scale', this.default.animation.scale.to)
         },
         rotation: {
-          from: this.getAnimationProperty(item, 'from-rotation', this.default.animation.rotation.from),
-          to: this.getAnimationProperty(item, 'to-rotation', this.default.animation.rotation.to)
+          from: this.helper.getAnimationProperty(item, 'from-rotation', this.default.animation.rotation.from),
+          to: this.helper.getAnimationProperty(item, 'to-rotation', this.default.animation.rotation.to)
         },
         width: {
-          from: this.getAnimationProperty(item, 'from-width', this.default.animation.width.from),
-          to: this.getAnimationProperty(item, 'to-width', this.default.animation.width.to)
+          from: this.helper.getAnimationProperty(item, 'from-width', this.default.animation.width.from),
+          to: this.helper.getAnimationProperty(item, 'to-width', this.default.animation.width.to)
         }
       };
 
       const extraProps = {
-        ease: eval(this.getAnimationProperty(item, 'ease', this.default.animation.ease)),
-        repeat: eval(this.getAnimationProperty(item, 'repeat', this.default.animation.repeat)),
-        yoyo: eval(this.getAnimationProperty(item, 'yoyo', this.default.animation.yoyo)),
-        delay: eval(this.getAnimationProperty(item, 'delay', this.default.animation.delay))
+        ease: eval(this.helper.getAnimationProperty(item, 'ease', this.default.animation.ease)),
+        repeat: eval(this.helper.getAnimationProperty(item, 'repeat', this.default.animation.repeat)),
+        yoyo: eval(this.helper.getAnimationProperty(item, 'yoyo', this.default.animation.yoyo)),
+        delay: eval(this.helper.getAnimationProperty(item, 'delay', this.default.animation.delay))
       };
 
-      const duration = this.getAnimationProperty(item, 'duration', this.default.animation.duration);
-      const position = this.getAnimationProperty(item, 'position', this.default.animation.position);
-      const stagger = this.getAnimationProperty(item, 'stagger', this.default.animation.stagger);
-      const label = this.getAnimationProperty(item, 'label', this.default.animation.label);
-      const transition = this.getAnimationProperty(item, 'transition', this.default.animation.transition);
+      const duration = this.helper.getAnimationProperty(item, 'duration', this.default.animation.duration);
+      const position = this.helper.getAnimationProperty(item, 'position', this.default.animation.position);
+      const stagger = this.helper.getAnimationProperty(item, 'stagger', this.default.animation.stagger);
+      const label = this.helper.getAnimationProperty(item, 'label', this.default.animation.label);
+      const transition = this.helper.getAnimationProperty(item, 'transition', this.default.animation.transition);
 
       const fromProps = this._buildState('from', animationProps);
       const toProps = this._buildState('to', animationProps);
@@ -444,9 +358,18 @@ class ScrollController {
 
   _getDefaults() {
     return {
-      controller: {
-        container: window,
-        addIndicators: false
+      parallax: {
+        enabled: true,
+        type: 'global',
+        speed: 1,
+        momentum: .3,
+        stagger: null,
+        ease: 'Power0.easeNone',
+        trigger: this.element.parentNode,
+        duration: '100%',
+        offset: 0,
+        hook: 'onCenter',
+        indicator: null
       },
       scene: {
         name: null,
@@ -519,4 +442,4 @@ class ScrollController {
   }
 };
 
-export default ScrollController;
+export default ScrollView;

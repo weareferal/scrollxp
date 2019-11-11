@@ -1,14 +1,14 @@
 import { getData, setData } from './utils';
 
 import Menu from './components/menu';
-import ScrollController from './components/scroll-controller';
+import ScrollContainer from './components/scroll-container';
 import ToggleButton from './components/toggle-button';
 
 
 let App = {
   components: [
     Menu,
-    ScrollController,
+    ScrollContainer,
     ToggleButton
   ]
 };

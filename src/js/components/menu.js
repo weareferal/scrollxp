@@ -1,15 +1,15 @@
 import { component } from '../decorators';
 import { findComponent } from '../utils';
-import ScrollController from './scroll-controller';
+import ScrollContainer from './scroll-container';
 
 
 @component('menu')
 class Menu {
   constructor(element) {
-    const scrollController = findComponent(ScrollController);
-    if (scrollController) {
+    const scrollContainer = findComponent(ScrollContainer);
+    if (scrollContainer) {
       const anchors = element.querySelectorAll('a[href^="#"]');
-      scrollController.bindAnchors(anchors);
+      scrollContainer.bindAnchors(anchors);
     }
   }
 };
