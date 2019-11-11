@@ -5,19 +5,15 @@ import { TweenMax, TimelineMax } from 'gsap';
 
 
 class ScrollView {
-  constructor(element, breakpoints) {
-    this._container = element;
+  constructor(options) {
+    this._container = options.container || window;
     this._content = this._container.children[0];
 
-    this._smoothScrolling = false;
+    this._smoothScrolling = options.smoothScrolling || false;
 
-    this._domElements = [];
-    this._tweens = [];
-    this._scenes = [];
+    this._helper = new PropertyHelper(options.breakpoints);
 
-    this._helper = new PropertyHelper(breakpoints);
-
-    this._defaults = {
+    this._defaults = Object.assign({
       parallax: {
         enabled: true,
         type: 'global',
@@ -85,12 +81,16 @@ class ScrollView {
           to: null
         }
       }
-    };
+    }, options.defaults);
+
+    this._domElements = [];
+    this._tweens = [];
+    this._scenes = [];
 
     this._controller = new ScrollController({
       container: this._container,
       smoothScrolling: this._smoothScrolling,
-      addIndicators: false
+      addIndicators: options.addIndicators || false
     });
 
     new BreakpointListener(({ screenSize, hasChanged }) => {
@@ -103,12 +103,10 @@ class ScrollView {
             this._controller.smoothScrolling(true);
           }
         }
-
         console.debug('[ScrollView] Rebuiling scenes for:', screenSize);
-
         this._rebuild();
       }
-    }, breakpoints);
+    }, this._helper.breakpoints());
   }
 
   bindAnchors(anchors) {

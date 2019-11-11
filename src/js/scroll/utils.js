@@ -61,13 +61,21 @@ export class BreakpointListener {
  */
 export class PropertyHelper {
   constructor(breakpoints) {
-    this.breakpoints = breakpoints ? breakpoints : {
+    this._breakpoints = breakpoints ? breakpoints : {
       'sm': 576,
       'md': 768,
       'lg': 992,
       'xl': 1200,
       'xxl': 1600
     };
+  }
+
+  breakpoints(newValue) {
+    if (!arguments.length) {
+      return this._breakpoints;
+    } else {
+      this._breakpoints = newValue;
+    }
   }
 
   // TODO: Improve this to be independent from breakpoints, maybe using a recursive function
@@ -77,20 +85,20 @@ export class PropertyHelper {
     const key = property === type ? type : `${type}-${property}`;
 
     // xs
-    if (screenWidth < this.breakpoints['sm']) {
+    if (screenWidth < this._breakpoints['sm']) {
       return item.getAttribute(`data-xs-${key}`) ||
             item.getAttribute(`data-${key}`) ||
             defaultValue;
     }
     // sm
-    else if (screenWidth < this.breakpoints['md']) {
+    else if (screenWidth < this._breakpoints['md']) {
       return item.getAttribute(`data-sm-${key}`) ||
             item.getAttribute(`data-xs-${key}`) ||
             item.getAttribute(`data-${key}`) ||
             defaultValue;
     }
     // md
-    else if (screenWidth < this.breakpoints['lg']) {
+    else if (screenWidth < this._breakpoints['lg']) {
       return item.getAttribute(`data-md-${key}`) ||
             item.getAttribute(`data-sm-${key}`) ||
             item.getAttribute(`data-xs-${key}`) ||
@@ -98,7 +106,7 @@ export class PropertyHelper {
             defaultValue;
     }
     // lg
-    else if (screenWidth < this.breakpoints['xl']) {
+    else if (screenWidth < this._breakpoints['xl']) {
       return item.getAttribute(`data-lg-${key}`) ||
             item.getAttribute(`data-md-${key}`) ||
             item.getAttribute(`data-sm-${key}`) ||
@@ -107,7 +115,7 @@ export class PropertyHelper {
             defaultValue;
     }
     // xl
-    else if (screenWidth < this.breakpoints['xxl']) {
+    else if (screenWidth < this._breakpoints['xxl']) {
       return item.getAttribute(`data-xl-${key}`) ||
             item.getAttribute(`data-lg-${key}`) ||
             item.getAttribute(`data-md-${key}`) ||

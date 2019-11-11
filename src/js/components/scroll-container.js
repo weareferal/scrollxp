@@ -7,7 +7,11 @@ import breakpoints from '../../breakpoints';
 @component('scrollContainer')
 class ScrollContainer {
   constructor(element) {
-    this.view = new ScrollView(element, breakpoints);
+    this.view = new ScrollView({
+      container: element,
+      smoothScrolling: false,
+      breakpoints: breakpoints
+    });
   }
 
   bindAnchors(anchors) {
