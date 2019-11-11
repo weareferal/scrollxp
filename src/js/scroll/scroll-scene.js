@@ -76,7 +76,7 @@ class Scene {
        * Therefore, we need to apply offsets to make it work properly.
        * https://github.com/idiotWu/smooth-scrollbar/issues/49#issuecomment-265358197
        */
-      if (this.controller.hasSmoothScrolling()) {
+      if (this.controller.smoothScrolling()) {
         let elementPosY = 0;
 
         this.pinnedScrollListener = ({ offset }) => {
@@ -123,7 +123,7 @@ class Scene {
      * Since we're adding listeners to emulate the same pin feature that ScrollMagic has, when removing the scene,
      * we need to remove these listeners and reset the element position.
      */
-    if (this.pinnedElement && this.controller && this.controller.hasSmoothScrolling()) {
+    if (this.pinnedElement && this.controller && this.controller.smoothScrolling()) {
       this.scene.off('enter', this.pinnedEnterListener);
       this.scene.off('leave', this.pinnedLeaveListener);
 

@@ -9,7 +9,7 @@ class ScrollView {
     this.element = element;
     this.content = this.element.children[0];
 
-    this.smoothScrolling = false;
+    this._smoothScrolling = false;
 
     this.default = this._getDefaults();
 
@@ -21,35 +21,50 @@ class ScrollView {
 
     this.controller = new ScrollController({
       container: this.element,
-      smoothScrolling: this.smoothScrolling,
+      smoothScrolling: this._smoothScrolling,
       addIndicators: false
     });
 
     new BreakpointListener(({ screenSize, hasChanged }) => {
       if (hasChanged) {
         // Disable smooth scrolling on mobile
-        if (this.smoothScrolling) {
+        if (this._smoothScrolling) {
           if (screenSize === 'xs') {
-            this.controller.initCommonScrolling();
+            this.controller.smoothScrolling(false);
           } else {
-            this.controller.initSmoothScrolling();
+            this.controller.smoothScrolling(true);
           }
         }
+
         console.debug('[ScrollView] Rebuiling scenes for:', screenSize);
-        this.rebuild();
+
+        this._rebuild();
       }
     }, breakpoints);
   }
 
-  rebuild() {
+  bindAnchors(anchors) {
+    this.controller.bindAnchors(anchors);
+  }
+
+  smoothScrolling(newSmoothScrolling) {
+    if (!arguments.length) {
+      return this._smoothScrolling;
+    } else {
+      this.controller.smoothScrolling(newSmoothScrolling);
+      this._rebuild();
+    }
+  }
+
+  _rebuild() {
     setTimeout(() => {
-      this.resetScenes();
-      this.buildParallaxScenes();
-      this.buildScenes();
+      this._resetScenes();
+      this._buildParallaxScenes();
+      this._buildScenes();
     }, 0);
   }
 
-  buildParallaxScenes() {
+  _buildParallaxScenes() {
     const globalElements = [];
     const sceneElements = [];
 
@@ -110,7 +125,7 @@ class ScrollView {
     }
   }
 
-  buildScenes() {
+  _buildScenes() {
     const domScenes = this.element.querySelectorAll('[data-scene]');
 
     domScenes.forEach(domScene => {
@@ -147,43 +162,6 @@ class ScrollView {
         this.scenesList.push(scene);
       }
     });
-  }
-
-  resetScenes() {
-    this.tweensList.forEach(tween => tween.clear());
-
-    this.scenesList.forEach(scene => {
-      scene.removePin(true);
-      this.controller.removeScene(scene)
-    });
-
-    TweenMax.set(this.elementsList, {
-      clearProps: 'all'
-    });
-
-    this.tweensList = [];
-    this.scenesList = [];
-    this.elementsList = [];
-  }
-
-  bindAnchors(anchors) {
-    this.controller.bindAnchors(anchors);
-  }
-
-  toggleSmoothScrolling() {
-    if (this.controller.hasSmoothScrolling()) {
-      this.controller.initCommonScrolling();
-      this.smoothScrolling = false;
-    } else {
-      this.controller.initSmoothScrolling();
-      this.smoothScrolling = true;
-    }
-    console.log('[ScrollController] Scrolling has changed, rebuilding scenes.');
-    this.rebuild();
-  }
-
-  hasSmoothScrolling() {
-    return this.controller.hasSmoothScrolling();
   }
 
   _buildGlobalParallax(items) {
@@ -227,6 +205,23 @@ class ScrollView {
       this.scenesList.push(scene);
       this.controller.addScene(scene);
     });
+  }
+
+  _resetScenes() {
+    this.tweensList.forEach(tween => tween.clear());
+
+    this.scenesList.forEach(scene => {
+      scene.removePin(true);
+      this.controller.removeScene(scene)
+    });
+
+    TweenMax.set(this.elementsList, {
+      clearProps: 'all'
+    });
+
+    this.tweensList = [];
+    this.scenesList = [];
+    this.elementsList = [];
   }
 
   _updateItems(items, offsetY) {

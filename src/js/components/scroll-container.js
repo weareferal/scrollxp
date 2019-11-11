@@ -14,12 +14,12 @@ class ScrollContainer {
     this.view.bindAnchors(anchors);
   }
 
-  toggleSmoothScrolling() {
-    return this.view.toggleSmoothScrolling();
-  }
-
-  hasSmoothScrolling() {
-    return this.view.hasSmoothScrolling();
+  smoothScrolling(newSmoothScrolling) {
+    if (!arguments.length) {
+      return this.view.smoothScrolling();
+    } else {
+      this.view.smoothScrolling(newSmoothScrolling);
+    }
   }
 };
 

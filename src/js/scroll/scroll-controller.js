@@ -23,11 +23,7 @@ class ScrollController {
     this._scenes = [];
     this._scrollbarListeners = [];
 
-    if (this.options.smoothScrolling) {
-      this.initSmoothScrolling();
-    } else {
-      this.initCommonScrolling();
-    }
+    this.smoothScrolling(this.options.smoothScrolling);
 
     // Scroll to when loading page with hashtag
     // https://github.com/idiotWu/smooth-scrollbar/issues/128#issuecomment-390980479
@@ -36,7 +32,7 @@ class ScrollController {
       requestAnimationFrame(() => {
         setTimeout(() => {
           this.element.scrollTo(0, 0);
-          if (this.hasSmoothScrolling()) {
+          if (this.smoothScrolling()) {
             this._scrollbar.scrollIntoView(document.querySelector(hash), {
               offsetTop: -this._scrollbar.containerEl.scrollTop
             });
@@ -48,45 +44,76 @@ class ScrollController {
     }
   }
 
-  initCommonScrolling() {
-    this._removeAllScenes();
-    this._destroyController();
+  // smoothScrolling(newSmoothScrolling) {
+  //   this._removeAllScenes();
+  //   this._destroyController();
 
-    this._smoothScrolling = false;
+  //   this._smoothScrolling = newSmoothScrolling;
 
-    delete this.options.smoothScrolling;
+  //   delete this.options.smoothScrolling;
 
-    this.controller = new ScrollMagic.Controller(this.options);
+  //   if (newSmoothScrolling) {
+  //     console.debug('[ScrollController] Smooth scrolling activated');
 
-    this.controller.scrollTo(function (newPos) {
-      TweenMax.to(this, 2, {
-        scrollTo: {
-          y: newPos
-        },
-        ease: Power4.easeOut
-      });
-    });
+  //     this.controller = new ScrollMagic.Controller(Object.assign(this.options, { refreshInterval: 0 }));
 
-    this._removeScrollbars();
-    this._addAllScenes();
+  //     this._createScrollbars();
+  //   } else {
+  //     console.debug('[ScrollController] Common scrolling activated');
 
-    console.debug('[Controller] Created common scrolling');
-  }
+  //     this.controller = new ScrollMagic.Controller(this.options);
 
-  initSmoothScrolling() {
-    this._removeAllScenes();
-    this._destroyController();
+  //     this.controller.scrollTo(function (newPos) {
+  //       TweenMax.to(this, 2, {
+  //         scrollTo: {
+  //           y: newPos
+  //         },
+  //         ease: Power4.easeOut
+  //       });
+  //     });
 
-    this._smoothScrolling = true;
+  //     this._removeScrollbars();
+  //   }
 
-    delete this.options.smoothScrolling;
+  //   this._addAllScenes();
+  // }
 
-    this.controller = new ScrollMagic.Controller(Object.assign(this.options, { refreshInterval: 0 }));
-  
-    this._createScrollbars();
-    this._addAllScenes();
+  smoothScrolling(newSmoothScrolling) {
+    if (!arguments.length) {
+      return this._smoothScrolling;
+    } else {
+      this._removeAllScenes();
+      this._destroyController();
 
-    console.debug('[Controller] Created smooth scrolling');
+      this._smoothScrolling = newSmoothScrolling;
+
+      delete this.options.smoothScrolling;
+
+      if (newSmoothScrolling) {
+        console.debug('[ScrollController] Smooth scrolling activated');
+
+        this.controller = new ScrollMagic.Controller(Object.assign(this.options, { refreshInterval: 0 }));
+
+        this._createScrollbars();
+      } else {
+        console.debug('[ScrollController] Common scrolling activated');
+
+        this.controller = new ScrollMagic.Controller(this.options);
+
+        this.controller.scrollTo(function (newPos) {
+          TweenMax.to(this, 2, {
+            scrollTo: {
+              y: newPos
+            },
+            ease: Power4.easeOut
+          });
+        });
+
+        this._removeScrollbars();
+      }
+
+      this._addAllScenes();
+    }
   }
 
   bindAnchors(anchors) {
@@ -97,7 +124,7 @@ class ScrollController {
         if (id.length > 0) {
           e.preventDefault();
 
-          if (this.hasSmoothScrolling()) {
+          if (this.smoothScrolling()) {
             const element = this.element.querySelector(id);
             if (element) {
               this._scrollbar.scrollIntoView(element);
@@ -154,14 +181,10 @@ class ScrollController {
   }
 
   getScrollPos() {
-    if (this.hasSmoothScrolling()) {
+    if (this.smoothScrolling()) {
       return this._scrollbar.offset.y;
     }
     return this.controller.scrollPos();
-  }
-
-  hasSmoothScrolling() {
-    return this._smoothScrolling;
   }
 
   _createScrollbars() {
@@ -190,7 +213,7 @@ class ScrollController {
 
   _destroyController() {
     if (this.controller) {
-      if (this.hasSmoothScrolling()) {
+      if (this.smoothScrolling()) {
         console.debug('[Controller] Removed smooth scrolling');
       } else {
         console.debug('[Controller] Removed common scrolling');
