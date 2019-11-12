@@ -83,15 +83,10 @@ class ScrollView {
       }
     }, options.defaults);
 
-    // All animated DOM elements. This list is used to reset styles when changing screen sizes
+    // These lists keep DOM elements, tweens and scenes, so that when we resize the screen and reach a breakpoint,
+    // the elements are reset and the scenes are removed, rebuilt and added again.
     this._domElements = [];
-
-    // All scene tweens. This list is used to empty the timeline of all tweens, timelines,
-    // and callbacks (and optionally labels too) when changing screen sizes
     this._tweens = [];
-
-    // All scenes. This is list is used to remove all scenes from the controller when changing
-    // screen sizes
     this._scenes = [];
 
     this._sceneModifiers = {};
@@ -102,7 +97,18 @@ class ScrollView {
       addIndicators: options.addIndicators || false
     });
 
+    // This content scene is used to update scroll progress when a scroll listener is added
+    this._contentScene = new ScrollScene({
+      triggerElement: this._content,
+      triggerHook: 'onLeave',
+      duration: this._content.offsetHeight
+    });
+    this._controller.addScene(this._contentScene);
+
     new BreakpointListener(({ screenSize, hasChanged }) => {
+      // Update content scene duration, so the scroll progress is adjusted
+      this._contentScene.duration(this._content.offsetHeight);
+
       if (hasChanged) {
         // Disable smooth scrolling on mobile
         if (this._smoothScrolling) {
@@ -146,6 +152,14 @@ class ScrollView {
 
   registerSceneModifier(modifierName, modifierFunction) {
     this._sceneModifiers[modifierName] = modifierFunction;
+  }
+
+  addScrollListener(listener) {
+    this._contentScene.on('progress', listener);
+  }
+
+  removeScrollListener(listener) {
+    this._contentScene.off('progress', listener);
   }
 
   smoothScrolling(newSmoothScrolling) {
@@ -481,7 +495,7 @@ class ScrollView {
 
     this._scenes.forEach(scene => {
       scene.removePin(true);
-      this._controller.removeScene(scene)
+      this._controller.removeScene(scene);
     });
 
     TweenMax.set(this._domElements, {

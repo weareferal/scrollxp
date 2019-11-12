@@ -80,60 +80,6 @@ export function getRandom(min, max) {
   return Math.random() * (max - min) + min;
 };
 
-/**
- * BreakpointListener
- * 
- * Provide information when screen size changes from/to several breakpoints.
- * 
- * @param {function} callback
- * @param {json} breakpoints
- */
-export class BreakpointListener {
-  constructor(callback, breakpoints) {
-    this.screenSize = null;
-    this.windowWidth = window.innerWidth;
-    this.timeout = null;
-
-    this.checkView = () => {
-      let keys = Object.keys(breakpoints);
-
-      let screenSize = keys.slice(-1)[0];
-
-      for (let i=keys.length-1; i >= 0; i--) {
-        let value = breakpoints[keys[i]];
-        if (this.windowWidth < value) {
-          screenSize = keys[i-1] || 'xs';
-        }
-      }
-
-      let hasChanged = this.screenSize !== screenSize;
-
-      this.screenSize = screenSize;
-
-      callback({
-        screenSize: this.screenSize,
-        hasChanged: hasChanged
-      });
-    };
-
-    this.listener = () => {
-      if (this.windowWidth !== window.innerWidth) {
-        this.windowWidth = window.innerWidth;
-    
-        if (this.timeout) {
-          clearTimeout(this.timeout);
-        }
-    
-        this.timeout = setTimeout(this.checkView, 250);
-      }
-    };
-  
-    window.addEventListener('resize', this.listener);
-
-    this.checkView();
-  }
-};
-
 export class Timer {
   constructor(callback, delay) {
     let timerId, start, remaining = delay;

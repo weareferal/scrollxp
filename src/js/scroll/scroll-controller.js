@@ -4,8 +4,6 @@ import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators';
 import 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap';
 import 'gsap/ScrollToPlugin';
 
-import ScrollScene from './scroll-scene';
-
 
 /**
  * ScrollController
@@ -20,6 +18,8 @@ class ScrollController {
     this._container = options.container;
     this._options = options;
 
+    // These lists keep scenes and scrollbar listeners, so that when we turn on/off the smooth scrolling,
+    // they are removed/added to the new controller.
     this._scenes = [];
     this._scrollbarListeners = [];
 

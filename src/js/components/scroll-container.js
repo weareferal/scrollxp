@@ -14,7 +14,6 @@ class ScrollContainer {
     });
 
     const sidebar = document.querySelector('.scene__sidebar');
-
     this.view.registerSceneModifier('pin-content',
       function (domScene) {
         return {
@@ -34,6 +33,10 @@ class ScrollContainer {
           })
         }
       });
+
+    // this.view.addScrollListener(e => {
+    //   console.log('progress', e.progress);
+    // });
   }
 
   bindAnchors(anchors) {
