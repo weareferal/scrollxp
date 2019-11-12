@@ -12,6 +12,28 @@ class ScrollContainer {
       smoothScrolling: false,
       breakpoints: breakpoints
     });
+
+    const sidebar = document.querySelector('.scene__sidebar');
+
+    this.view.registerSceneModifier('pin-content',
+      function (domScene) {
+        return {
+          duration: sidebar.offsetHeight - domScene.offsetHeight,
+          onEnter: function () {
+            this.duration(sidebar.offsetHeight - domScene.offsetHeight);
+          },
+          pin: domScene
+        }
+      });
+
+    this.view.registerSceneModifier('slide-in-sidebar',
+      function (domScene) {
+        return {
+          tween: TweenMax.from(domScene, 1, {
+            xPercent: 100
+          })
+        }
+      });
   }
 
   bindAnchors(anchors) {

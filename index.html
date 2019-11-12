@@ -120,6 +120,22 @@
           </div>
         </div>
       </section>
+      <section class="section" id="scene-modifier">
+        <h1 class="section__title">Scene Modifier</h1>
+        <p>As <strong>data-* attributes</strong> can't cover eveything we want to do with scenes, we can apply custom behavior to them through scene modifiers.</p>
+        <div class="scene scene--row">
+          <div class="scene__col">
+            <div class="scene__content" data-scene="pin-content" data-scene-trigger="#scene-modifier" data-scene-hook="onLeave" data-xs-scene-enabled="false" data-md-scene-enabled="true">
+              scene modifier: "pin-content"
+            </div>
+          </div>
+          <div class="scene__col">
+            <div class="scene__sidebar" data-scene="slide-in-sidebar" data-scene-trigger="#scene-modifier" data-scene-duration="25%" data-xs-scene-enabled="false" data-md-scene-enabled="true">
+              scene modifier: "slide-in-sidebar"
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -135,6 +151,9 @@
     </li>
     <li class="menu__item">
       <a class="menu__link" href="#pinned-scene">Pinned Scene</a>
+    </li>
+    <li class="menu__item">
+      <a class="menu__link" href="#scene-modifier">Scene Modifier</a>
     </li>
   </ul>
 

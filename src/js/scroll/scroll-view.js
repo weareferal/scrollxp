@@ -83,9 +83,18 @@ class ScrollView {
       }
     }, options.defaults);
 
+    // All animated DOM elements. This list is used to reset styles when changing screen sizes
     this._domElements = [];
+
+    // All scene tweens. This list is used to empty the timeline of all tweens, timelines,
+    // and callbacks (and optionally labels too) when changing screen sizes
     this._tweens = [];
+
+    // All scenes. This is list is used to remove all scenes from the controller when changing
+    // screen sizes
     this._scenes = [];
+
+    this._sceneModifiers = {};
 
     this._controller = new ScrollController({
       container: this._container,
@@ -135,6 +144,10 @@ class ScrollView {
     });
   }
 
+  registerSceneModifier(modifierName, modifierFunction) {
+    this._sceneModifiers[modifierName] = modifierFunction;
+  }
+
   smoothScrolling(newSmoothScrolling) {
     if (!arguments.length) {
       return this._smoothScrolling;
@@ -161,7 +174,7 @@ class ScrollView {
 
       if (isEnabled) {
 
-        const scene = new ScrollScene({
+        let scene = new ScrollScene({
           triggerElement: this._helper.getSceneProperty(domScene, 'trigger', domScene),
           triggerHook: this._helper.getSceneProperty(domScene, 'hook', this._defaults.scene.triggerHook),
           duration: this._helper.getSceneProperty(domScene, 'duration', this._defaults.scene.duration),
@@ -175,14 +188,14 @@ class ScrollView {
 
         const classToggle = this._helper.getSceneProperty(domScene, 'class-toggle', this._defaults.scene.classToggle);
         const pin = this._helper.getSceneProperty(domScene, 'pin', this._defaults.scene.pin);
-        const sceneName = this._helper.getSceneProperty(domScene, 'scene', this._defaults.scene.name);
+        const modifierName = this._helper.getSceneProperty(domScene, 'scene', this._defaults.scene.modifierName);
 
         if (classToggle) {
           scene.setClassToggle(domScene, classToggle);
         } else if (pin) {
           scene.setPin(domScene);
-        } else if (sceneName) {
-          this._createCustomAnimation(scene, domScene, sceneName);
+        } else if (modifierName) {
+          scene = this._applySceneModifier(modifierName, scene, domScene);
         } else {
           this._createAnimation(scene, domScene);
         }
@@ -296,8 +309,44 @@ class ScrollView {
     this._tweens.push(tween);
   }
 
-  _createCustomAnimation(scene, domScene, sceneName) {
-    // TODO: Refactor this. Custom scenes must be implemented outside ScrollView and registered here
+  // TODO: Refactor this. Custom scenes must be implemented outside ScrollView and applied here
+  /**
+   * A modifier must be registered in the scroll view in order to be applied.
+   * 
+   * As data-* attributes can't cover eveything we want to do with scenes, we can apply custom behavior
+   * to it through scene modifiers.
+   * 
+   * @param {*} modifierName
+   * @param {*} scene
+   * @param {*} domScene
+   */
+  _applySceneModifier(modifierName, scene, domScene) {
+    const modifierFunction = this._sceneModifiers[modifierName];
+    if (modifierFunction) {
+      const modifier = modifierFunction(domScene);
+
+      if (modifier.tween !== undefined) {
+        let tween = new TimelineMax().add(modifier.tween);
+
+        scene.setTween(tween);
+        this._tweens.push(tween);
+      }
+
+      if (modifier.duration !== undefined) {
+        scene.duration(modifier.duration);
+      }
+
+      if (modifier.onEnter !== undefined) {
+        scene.on('enter', modifier.onEnter);
+      }
+
+      if (modifier.pin !== undefined) {
+        scene.setPin(modifier.pin);
+      }
+
+      this._domElements.push(domScene);
+    }
+    return scene;
   }
 
   _buildParallaxScenes() {
