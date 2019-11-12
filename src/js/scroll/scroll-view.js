@@ -91,36 +91,43 @@ class ScrollView {
 
     this._sceneModifiers = {};
 
-    this._controller = new ScrollController({
-      container: this._container,
-      smoothScrolling: this._smoothScrolling,
-      addIndicators: options.addIndicators || false
-    });
-
     // This content scene is used to update scroll progress when a scroll listener is added
     this._contentScene = new ScrollScene({
       triggerElement: this._content,
       triggerHook: 'onLeave',
       duration: this._content.offsetHeight
     });
-    this._controller.addScene(this._contentScene);
 
+    // TODO: Instead of checking for xs, check for isMobile somehow (actual devices)
     new BreakpointListener(({ screenSize, hasChanged }) => {
+      if (hasChanged) {
+        // First load
+        if (!this._controller) {
+          this._controller = new ScrollController({
+            container: this._container,
+            smoothScrolling: screenSize === 'xs' ? false : this._smoothScrolling,
+            addIndicators: options.addIndicators || false
+          });
+
+          this._controller.addScene(this._contentScene);
+        } else {
+          // Disable smooth scrolling on mobile
+          if (this._smoothScrolling) {
+            if (screenSize === 'xs') {
+              this._controller.smoothScrolling(false);
+            } else {
+              this._controller.smoothScrolling(true);
+            }
+          }
+        }
+
+        console.debug('[ScrollView] Rebuilding scenes for:', screenSize);
+        this._rebuild();
+      }
+
       // Update content scene duration, so the scroll progress is adjusted
       this._contentScene.duration(this._content.offsetHeight);
 
-      if (hasChanged) {
-        // Disable smooth scrolling on mobile
-        if (this._smoothScrolling) {
-          if (screenSize === 'xs') {
-            this._controller.smoothScrolling(false);
-          } else {
-            this._controller.smoothScrolling(true);
-          }
-        }
-        console.debug('[ScrollView] Rebuiling scenes for:', screenSize);
-        this._rebuild();
-      }
     }, this._helper.breakpoints());
   }
 
