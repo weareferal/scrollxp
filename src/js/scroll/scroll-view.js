@@ -330,7 +330,6 @@ class ScrollView {
     this._tweens.push(tween);
   }
 
-  // TODO: Refactor this. Custom scenes must be implemented outside ScrollView and applied here
   /**
    * A modifier must be registered in the scroll view in order to be applied.
    * 
