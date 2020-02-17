@@ -59,6 +59,9 @@ class ScrollController {
 
       delete this._options.smoothScrolling;
 
+      const scrollOffset = this._options.scrollOffset;
+      delete this._options.scrollOffset;
+
       if (newSmoothScrolling) {
         console.debug('[ScrollController] Smooth scrolling activated');
 
@@ -73,7 +76,7 @@ class ScrollController {
         this._controller.scrollTo(function (newPos) {
           TweenMax.to(this, 2, {
             scrollTo: {
-              y: newPos
+              y: newPos + scrollOffset
             },
             ease: Power4.easeOut
           });

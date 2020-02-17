@@ -3,13 +3,46 @@ import ScrollScene from './scroll-scene';
 import { BreakpointListener, PropertyHelper } from './utils';
 import { TweenMax, TimelineMax } from 'gsap';
 
-
+/**
+ * !!!IMPORTANT!!!
+ * 
+ * How it works:
+ * - The attribute [data-scene] creates a scene with duration = 0,
+ *   use [data-scene-*] to change the scene
+ * - The attribute [data-animate] creates an animation,
+ *   use [data-animate-*] to change the animation
+ * - Animations get stacked in a timeline as they are declared
+ * 
+ * Rules:
+ * - [data-animate-*] only works inside an unregistered scene, i.e., [data-scene]
+ *   (if we change that, we have trouble with nested scenes)
+ * - [data-scene="NAME"] can have nested scenes (registered and unregistered)
+ * - [data-scene] can have only unregistered nested scenes
+ * 
+ * Registering scenes and animations:
+ * - Animations can be customized to be reused, we do that by registering animations
+ *   JS: this.view.registerAnimation('fade-in', duration: 1, { from: { autoAlpha: 0 } });
+ *   HTML: <div data-animate="fade-in"></div>
+ * - Scenes can be customized to allow more control over HTML elements, we do that by registering scenes
+ *   JS: this.view.registerSceneModifier("reveal", function(
+          domScene
+        ) {
+          return {
+            onEnter: function() {
+              domScene.classList.add("is-visible");
+            },
+            triggerHook: "0.8"
+          };
+      HTML: <div data-scene="reveal"></div>
+ */
 class ScrollView {
   constructor(options) {
     this._container = options.container || window;
     this._content = this._container.children[0];
 
     this._smoothScrolling = options.smoothScrolling || false;
+
+    this._scrollOffset = options.scrollOffset || 0;
 
     this._helper = new PropertyHelper(options.breakpoints);
 
@@ -18,7 +51,7 @@ class ScrollView {
         enabled: true,
         type: 'global',
         speed: 1,
-        momentum: .3,
+        momentum: 0,
         stagger: null,
         ease: 'Power0.easeNone',
         trigger: this._container.parentNode,
@@ -48,6 +81,7 @@ class ScrollView {
         yoyo: false,
         delay: 0,
         label: null,
+        transformOrigin: null,
         alpha: {
           from: null,
           to: null
@@ -76,7 +110,27 @@ class ScrollView {
           from: null,
           to: null
         },
+        rotationX: {
+          from: null,
+          to: null
+        },
+        rotationY: {
+          from: null,
+          to: null
+        },
+        skewX: {
+          from: null,
+          to: null
+        },
+        skewY: {
+          from: null,
+          to: null
+        },
         width: {
+          from: null,
+          to: null
+        },
+        height: {
           from: null,
           to: null
         }
@@ -89,28 +143,32 @@ class ScrollView {
     this._tweens = [];
     this._scenes = [];
 
+    // Keeps registered scene modifiers
     this._sceneModifiers = {};
 
-    // This content scene is used to update scroll progress when a scroll listener is added
-    this._contentScene = new ScrollScene({
-      triggerElement: this._content,
-      triggerHook: 'onLeave',
-      duration: this._content.offsetHeight
-    });
+    // Keeps registered animations
+    this._animations = {};
 
     // TODO: Instead of checking for xs, check for isMobile somehow (actual devices)
     new BreakpointListener(({ screenSize, hasChanged }) => {
       if (hasChanged) {
+
         // First load
         if (!this._controller) {
+
           this._controller = new ScrollController({
             container: this._container,
             smoothScrolling: screenSize === 'xs' ? false : this._smoothScrolling,
+            scrollOffset: options.scrollOffset || 0,
             addIndicators: options.addIndicators || false
           });
 
-          this._controller.addScene(this._contentScene);
+          if (this._contentScene) {
+            this._controller.addScene(this._contentScene);
+          }
+
         } else {
+
           // Disable smooth scrolling on mobile
           if (this._smoothScrolling) {
             if (screenSize === 'xs') {
@@ -119,14 +177,18 @@ class ScrollView {
               this._controller.smoothScrolling(true);
             }
           }
+
         }
 
         console.debug('[ScrollView] Rebuilding scenes for:', screenSize);
         this._rebuild();
+
       }
 
       // Update content scene duration, so the scroll progress is adjusted
-      this._contentScene.duration(this._content.offsetHeight);
+      if (this._contentScene) {
+        this._contentScene.duration(this._content.offsetHeight);
+      }
 
     }, this._helper.breakpoints());
   }
@@ -148,8 +210,11 @@ class ScrollView {
       this._controller.addScene(
         new ScrollScene({
           triggerElement: section,
-          triggerHook: 'onLeave',
-          duration: section.offsetHeight
+          triggerHook: '0.01', // BUGFIX: Sometimes the scene isn't triggered for 1px difference, using this value fixes the issue.
+          offset: this._scrollOffset,
+          duration: function () {
+            return section.offsetHeight;
+          }
         })
         .on('enter', () => anchor.classList.add('is-active'))
         .on('leave', () => anchor.classList.remove('is-active'))
@@ -157,16 +222,45 @@ class ScrollView {
     });
   }
 
+  scrollTo(targetId) {
+    this._controller.scrollTo(targetId);
+  }
+
   registerSceneModifier(modifierName, modifierFunction) {
     this._sceneModifiers[modifierName] = modifierFunction;
   }
 
-  addScrollListener(listener) {
-    this._contentScene.on('progress', listener);
+  registerAnimation(animationName, animationProps) {
+    this._animations[animationName] = animationProps;
   }
 
-  removeScrollListener(listener) {
-    this._contentScene.off('progress', listener);
+  addScrollListener(listener) {
+    // This content scene is used to update scroll progress when a scroll listener is added
+    if (!this._contentScene) {
+      this._contentScene = new ScrollScene({
+        triggerElement: this._content,
+        triggerHook: 'onLeave',
+        duration: this._content.offsetHeight
+      });
+    }
+
+    this._contentScene.on('progress', () => {
+      const contentHeight = this._content.offsetHeight;
+      const containerHeight = this._container.offsetHeight;
+      const currentPos = this._controller.getScrollPos();
+
+      let progress = currentPos/(contentHeight - containerHeight);
+
+      if (progress < 0) {
+        progress = 0;
+      }
+
+      if (progress > 1) {
+        progress = 1;
+      }
+
+      listener(progress);
+    });
   }
 
   smoothScrolling(newSmoothScrolling) {
@@ -199,7 +293,7 @@ class ScrollView {
           triggerElement: this._helper.getSceneProperty(domScene, 'trigger', domScene),
           triggerHook: this._helper.getSceneProperty(domScene, 'hook', this._defaults.scene.triggerHook),
           duration: this._helper.getSceneProperty(domScene, 'duration', this._defaults.scene.duration),
-          reverse: this._helper.getSceneProperty(domScene, 'reverse', this._defaults.scene.reverse)
+          reverse: eval(this._helper.getSceneProperty(domScene, 'reverse', this._defaults.scene.reverse))
         });
 
         const indicator = this._helper.getSceneProperty(domScene, 'indicator', this._defaults.scene.indicator);
@@ -216,7 +310,7 @@ class ScrollView {
         } else if (pin) {
           scene.setPin(domScene);
         } else if (modifierName) {
-          scene = this._applySceneModifier(modifierName, scene, domScene);
+            scene = this._applySceneModifier(modifierName, scene, domScene);
         } else {
           this._createAnimation(scene, domScene);
         }
@@ -265,54 +359,105 @@ class ScrollView {
           from: this._helper.getAnimationProperty(domElement, 'from-rotation', this._defaults.animation.rotation.from),
           to: this._helper.getAnimationProperty(domElement, 'to-rotation', this._defaults.animation.rotation.to)
         },
+        rotationX: {
+          from: this._helper.getAnimationProperty(domElement, 'from-rotation-x', this._defaults.animation.rotationX.from),
+          to: this._helper.getAnimationProperty(domElement, 'to-rotation-x', this._defaults.animation.rotationX.to)
+        },
+        rotationY: {
+          from: this._helper.getAnimationProperty(domElement, 'from-rotation-y', this._defaults.animation.rotationY.from),
+          to: this._helper.getAnimationProperty(domElement, 'to-rotation-y', this._defaults.animation.rotationY.to)
+        },
+        skewX: {
+          from: this._helper.getAnimationProperty(domElement, 'from-skew-x', this._defaults.animation.skewX.from),
+          to: this._helper.getAnimationProperty(domElement, 'to-skew-x', this._defaults.animation.skewX.to)
+        },
+        skewY: {
+          from: this._helper.getAnimationProperty(domElement, 'from-skew-y', this._defaults.animation.skewY.from),
+          to: this._helper.getAnimationProperty(domElement, 'to-skew-y', this._defaults.animation.skewY.to)
+        },
         width: {
           from: this._helper.getAnimationProperty(domElement, 'from-width', this._defaults.animation.width.from),
           to: this._helper.getAnimationProperty(domElement, 'to-width', this._defaults.animation.width.to)
+        },
+        height: {
+          from: this._helper.getAnimationProperty(domElement, 'from-height', this._defaults.animation.height.from),
+          to: this._helper.getAnimationProperty(domElement, 'to-height', this._defaults.animation.height.to)
         }
       };
 
-      const extraProps = {
-        ease: eval(this._helper.getAnimationProperty(domElement, 'ease', this._defaults.animation.ease)),
-        repeat: eval(this._helper.getAnimationProperty(domElement, 'repeat', this._defaults.animation.repeat)),
-        yoyo: eval(this._helper.getAnimationProperty(domElement, 'yoyo', this._defaults.animation.yoyo)),
-        delay: eval(this._helper.getAnimationProperty(domElement, 'delay', this._defaults.animation.delay))
-      };
-
-      const duration = this._helper.getAnimationProperty(domElement, 'duration', this._defaults.animation.duration);
-      const position = this._helper.getAnimationProperty(domElement, 'position', this._defaults.animation.position);
-      const stagger = this._helper.getAnimationProperty(domElement, 'stagger', this._defaults.animation.stagger);
+      // Can be set by data-* attributes ONLY
+      const delay = eval(this._helper.getAnimationProperty(domElement, 'delay', this._defaults.animation.delay));
       const label = this._helper.getAnimationProperty(domElement, 'label', this._defaults.animation.label);
-      const transition = this._helper.getAnimationProperty(domElement, 'transition', this._defaults.animation.transition);
 
-      const fromProps = this._buildState('from', animationProps);
-      const toProps = this._buildState('to', animationProps);
+      // Can be set by data-* attribute AND modified by registered animation
+      let transition = this._helper.getAnimationProperty(domElement, 'transition', this._defaults.animation.transition);
+      let position = this._helper.getAnimationProperty(domElement, 'position', this._defaults.animation.position);
 
-      if (!animation) {
-        let hasProperties = fromProps || toProps;
-        if (hasProperties) {
-          if (stagger) {
-            if (fromProps && toProps) {
-              tween.staggerFromTo(domElement.children, duration, fromProps, Object.assign(toProps, extraProps), stagger, position);
-            }
-            else if (fromProps) {
-              tween.staggerFrom(domElement.children, duration, Object.assign(fromProps, extraProps), stagger, position);
-            }
-            else {
-              tween.staggerTo(domElement.children, duration, Object.assign(toProps, extraProps), stagger, position);
-            }
-            this._domElements.push(domElement.children);
-          } else {
-            if (fromProps && toProps) {
-              tween.fromTo(domElement, duration, fromProps, Object.assign(toProps, extraProps), position);
-            }
-            else if (fromProps) {
-              tween.from(domElement, duration, Object.assign(fromProps, extraProps), position);
-            }
-            else {
-              tween.to(domElement, duration, Object.assign(toProps, extraProps), position);
-            }
-            this._domElements.push(domElement);
+      // Can be set by data-* attribute OR registered animation
+      let fromProps, toProps, extraProps, duration, stagger;
+
+      // Retrieve registered animation
+      if (animation) {
+        if (!this._animations[animation]) {
+          console.error(`[ScrollView] Can\'t find animation "${animation}". You need to register it.`);
+          return;
+        }
+
+        fromProps = this._animations[animation].from;
+        toProps = this._animations[animation].to;
+        extraProps = {
+          ease: this._animations[animation].ease,
+          repeat: this._animations[animation].repeat,
+          yoyo: this._animations[animation].yoyo,
+          transformOrigin: this._animations[animation].transformOrigin
+        };
+        duration = this._animations[animation].duration;
+        stagger = this._animations[animation].stagger;
+        transition = this._animations[animation].transition || transition;
+        position = this._animations[animation].position || position;
+      }
+      // Build animation from DOM attributes
+      else {
+        fromProps = this._buildState('from', animationProps);
+        toProps = this._buildState('to', animationProps);
+        extraProps = {
+          ease: eval(this._helper.getAnimationProperty(domElement, 'ease', this._defaults.animation.ease)),
+          repeat: eval(this._helper.getAnimationProperty(domElement, 'repeat', this._defaults.animation.repeat)),
+          yoyo: eval(this._helper.getAnimationProperty(domElement, 'yoyo', this._defaults.animation.yoyo)),
+          transformOrigin: this._helper.getAnimationProperty(domElement, 'transform-origin', this._defaults.animation.transformOrigin)
+        };
+        duration = this._helper.getAnimationProperty(domElement, 'duration', this._defaults.animation.duration);
+        stagger = this._helper.getAnimationProperty(domElement, 'stagger', this._defaults.animation.stagger);
+      }
+
+      if (delay) {
+        tween.delay(delay);
+      }
+
+      let hasProperties = fromProps || toProps;
+      if (hasProperties) {
+        if (stagger) {
+          if (fromProps && toProps) {
+            tween.staggerFromTo(domElement.children, duration, fromProps, Object.assign(toProps, extraProps), stagger, position);
           }
+          else if (fromProps) {
+            tween.staggerFrom(domElement.children, duration, Object.assign(fromProps, extraProps), stagger, position);
+          }
+          else {
+            tween.staggerTo(domElement.children, duration, Object.assign(toProps, extraProps), stagger, position);
+          }
+          this._domElements.push(domElement.children);
+        } else {
+          if (fromProps && toProps) {
+            tween.fromTo(domElement, duration, fromProps, Object.assign(toProps, extraProps), position);
+          }
+          else if (fromProps) {
+            tween.from(domElement, duration, Object.assign(fromProps, extraProps), position);
+          }
+          else {
+            tween.to(domElement, duration, Object.assign(toProps, extraProps), position);
+          }
+          this._domElements.push(domElement);
         }
       }
 
@@ -330,6 +475,7 @@ class ScrollView {
     this._tweens.push(tween);
   }
 
+  // TODO: Refactor this. Custom scenes must be implemented outside ScrollView and applied here
   /**
    * A modifier must be registered in the scroll view in order to be applied.
    * 
@@ -356,12 +502,28 @@ class ScrollView {
         scene.duration(modifier.duration);
       }
 
+      if (modifier.triggerHook !== undefined) {
+        scene.triggerHook(modifier.triggerHook);
+      }
+
       if (modifier.onEnter !== undefined) {
         scene.on('enter', modifier.onEnter);
       }
 
+      if (modifier.onProgress !== undefined) {
+        scene.on('progress', modifier.onProgress);
+      }
+
+      if (modifier.offset !== undefined) {
+        scene.offset(modifier.offset);
+      }
+
       if (modifier.pin !== undefined) {
         scene.setPin(modifier.pin);
+      }
+
+      if (modifier.reverse !== undefined) {
+        scene.reverse(modifier.reverse);
       }
 
       this._domElements.push(domScene);
@@ -468,6 +630,8 @@ class ScrollView {
       if (item.indicator) {
         scene.addIndicators({ name: item.indicator });
       }
+
+      this._domElements.push(item.domElement);
   
       this._scenes.push(scene);
       this._controller.addScene(scene);
@@ -502,6 +666,11 @@ class ScrollView {
     this._scenes.forEach(scene => {
       scene.removePin(true);
       this._controller.removeScene(scene);
+    });
+
+    // TODO: Check if it breaks anything when not using in parallax elements
+    this._domElements.forEach(domElement => {
+      TweenMax.killTweensOf(domElement);
     });
 
     TweenMax.set(this._domElements, {

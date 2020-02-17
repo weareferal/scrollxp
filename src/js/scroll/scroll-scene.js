@@ -171,6 +171,22 @@ class ScrollScene {
     return this;
   }
 
+  offset(newOffset) {
+    if (!arguments.length) {
+      return this._scene.offset();
+    }
+    this._scene.offset(newOffset);
+    return this;
+  }
+
+  reverse(newReverse) {
+    if (!arguments.length) {
+      return this._scene.reverse();
+    }
+    this._scene.reverse(newReverse);
+    return this;
+  }
+
   refresh() {
     this._scene.refresh();
     return this;
