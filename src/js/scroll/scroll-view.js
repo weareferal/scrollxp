@@ -615,11 +615,14 @@ class ScrollView {
         duration: item.duration,
         offset: item.offset
       })
-      .on('update', () => {
+      .on('update', e => {
         if (during) {
-          const startPos = scene.triggerElement().offsetTop - (scene.triggerHook() * scene.duration());
+          const progress = (function () {
+            const p = (e.scrollPos - e.startPos)/(e.endPos - e.startPos);
+            return p < 0 ? 0 : (p > 1 ? 1 : p);
+          })();
 
-          const delta = this._controller.getScrollPos() - startPos;
+          const delta = scene.duration() * progress;
 
           this._updateParallaxItems([item], delta);
         }
