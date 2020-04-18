@@ -163,10 +163,6 @@ class ScrollView {
             addIndicators: options.addIndicators || false
           });
 
-          if (this._contentScene) {
-            this._controller.addScene(this._contentScene);
-          }
-
         } else {
 
           // Disable smooth scrolling on mobile
@@ -248,6 +244,7 @@ class ScrollView {
         triggerHook: 'onLeave',
         duration: this._content.offsetHeight
       });
+      this._controller.addScene(this._contentScene);
     }
 
     this._contentScene.on('progress', () => {

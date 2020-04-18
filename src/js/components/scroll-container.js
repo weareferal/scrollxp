@@ -34,9 +34,9 @@ class ScrollContainer {
         }
       });
 
-    // this.view.addScrollListener(e => {
-    //   console.log('progress', e.progress);
-    // });
+    this.view.addScrollListener(progress => {
+      console.log('progress', progress);
+    });
   }
 
   bindAnchors(anchors) {
