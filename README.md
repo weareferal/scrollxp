@@ -87,7 +87,7 @@ Then, in the same DOM element, you can setup the scene by adding those optional 
 |---------------------------|----------------------|-------------|-------------|
 | `data-scene-trigger`      | `string`             | DOM element | Selector that defines the start of the scene. If undefined, the scene will start at the `data-scene` element. |
 | `data-scene-hook`         | `string` or `number` | `onCenter`  | Can be `onEnter`, `onCenter`, `onLeave` or a float number between 0-1 |
-| `data-scene-duration`     | `string` or `number` | `0`         | The duration of the scene. |
+| `data-scene-duration`     | `string` or `number` | `0`         | The duration of the scene. `100%` will keep the duration always exactly at the inner height of the scroll container. `0` means that the scene is 'open end' and no end will be triggered. |
 | `data-scene-reverse`      | `boolean`            | `true`      | Should the scene reverse, when scrolling up? |
 | `data-scene-enabled`      | `boolean`            | `true`      | Use it to disable the scene for other screen sizes. Check out breakpoints section. |
 | `data-scene-indicator`    | `string`             | `null`      | Add visual indicators. Use it to debug. |

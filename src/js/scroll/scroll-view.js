@@ -191,6 +191,12 @@ class ScrollView {
       }
 
     }, this._helper.breakpoints());
+
+    // Bind anchors
+    if (options.anchors && options.anchors.length > 0) {
+      const anchors = Array.from(options.anchors).filter(anchor => anchor.hash.length > 1);
+      this.bindAnchors(anchors);
+    }
   }
 
   bindAnchors(anchors) {
