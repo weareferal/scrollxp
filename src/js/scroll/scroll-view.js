@@ -37,6 +37,8 @@ import { TweenMax, TimelineMax } from 'gsap';
  */
 class ScrollView {
   constructor(options) {
+    this._options = options;
+
     this._container = options.container || window;
     this._content = this._container.children[0];
 
@@ -188,16 +190,15 @@ class ScrollView {
 
     }, this._helper.breakpoints());
 
-    // Bind anchors
+    // Set up scrollTo anchors
     if (options.anchors && options.anchors.length > 0) {
       const anchors = Array.from(options.anchors).filter(anchor => anchor.hash.length > 1);
-      this.bindAnchors(anchors);
+      this.setUpScrollTo(anchors);
     }
   }
 
-  bindAnchors(anchors) {
+  setUpScrollTo(anchors) {
     anchors.forEach(anchor => {
-      // Bind scroll to anchor
       anchor.addEventListener('click', e => {
         const id = e.currentTarget.getAttribute('href');
         if (id.length > 0) {
@@ -206,21 +207,32 @@ class ScrollView {
           this._controller.scrollTo(id);
         }
       });
-      // Bind anchor to scroll
+    });
+  }
+
+  bindAnchors(anchors) {
+    this.setUpScrollTo(anchors);
+
+    // Bind anchor to scroll scenes
+    anchors.forEach(anchor => {
       const id = anchor.getAttribute('href');
       const section = this._container.querySelector(id);
-      this._controller.addScene(
-        new ScrollScene({
-          triggerElement: section,
-          triggerHook: '0.01', // BUGFIX: Sometimes the scene isn't triggered for 1px difference, using this value fixes the issue.
-          offset: this._scrollOffset,
-          duration: function () {
-            return section.offsetHeight;
-          }
-        })
-        .on('enter', () => anchor.classList.add('is-active'))
-        .on('leave', () => anchor.classList.remove('is-active'))
-      );
+      const anchorScene = new ScrollScene({
+        triggerElement: section,
+        triggerHook: '0.01', // BUGFIX: Sometimes the scene isn't triggered for 1px difference, using this value fixes the issue.
+        offset: this._scrollOffset,
+        duration: function () {
+          return section.offsetHeight;
+        }
+      })
+      .on('enter', () => anchor.classList.add('is-active'))
+      .on('leave', () => anchor.classList.remove('is-active'));
+
+      if (this._options.addIndicators) {
+        anchorScene.addIndicators({ name: id });
+      }
+
+      this._controller.addScene(anchorScene);
     });
   }
 
@@ -244,6 +256,11 @@ class ScrollView {
         triggerHook: 'onLeave',
         duration: this._content.offsetHeight
       });
+
+      if (this._options.addIndicators) {
+        this._contentScene.addIndicators({ name: 'content' });
+      }
+
       this._controller.addScene(this._contentScene);
     }
 
