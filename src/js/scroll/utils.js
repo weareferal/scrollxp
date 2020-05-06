@@ -148,4 +148,35 @@ export class PropertyHelper {
   getAnimationProperty(item, property, defaultValue) {
     return this.getDataProperty('animate', item, property, defaultValue);
   }
-}
+};
+
+/**
+ * Simple object check.
+ * @param item
+ * @returns {boolean}
+ */
+export function isObject(item) {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+};
+
+/**
+ * Deep merge two objects.
+ * @param target
+ * @param sources
+ */
+export function mergeDeep(target, source) {
+  let output = Object.assign({}, target);
+  if (isObject(target) && isObject(source)) {
+    Object.keys(source).forEach(key => {
+      if (isObject(source[key])) {
+        if (!(key in target))
+          Object.assign(output, { [key]: source[key] });
+        else
+          output[key] = mergeDeep(target[key], source[key]);
+      } else {
+        Object.assign(output, { [key]: source[key] });
+      }
+    });
+  }
+  return output;
+};

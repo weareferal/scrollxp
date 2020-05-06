@@ -1,6 +1,6 @@
 import ScrollController from './scroll-controller';
 import ScrollScene from './scroll-scene';
-import { BreakpointListener, PropertyHelper } from './utils';
+import { BreakpointListener, PropertyHelper, mergeDeep } from './utils';
 import { TweenMax, TimelineMax } from 'gsap';
 
 /**
@@ -48,7 +48,7 @@ class ScrollView {
 
     this._helper = new PropertyHelper(options.breakpoints);
 
-    this._defaults = Object.assign({
+    this._defaults = mergeDeep({
       parallax: {
         enabled: true,
         type: 'global',
