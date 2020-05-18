@@ -144,6 +144,7 @@ class ScrollView {
     this._domElements = [];
     this._tweens = [];
     this._scenes = [];
+    this._anchorScenes = [];
 
     // Keeps registered scene modifiers
     this._sceneModifiers = {};
@@ -200,6 +201,9 @@ class ScrollView {
   setUpScrollTo(anchors) {
     anchors.forEach(anchor => {
       anchor.addEventListener('click', e => {
+        anchors.forEach(anchor => anchor.classList.remove('is-active'));
+        e.currentTarget.classList.add('is-active');
+
         const id = e.currentTarget.getAttribute('href');
         if (id.length > 0) {
           e.preventDefault();
@@ -232,12 +236,19 @@ class ScrollView {
         anchorScene.addIndicators({ name: id });
       }
 
+      this._anchorScenes.push(anchorScene);
+
       this._controller.addScene(anchorScene);
     });
   }
 
   scrollTo(targetId) {
     this._controller.scrollTo(targetId);
+  }
+
+  setScrollOffset(offset) {
+    this._anchorScenes.forEach(scene => scene.offset(offset));
+    this._controller.setScrollOffset(offset);
   }
 
   registerSceneModifier(modifierName, modifierFunction) {

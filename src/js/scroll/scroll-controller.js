@@ -73,10 +73,13 @@ class ScrollController {
 
         this._controller = new ScrollMagic.Controller(this._options);
 
-        this._controller.scrollTo(function (newPos) {
+        this._controller.scrollTo(function (newPos, callback) {
           TweenMax.to(this, 2, {
             scrollTo: {
               y: newPos + scrollOffset
+            },
+            onComplete: function () {
+              if (callback) callback();
             },
             ease: Power4.easeOut
           });
@@ -96,7 +99,12 @@ class ScrollController {
         this._scrollbar.scrollIntoView(element);
       }
     } else {
-      this._controller.scrollTo(targetId);
+      this._latestTargetId = targetId;
+
+      this._isScrollingTo = true;
+      this._controller.scrollTo(targetId, () => {
+        this._isScrollingTo = false;
+      });
     }
   }
 
@@ -135,6 +143,29 @@ class ScrollController {
       this._scrollbarListeners = this._scrollbarListeners.filter(function (current) {
         return current !== listener;
       });
+    }
+  }
+
+  setScrollOffset(offset) {
+    if(!this._smoothScrolling) {
+      this._controller.scrollTo(function (newPos, callback) {
+        TweenMax.to(this, 2, {
+          scrollTo: {
+            y: newPos + offset
+          },
+          onComplete: function () {
+            if (callback) callback();
+          },
+          ease: Power4.easeOut
+        });
+      });
+
+      // This is necessary because if the offset changes while the page is animating,
+      // it goes to the wrong position. So we need to animate it to the right one.
+      if (this._isScrollingTo && this._latestTargetId) {
+        this.scrollTo(this._latestTargetId);
+        this._latestTargetId = null;
+      }
     }
   }
 
