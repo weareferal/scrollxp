@@ -151,6 +151,33 @@ export class PropertyHelper {
 };
 
 /**
+ * Class Watcher
+ * 
+ * Wait for class before running callback.
+ * 
+ * @param {node} domElement
+ * @param {string} className
+ * @param {function} callback
+ */
+export class ClassWatcher {
+  constructor(domElement, className, callback) {
+    const observer = new MutationObserver(mutationsList => {
+      for(let mutation of mutationsList) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          if (mutation.target.classList.contains(className)) {
+            callback();
+
+            observer.disconnect();
+          }
+          break;
+        }
+      }
+    });
+    observer.observe(domElement, { attributes: true });
+  }
+};
+
+/**
  * Simple object check.
  * @param item
  * @returns {boolean}
@@ -161,8 +188,9 @@ export function isObject(item) {
 
 /**
  * Deep merge two objects.
- * @param target
- * @param sources
+ * @param {json} target
+ * @param {json} sources
+ * @returns {json}
  */
 export function mergeDeep(target, source) {
   let output = Object.assign({}, target);

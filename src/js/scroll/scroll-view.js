@@ -1,6 +1,6 @@
 import ScrollController from './scroll-controller';
 import ScrollScene from './scroll-scene';
-import { BreakpointListener, PropertyHelper, mergeDeep } from './utils';
+import { BreakpointListener, PropertyHelper, ClassWatcher, mergeDeep } from './utils';
 import { TweenMax, TimelineMax } from 'gsap';
 
 /**
@@ -74,6 +74,7 @@ class ScrollView {
       },
       animation: {
         name: null,
+        onClass: null,
         duration: 1,
         position: '+=0',
         stagger: null,
@@ -419,6 +420,7 @@ class ScrollView {
       // Can be set by data-* attributes ONLY
       const delay = eval(this._helper.getAnimationProperty(domElement, 'delay', this._defaults.animation.delay));
       const label = this._helper.getAnimationProperty(domElement, 'label', this._defaults.animation.label);
+      const onClass = this._helper.getAnimationProperty(domElement, 'on-class', this._defaults.animation.onClass);
 
       // Can be set by data-* attribute AND modified by registered animation
       let transition = this._helper.getAnimationProperty(domElement, 'transition', this._defaults.animation.transition);
@@ -463,6 +465,11 @@ class ScrollView {
 
       if (delay) {
         tween.delay(delay);
+      }
+
+      if (onClass) {
+        tween.pause();
+        new ClassWatcher(domElement, onClass, () => tween.play());
       }
 
       let hasProperties = fromProps || toProps;
