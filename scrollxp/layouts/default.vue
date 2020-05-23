@@ -3,11 +3,10 @@
     <nav class="fixed z-30 w-full border-b border-concrete flex justify-between items-center transition-colors duration-150">
       <a class="font-shadows font-bold text-2xl transition-colors duration-300 hover:text-rope block ml-5 md:ml-10 w-32" href="/">ScrollXP</a>
       <Menu :items="items" />
-      <!-- <button class="menu-toggle-btn clickable lg:hidden bg-white rounded-full w-10 h-10 flex items-center justify-center mx-5 my-4">
-        <img class="w-5 lazyload" data-src="/images/menu-icon.svg" alt="Menu Icon">
-      </button> -->
     </nav>
-    <nuxt />
+    <div class="pt-24">
+      <nuxt />
+    </div>
   </div>
 </template>
 
@@ -23,12 +22,12 @@ export default {
       items: [
         {
           title: 'Parallax',
-          url: '/',
+          url: '/global-parallax',
           subitems: [
             {
               title: 'Global Parallax',
               text: 'Common parallax effect. Elements move in different speeds, even when they aren\'t visible in the screen.',
-              url: '/'
+              url: '/global-parallax'
             },
             {
               title: 'Scene Parallax',

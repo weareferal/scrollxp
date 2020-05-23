@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     Create content here
   </div>
 </template>
@@ -12,12 +12,12 @@ export default {
 </script>
 
 <style>
-.container {
+/* .container {
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-}
+} */
 </style>

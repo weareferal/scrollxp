@@ -54,7 +54,20 @@ export default {
     /*
     ** You can extend webpack config here
     */
-    extend (config, ctx) {
+    extend (config, { loaders }) {
+      config.module.rules = [
+        {
+          test: /ScrollMagic/,
+          use: loaders.null()
+        }
+      ];
+      config.resolve.alias['TweenLite'] = 'gsap/src/uncompressed/TweenLite.js';
+      config.resolve.alias['TweenMax'] = 'gsap/src/uncompressed/TweenMax.js';
+      config.resolve.alias['TimelineLite'] = 'gsap/src/uncompressed/TimelineLite.js';
+      config.resolve.alias['TimelineMax'] = 'gsap/src/uncompressed/TimelineMax.js';
+      config.resolve.alias['ScrollMagic'] = 'scrollmagic/scrollmagic/uncompressed/ScrollMagic.js';
+      config.resolve.alias['animation.gsap'] = 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap.js';
+      config.resolve.alias['debug.addIndicators'] = 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js';
     }
   }
 }

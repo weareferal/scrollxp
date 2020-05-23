@@ -13,5 +13,8 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
+    'no-new': 0,
+    'no-eval': 0,
+    'standard/no-callback-literal': 0
   }
 }
