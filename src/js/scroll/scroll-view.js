@@ -468,8 +468,10 @@ class ScrollView {
       }
 
       if (onClass) {
-        tween.pause();
-        new ClassWatcher(domElement, onClass, () => tween.play());
+        tween.add(() => {
+          tween.pause();
+          new ClassWatcher(domElement, onClass, () => tween.play());
+        });
       }
 
       let hasProperties = fromProps || toProps;

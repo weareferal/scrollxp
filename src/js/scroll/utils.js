@@ -161,19 +161,23 @@ export class PropertyHelper {
  */
 export class ClassWatcher {
   constructor(domElement, className, callback) {
-    const observer = new MutationObserver(mutationsList => {
-      for(let mutation of mutationsList) {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          if (mutation.target.classList.contains(className)) {
-            callback();
+    if (domElement.classList.contains(className)) {
+      callback();
+    } else {
+      const observer = new MutationObserver(mutationsList => {
+        for(let mutation of mutationsList) {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            if (mutation.target.classList.contains(className)) {
+              callback();
 
-            observer.disconnect();
+              observer.disconnect();
+            }
+            break;
           }
-          break;
         }
-      }
-    });
-    observer.observe(domElement, { attributes: true });
+      });
+      observer.observe(domElement, { attributes: true });
+    }
   }
 };
 
