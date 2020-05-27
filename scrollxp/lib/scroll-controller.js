@@ -1,13 +1,17 @@
 import Scrollbar from 'smooth-scrollbar'
-import ScrollMagic from 'scrollmagic'
+// import ScrollMagic from 'scrollmagic'
 // import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators'
 // import 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap'
-import 'gsap/ScrollToPlugin'
+// import 'gsap/ScrollToPlugin'
 // import 'imports?define=>false!scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap';
 // import 'imports?define=>false!scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators';
+// import { TweenMax, Power4 } from 'gsap'
+import TweenMax from 'TweenMax'
+import { Power4 } from 'EasePack'
+import ScrollMagic from 'ScrollMagic'
 import 'animation.gsap'
 import 'debug.addIndicators'
-import { TweenMax, Power4 } from 'gsap'
+import 'ScrollToPlugin'
 
 /**
  * ScrollController

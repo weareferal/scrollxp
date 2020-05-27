@@ -54,20 +54,19 @@ export default {
     /*
     ** You can extend webpack config here
     */
-    extend (config, { loaders }) {
-      config.module.rules = [
-        {
-          test: /ScrollMagic/,
-          use: loaders.null()
-        }
-      ];
-      config.resolve.alias['TweenLite'] = 'gsap/src/uncompressed/TweenLite.js';
-      config.resolve.alias['TweenMax'] = 'gsap/src/uncompressed/TweenMax.js';
-      config.resolve.alias['TimelineLite'] = 'gsap/src/uncompressed/TimelineLite.js';
-      config.resolve.alias['TimelineMax'] = 'gsap/src/uncompressed/TimelineMax.js';
-      config.resolve.alias['ScrollMagic'] = 'scrollmagic/scrollmagic/uncompressed/ScrollMagic.js';
-      config.resolve.alias['animation.gsap'] = 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap.js';
-      config.resolve.alias['debug.addIndicators'] = 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js';
+    extend (config) {
+      config.resolve.modules = ['node_modules'];
+      config.resolve.alias = {
+        'TweenLite': 'gsap/src/minified/TweenLite.min.js',
+        'TweenMax': 'gsap/src/minified/TweenMax.min.js',
+        'TimelineLite': 'gsap/src/minified/TimelineLite.min.js',
+        'TimelineMax': 'gsap/src/minified/TimelineMax.min.js',
+        'ScrollMagic': 'scrollmagic/scrollmagic/minified/ScrollMagic.min.js',
+        'animation.gsap': 'scrollmagic/scrollmagic/minified/plugins/animation.gsap.min.js',
+        'debug.addIndicators': 'scrollmagic/scrollmagic/minified/plugins/debug.addIndicators.min.js',
+        'ScrollToPlugin': 'gsap/src/minified/plugins/ScrollToPlugin.min.js',
+        'EasePack': 'gsap/src/minified/easing/EasePack.min.js'
+      };
     }
   }
 }

@@ -1,5 +1,7 @@
-import ScrollMagic from 'scrollmagic'
-import { TweenMax } from 'gsap'
+// import ScrollMagic from 'scrollmagic'
+// import { TweenMax } from 'gsap'
+import TweenMax from 'TweenMax'
+import ScrollMagic from 'ScrollMagic'
 
 /**
  * ScrollScene

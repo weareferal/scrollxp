@@ -1,4 +1,6 @@
-import { TweenMax, TimelineMax } from 'gsap'
+// import { TweenMax, TimelineMax } from 'gsap'
+import TweenMax from 'TweenMax'
+import TimelineMax from 'TimelineMax'
 import ScrollController from './scroll-controller'
 import ScrollScene from './scroll-scene'
 import { BreakpointListener, PropertyHelper, ClassWatcher, mergeDeep } from './utils'

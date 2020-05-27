@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="fixed z-30 w-full border-b border-concrete flex justify-between items-center transition-colors duration-150">
+    <nav class="fixed z-30 bg-white w-full border-b border-concrete flex justify-between items-center transition-colors duration-150">
       <a class="font-shadows font-bold text-2xl transition-colors duration-300 hover:text-rope block ml-5 md:ml-10 w-32" href="/">ScrollXP</a>
       <Menu :items="items" />
     </nav>
