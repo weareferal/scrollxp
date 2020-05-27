@@ -1,13 +1,13 @@
 import { component } from '../decorators';
 
-import ScrollView from '../scroll/scroll-view';
+import ScrollXP from 'scrollxp';
 import breakpoints from '../../breakpoints';
 
 
 @component('scrollContainer')
 class ScrollContainer {
   constructor(element) {
-    this.view = new ScrollView({
+    this.view = new ScrollXP({
       container: element,
       smoothScrolling: false,
       breakpoints: breakpoints

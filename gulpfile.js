@@ -47,15 +47,7 @@ let paths = (function () {
  * List of modules to get bundled into vendors minified file.
  */
 let vendors = [
-  'scrollmagic',
-  'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators',
-  'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap',
-  'smooth-scrollbar',
-  'lazysizes',
-  'lazysizes/plugins/object-fit/ls.object-fit',
-  'lazysizes/plugins/unveilhooks/ls.unveilhooks',
-  'gsap',
-  'gsap/ScrollToPlugin'
+  // 'scrollxp'
 ];
 
 /**
@@ -211,6 +203,26 @@ function vendor() {
 
 exports.vendor = vendor;
 
+// function lib() {
+//   const b = browserify({
+//     entries: './lib/index.js',
+//     debug: true
+//   }).transform('babelify', { presets: ['es2015'] });
+//   return b.bundle()
+//     .on('error', function (err) {
+//       console.error(err);
+//       this.emit('end');
+//     })
+//     .pipe(source('scrollxp.js'))
+//     .pipe(buffer())
+//     .pipe(sourcemaps.init({ loadMaps: true }))
+//     .pipe(uglify())
+//     .pipe(sourcemaps.write('.'))
+//     .pipe(gulp.dest('lib/dist/'));
+// }
+
+// exports.lib = lib;
+
 /**
  * Images Task
  *
@@ -238,6 +250,9 @@ function watch() {
 
   // Watch JS files for changes & recompile
   gulp.watch(`${paths.src}/js/**/*.js`, js);
+
+  // Watch lib changes & recompile
+  // gulp.watch('./lib/*.js', gulp.series(lib, js));
 
   // Watch images for changes, optimize & recompile
   gulp.watch(`${paths.src}/images/**/*`, gulp.series(images, reload));
