@@ -1,7 +1,7 @@
 import Scrollbar from 'smooth-scrollbar';
 import ScrollMagic from './scrollmagic/ScrollMagic';
-import './scrollmagic/plugins/animation.gsap';
-import './scrollmagic/plugins/debug.addIndicators';
+import animation from './scrollmagic/plugins/animation.gsap';
+import indicators from './scrollmagic/plugins/debug.addIndicators';
 import 'gsap/ScrollToPlugin';
 
 import ScrollScene from './scroll-scene';
@@ -17,6 +17,9 @@ import ScrollScene from './scroll-scene';
  */
 class ScrollController {
   constructor(options) {
+    indicators();
+    animation();
+  
     this._container = options.container;
     this._options = options;
 

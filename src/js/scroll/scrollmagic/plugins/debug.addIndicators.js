@@ -1,47 +1,10 @@
-/*!
- * ScrollMagic v2.0.7 (2019-05-07)
- * The javascript library for magical scroll interactions.
- * (c) 2019 Jan Paepke (@janpaepke)
- * Project Website: http://scrollmagic.io
- * 
- * @version 2.0.7
- * @license Dual licensed under MIT license and GPL.
- * @author Jan Paepke - e-mail@janpaepke.de
- *
- * @file Debug Extension for ScrollMagic.
- */
-/**
- * This plugin was formerly known as the ScrollMagic debug extension.
- *
- * It enables you to add visual indicators to your page, to be able to see exactly when a scene is triggered.
- *
- * To have access to this extension, please include `plugins/debug.addIndicators.js`.
- * @mixin debug.addIndicators
- */
-(function (root, factory) {
-	if (typeof define === 'function' && define.amd) {
-		// AMD. Register as an anonymous module.
-		define(['ScrollMagic'], factory);
-	} else if (typeof exports === 'object') {
-		// CommonJS
-		factory(require('../ScrollMagic'));
-	} else {
-		// no browser global export needed, just execute
-		factory(root.ScrollMagic || (root.jQuery && root.jQuery.ScrollMagic));
-	}
-}(this, function (ScrollMagic) {
-	"use strict";
-	var NAMESPACE = "debug.addIndicators";
+import ScrollMagic from '../ScrollMagic';
 
-	var
-		console = window.console || {},
-		err = Function.prototype.bind.call(console.error || console.log || function () {}, console);
-	if (!ScrollMagic) {
-		err("(" + NAMESPACE + ") -> ERROR: The ScrollMagic main module could not be found. Please make sure it's loaded before this plugin or use an asynchronous loader like requirejs.");
-	}
+export default function () {
+	const NAMESPACE = "debug.addIndicators";
 
 	// plugin settings
-	var
+	const
 		FONT_SIZE = "0.85em",
 		ZINDEX = "9999",
 		EDGE_OFFSET = 15; // minimum edge distance, added to indentation
@@ -50,8 +13,6 @@
 	var
 		_util = ScrollMagic._util,
 		_autoindex = 0;
-
-
 
 	ScrollMagic.Scene.extend(function () {
 		var
@@ -676,5 +637,4 @@
 			return e;
 		},
 	};
-
-}));
+};
