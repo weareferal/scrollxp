@@ -1,4 +1,4 @@
-import ScrollMagic from 'scrollmagic';
+import ScrollMagic from './scrollmagic/ScrollMagic';
 
 
 /**

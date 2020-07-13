@@ -1,7 +1,7 @@
 import Scrollbar from 'smooth-scrollbar';
-import ScrollMagic from 'scrollmagic';
-import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators';
-import 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap';
+import ScrollMagic from './scrollmagic/ScrollMagic';
+import './scrollmagic/plugins/animation.gsap';
+import './scrollmagic/plugins/debug.addIndicators';
 import 'gsap/ScrollToPlugin';
 
 import ScrollScene from './scroll-scene';

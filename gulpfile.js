@@ -47,9 +47,6 @@ let paths = (function () {
  * List of modules to get bundled into vendors minified file.
  */
 let vendors = [
-  'scrollmagic',
-  'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators',
-  'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap',
   'smooth-scrollbar',
   'lazysizes',
   'lazysizes/plugins/object-fit/ls.object-fit',
