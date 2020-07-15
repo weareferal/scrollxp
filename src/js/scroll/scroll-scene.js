@@ -1,4 +1,4 @@
-import ScrollMagic from './scrollmagic/ScrollMagic';
+import MagicScene from './scrollmagic/Scene';
 
 
 /**
@@ -19,7 +19,7 @@ class Scene {
     this._pinnedLeaveListener = null;
     this._pinnedScrollListener = null;
 
-    this._scene = new ScrollMagic.Scene(this._options);
+    this._scene = new MagicScene(this._options);
 
     return this;
   }

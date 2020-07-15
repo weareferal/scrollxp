@@ -1,7 +1,5 @@
 import Scrollbar from 'smooth-scrollbar';
-import ScrollMagic from './scrollmagic/ScrollMagic';
-import animation from './scrollmagic/plugins/animation.gsap';
-import indicators from './scrollmagic/plugins/debug.addIndicators';
+import MagicController from './scrollmagic/Controller';
 import 'gsap/ScrollToPlugin';
 
 import ScrollScene from './scroll-scene';
@@ -17,9 +15,6 @@ import ScrollScene from './scroll-scene';
  */
 class ScrollController {
   constructor(options) {
-    indicators();
-    animation();
-  
     this._container = options.container;
     this._options = options;
 
@@ -65,13 +60,13 @@ class ScrollController {
       if (newSmoothScrolling) {
         console.debug('[ScrollController] Smooth scrolling activated');
 
-        this._controller = new ScrollMagic.Controller(Object.assign(this._options, { refreshInterval: 0 }));
+        this._controller = new MagicController(Object.assign(this._options, { refreshInterval: 0 }));
 
         this._createScrollbars();
       } else {
         console.debug('[ScrollController] Common scrolling activated');
 
-        this._controller = new ScrollMagic.Controller(this._options);
+        this._controller = new MagicController(this._options);
 
         this._controller.scrollTo(function (newPos) {
           TweenMax.to(this, 2, {
