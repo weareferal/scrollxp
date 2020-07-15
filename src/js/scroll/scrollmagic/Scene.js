@@ -1,17 +1,10 @@
 import { SCENE_OPTIONS } from './defaults';
-import { PIN_SPACER_ATTRIBUTE } from './static';
+import { PIN_SPACER_ATTRIBUTE, FONT_SIZE, ZINDEX, EDGE_OFFSET, GSAP3_OR_GREATER } from './static';
 import { _util } from './util';
 import ScrollEvent from './ScrollEvent';
 import Controller from './Controller';
 import Indicator from './Indicator';
-import gsap from 'gsap';
 import { TimelineMax } from 'gsap';
-
-const GSAP3_OR_GREATER = gsap && parseFloat(gsap.version) >= 3;
-
-const FONT_SIZE = "0.85em";
-const ZINDEX = "9999";
-const EDGE_OFFSET = 15; // minimum edge distance, added to indentation
 
 const SCENE = {
   NAMESPACE: 'ScrollMagic.Scene',

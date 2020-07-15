@@ -1,9 +1,6 @@
 import { _util } from './util';
+import { FONT_SIZE, ZINDEX, EDGE_OFFSET } from './static';
 import Scene from './Scene';
-
-const FONT_SIZE = "0.85em";
-const ZINDEX = "9999";
-const EDGE_OFFSET = 15; // minimum edge distance, added to indentation
 
 /*
   * ----------------------------------------------------------------

@@ -1,5 +1,5 @@
 import { CONTROLLER_OPTIONS } from './defaults';
-import { PIN_SPACER_ATTRIBUTE } from './static';
+import { PIN_SPACER_ATTRIBUTE, FONT_SIZE, ZINDEX, EDGE_OFFSET } from './static';
 import Indicator from './Indicator';
 import Scene from './Scene';
 import { _util } from './util';
@@ -11,10 +11,6 @@ export const CONTROLLER = {
   SCROLL_DIRECTION_PAUSED: 'PAUSED',
   DEFAULT_OPTIONS: CONTROLLER_OPTIONS.defaults
 };
-
-const FONT_SIZE = "0.85em";
-const ZINDEX = "9999";
-const EDGE_OFFSET = 15; // minimum edge distance, added to indentation
 
 class Controller {
   constructor(options) {
