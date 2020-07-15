@@ -1,11 +1,10 @@
 {
-  "name": "scrollxp",
+  "name": "scrollxp-demo",
   "version": "0.0.1",
   "dependencies": {
     "gsap": "^2.1.3",
     "lazysizes": "^5.1.2",
-    "normalize.css": "^8.0.0",
-    "smooth-scrollbar": "^8.5.0"
+    "normalize.css": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",

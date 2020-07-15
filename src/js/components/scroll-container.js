@@ -1,6 +1,6 @@
 import { component } from '../decorators';
 
-import ScrollView from '../scroll/scroll-view';
+import ScrollView from '../../../lib/scroll-view';
 import breakpoints from '../../breakpoints';
 
 
