@@ -1,0 +1,10 @@
+{
+  "name": "scrollxp",
+  "version": "0.0.1-beta1",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "gsap": "^2.1.3",
+    "smooth-scrollbar": "^8.5.0"
+  }
+}

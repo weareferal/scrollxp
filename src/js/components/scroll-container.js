@@ -2,11 +2,15 @@ import { component } from '../decorators';
 
 import ScrollView from '../../../lib/scroll-view';
 import breakpoints from '../../breakpoints';
+import Bla from 'scrollxp';
 
 
 @component('scrollContainer')
 class ScrollContainer {
   constructor(element) {
+    const bla = new Bla();
+    bla.showMessage();
+
     this.view = new ScrollView({
       container: element,
       smoothScrolling: false,

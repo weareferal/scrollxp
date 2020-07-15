@@ -7,6 +7,7 @@ let gulp = require('gulp'),
     sass = require('gulp-sass'),
     sourcemaps = require('gulp-sourcemaps'),
     stylelint = require('gulp-stylelint'),
+    ts = require('gulp-typescript'),
     uglify = require('gulp-uglify'),
     prefixer = require('autoprefixer'),
     babelify = require('babelify'),
@@ -14,7 +15,8 @@ let gulp = require('gulp'),
     browserSync = require('browser-sync'),
     cssnano = require('cssnano'),
     buffer = require('vinyl-buffer'),
-    source = require('vinyl-source-stream');
+    source = require('vinyl-source-stream'),
+    tsify = require('tsify');
 
 /**
  * Notify
@@ -37,6 +39,7 @@ let paths = (function () {
   return {
     templates: `${this.basePath}`,
     src: `${this.basePath}/src`,
+    lib: `${this.basePath}/scrollxp`,
     build: `${this.basePath}/assets`
   }
 })();
@@ -50,8 +53,7 @@ let vendors = [
   'lazysizes',
   'lazysizes/plugins/object-fit/ls.object-fit',
   'lazysizes/plugins/unveilhooks/ls.unveilhooks',
-  'gsap',
-  // 'scrollxp'
+  'gsap'
 ];
 
 /**
@@ -207,32 +209,80 @@ function vendor() {
 
 exports.vendor = vendor;
 
-// function lib() {
-//   const b = browserify({
-//     entries: './lib/index.js',
+// function typescript() {
+//   return browserify({
+//     entries: `./scrollxp/index.ts`,
+//     debug: true,
+//     cache: {},
+//     packageCache: {}
+//   })
+  // .plugin(tsify)
+  // .transform(babelify, {
+  //   presets: ['@babel/preset-env'],
+  //   extensions: ['.ts']
+  // })
+//   .bundle()
+//   .on('error', function (err) {
+//     console.error(err);
+//     this.emit('end');
+//   })
+//   .pipe(source('lib.js'))
+//   .pipe(buffer())
+//   .pipe(rename('lib.min.js'))
+//   .pipe(sourcemaps.init({ loadMaps: true }))
+//   .pipe(uglify())
+//   .pipe(sourcemaps.write('.'))
+//   .pipe(gulp.dest(`${paths.build}/js/`))
+//   .pipe(browserSync.reload({ stream: true }));
+// }
+
+// function typescript() {
+//   return browserify({
+//     entries: `./scrollxp/index.ts`,
+//     debug: true,
+//     cache: {},
+//     packageCache: {}
+//   })
+//   .plugin(tsify)
+//   .bundle()
+//   .on('error', function (err) {
+//     console.error(err);
+//     this.emit('end');
+//   })
+//   .pipe(source('scrollxp.js'))
+//   .pipe(gulp.dest(`${paths.lib}/dist/`));
+// }
+
+// function bundleTS() {
+//   return browserify({
+//     entries: `${paths.lib}/build/index.js`,
 //     debug: true
 //   })
 //   .transform(babelify, {
-//     presets: ['@babel/preset-env'],
-//     plugins: [
-//       ['@babel/plugin-proposal-decorators', { 'legacy': true }]
-//     ],
-//     sourceMaps: true
-//   });
-//   return b.bundle()
-//     .on('error', function (err) {
-//       console.error(err);
-//       this.emit('end');
-//     })
-//     .pipe(source('scrollxp.js'))
-//     .pipe(buffer())
-//     .pipe(sourcemaps.init({ loadMaps: true }))
-//     .pipe(uglify())
-//     .pipe(sourcemaps.write('.'))
-//     .pipe(gulp.dest('lib/dist/'));
+//     presets: ['@babel/preset-env']
+//   })
+//   .bundle()
+//   .on('error', function (err) {
+//     console.error(err);
+//     this.emit('end');
+//   })
+//   .pipe(source('scrollxp.js'))
+//   .pipe(buffer())
+//   .pipe(sourcemaps.init({ loadMaps: true }))
+//   .pipe(uglify())
+//   .pipe(sourcemaps.write('.'))
+//   .pipe(gulp.dest(`${paths.lib}/dist/`));
 // }
 
-// exports.lib = lib;
+function lib() {
+  notify('Building lib...');
+  let tsProject = ts.createProject('tsconfig.json');
+  return tsProject.src()
+    .pipe(tsProject())
+    .pipe(gulp.dest(`${paths.lib}/dist/`));
+}
+
+exports.lib = lib;
 
 /**
  * Images Task
@@ -266,10 +316,10 @@ function watch() {
   gulp.watch(`${paths.src}/images/**/*`, gulp.series(images, reload));
 
   // Watch HTML files & reload
-  gulp.watch(`${paths.templates}/**/*.html`, reload);
+  gulp.watch(`${paths.templates}/index.html`, reload);
 
-  // Watch lib changes & recompile
-  // gulp.watch('./lib/**/*.js', gulp.series(lib, js));
+  // Watch TS files & recompile
+  gulp.watch(`${paths.lib}/src/**/*.ts`, gulp.series(lib, js));
 }
 
 /**
@@ -281,7 +331,7 @@ function watch() {
  * - Copy fonts to assets folder
  * - Launch BrowserSync & watch files
  */
-exports.default = gulp.series(vendor, breakpoints, gulp.parallel(js, css, images), gulp.parallel(server, watch));
+exports.default = gulp.series(vendor, breakpoints, lib, gulp.parallel(js, css, images), gulp.parallel(server, watch));
 
 /**
  * Build Task
@@ -291,4 +341,4 @@ exports.default = gulp.series(vendor, breakpoints, gulp.parallel(js, css, images
  * - Optimize and copy images to assets folder
  * - Copy fonts to assets folder
  */
-exports.build = gulp.series(vendor, breakpoints, gulp.parallel(js, css, images));
+exports.build = gulp.series(vendor, breakpoints, lib, gulp.parallel(js, css, images));
