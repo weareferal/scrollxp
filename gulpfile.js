@@ -217,14 +217,10 @@ exports.vendor = vendor;
  */
 function compileLib() {
   notify('Compiling lib...');
-  return gulp.src(`${paths.lib}/src/**/*.ts`)
-    .pipe(ts({
-        noImplicitAny: true,
-        target: "es5",
-        module: "commonjs",
-        declaration: true
-    }))
-    .pipe(gulp.dest(`${paths.lib}/build`));
+  let tsProject = ts.createProject('tsconfig.json');
+  return tsProject.src()
+      .pipe(tsProject())
+      .pipe(gulp.dest(`${paths.lib}/build`));
 }
 
 /**

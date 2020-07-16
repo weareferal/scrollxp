@@ -1,4 +1,4 @@
-var Bla = /** @class */ (function () {
+var Bla = (function () {
     function Bla() {
         this.message = 'BLAHH!';
         console.log("HEY I AM " + this.message + "!");
