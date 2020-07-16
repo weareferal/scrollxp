@@ -1,6 +1,7 @@
 var Bla = /** @class */ (function () {
     function Bla() {
-        console.log('HEY I AM BLA!');
+        this.message = 'BLAHH!';
+        console.log("HEY I AM " + this.message + "!");
     }
     return Bla;
 }());

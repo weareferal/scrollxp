@@ -1,7 +1,10 @@
 class Bla {
+  message: string;
+
   constructor() {
-    console.log('HEY I AM BLA!');
+    this.message = 'BLAHH!';
+    console.log(`HEY I AM ${this.message}!`);
   }
 }
 
-module.exports = Bla
+module.exports = Bla;

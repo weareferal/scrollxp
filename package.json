@@ -5,17 +5,27 @@
     "gsap": "^2.1.3",
     "lazysizes": "^5.1.2",
     "normalize.css": "^8.0.0",
-    "smooth-scrollbar": "^8.5.0"
+    "smooth-scrollbar": "^8.5.0",
+    "scrollxp": "./scrollxp"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",
     "@babel/plugin-proposal-decorators": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
     "autoprefixer": "^9.1.5",
     "babelify": "^10.0.0",
     "browser-sync": "^2.26.7",
     "browserify": "^16.5.0",
     "cssnano": "^4.1.3",
+    "eslint": "^7.4.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsdoc": "^29.2.0",
+    "eslint-plugin-prefer-arrow": "^1.2.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-unicorn": "^20.1.0",
     "gulp": "^4.0.2",
     "gulp-imagemin": "^6.0.0",
     "gulp-json-sass": "0.0.2",
@@ -29,12 +39,16 @@
     "gulp-uglify": "^3.0.0",
     "gulp-watch": "^5.0.1",
     "include-media": "^1.4.9",
+    "prettier": "^2.0.5",
     "stylelint": "^10.0.0",
     "stylelint-config-twbs-bootstrap": "^0.4.0",
     "tsify": "^4.0.2",
     "typescript": "^3.9.6",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
+  },
+  "scripts": {
+    "lint": "eslint -c scrollxp/.eslintrc.js --ext .ts scrollxp/src"
   },
   "engines": {
     "node": ">=0.8.0"
