@@ -16,7 +16,8 @@ let gulp = require('gulp'),
     cssnano = require('cssnano'),
     buffer = require('vinyl-buffer'),
     source = require('vinyl-source-stream'),
-    tsify = require('tsify');
+    tsify = require('tsify'),
+    tsc = require('typescript');
 
 /**
  * Notify
@@ -211,16 +212,16 @@ exports.vendor = vendor;
 
 // function typescript() {
 //   return browserify({
-//     entries: `./scrollxp/index.ts`,
+//     entries: `${paths.lib}/src/index.ts`,
 //     debug: true,
 //     cache: {},
 //     packageCache: {}
 //   })
-  // .plugin(tsify)
-  // .transform(babelify, {
-  //   presets: ['@babel/preset-env'],
-  //   extensions: ['.ts']
-  // })
+//   .plugin(tsify)
+//   .transform(babelify, {
+//     presets: ['@babel/preset-env'],
+//     extensions: ['.ts']
+//   })
 //   .bundle()
 //   .on('error', function (err) {
 //     console.error(err);
@@ -274,15 +275,122 @@ exports.vendor = vendor;
 //   .pipe(gulp.dest(`${paths.lib}/dist/`));
 // }
 
-function lib() {
-  notify('Building lib...');
-  let tsProject = ts.createProject('tsconfig.json');
-  return tsProject.src()
-    .pipe(tsProject())
-    .pipe(gulp.dest(`${paths.lib}/dist/`));
+// function bundleTS() {
+//   return browserify({
+//     entries: `${paths.lib}/dist/index.js`,
+//     debug: true
+//   })
+//   .bundle()
+//   .pipe(source('scrollxp.js'))
+//   .pipe(buffer())
+//   .pipe(gulp.dest(`${paths.lib}/`));
+// }
+
+// function lib() {
+//   notify('Building lib...');
+//   let tsProject = ts.createProject('tsconfig.json');
+//   return tsProject.src()
+//     .pipe(tsProject())
+//     .pipe(gulp.dest(`${paths.lib}/dist/`));
+// }
+
+// exports.lib = gulp.series(lib, bundleTS);
+
+// function lib() {
+//   return browserify({
+//     basedir: `${paths.lib}`,
+//     debug: true,
+//     entries: ['src/index.ts'],
+//     cache: {},
+//     packageCache: {}
+//   })
+//   .plugin(tsify)
+//   .bundle()
+//   .pipe(source('scrollxp.js'))
+//   .pipe(gulp.dest(`${paths.lib}/`));
+// }
+
+// exports.lib = lib;
+
+// function compileUMD() {
+//   notify('Building UMD lib...');
+//   return browserify({
+//     basedir: `${paths.lib}`,
+//     debug: true,
+//     entries: ['src/index.ts'],
+//     cache: {},
+//     packageCache: {}
+//   })
+//   .plugin(tsify, {
+//     noImplicitAny: true,
+//     target: "es5",
+//     module: "commonjs",
+//     strict: true,
+//     esModuleInterop: true,
+//     forceConsistentCasingInFileNames: true
+//   })
+//   .bundle()
+//   .pipe(source('scrollxp.js'))
+//   .pipe(gulp.dest(`${paths.lib}/dist`));
+// }
+
+// function compileESM() {
+//   notify('Building ESM lib...');
+//   return gulp.src(`${paths.lib}/src/**/*.ts`)
+//     .pipe(ts({
+//         noImplicitAny: true,
+//         declaration: true,
+//         target: "es2015",
+//         module: "es2020",
+//         strict: true,
+//         esModuleInterop: true,
+//         forceConsistentCasingInFileNames: true
+//     }))
+//     .pipe(gulp.dest(`${paths.lib}/`));
+// }
+
+// exports.lib = gulp.parallel(compileESM, compileUMD);
+
+/**
+ * Compile TypeScript files and create CommonJS modules
+ */
+function compileLib() {
+  notify('Compiling lib...');
+  return gulp.src(`${paths.lib}/src/**/*.ts`)
+    .pipe(ts({
+        noImplicitAny: true,
+        target: "es5",
+        module: "commonjs",
+        declaration: true
+    }))
+    .pipe(gulp.dest(`${paths.lib}/build`));
 }
 
-exports.lib = lib;
+/**
+ * Compile & bundle TypeScript files, creating the file dist/scrollxp.js and
+ * exposing the module through the namespace ScrollXP
+ */
+function bundleLib() {
+  return browserify({
+    basedir: `${paths.lib}`,
+    debug: true,
+    entries: ['src/index.ts'],
+    cache: {},
+    packageCache: {},
+    standalone: "ScrollXP"
+  })
+  .plugin(tsify, {
+    noImplicitAny: true,
+    target: "es5",
+    module: "umd",
+    moduleResolution: "node" // https://github.com/gucong3000/postcss-markdown/issues/32#issuecomment-612265569
+  })
+  .bundle()
+  .pipe(source('scrollxp.js'))
+  .pipe(gulp.dest(`${paths.lib}/dist`));
+}
+
+exports.lib = gulp.parallel(compileLib, bundleLib);
 
 /**
  * Images Task
@@ -319,7 +427,7 @@ function watch() {
   gulp.watch(`${paths.templates}/index.html`, reload);
 
   // Watch TS files & recompile
-  gulp.watch(`${paths.lib}/src/**/*.ts`, gulp.series(lib, js));
+  gulp.watch(`${paths.lib}/src/**/*.ts`, gulp.series(compileLib, js));
 }
 
 /**
@@ -331,7 +439,7 @@ function watch() {
  * - Copy fonts to assets folder
  * - Launch BrowserSync & watch files
  */
-exports.default = gulp.series(vendor, breakpoints, lib, gulp.parallel(js, css, images), gulp.parallel(server, watch));
+exports.default = gulp.series(vendor, breakpoints, compileLib, gulp.parallel(js, css, images), gulp.parallel(server, watch));
 
 /**
  * Build Task
@@ -341,4 +449,4 @@ exports.default = gulp.series(vendor, breakpoints, lib, gulp.parallel(js, css, i
  * - Optimize and copy images to assets folder
  * - Copy fonts to assets folder
  */
-exports.build = gulp.series(vendor, breakpoints, lib, gulp.parallel(js, css, images));
+exports.build = gulp.series(vendor, breakpoints, compileLib, gulp.parallel(js, css, images));

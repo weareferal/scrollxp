@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    "target": "es5",
-    "declaration": true
-  },
-  "include": ["./scrollxp/src/**/*"],
-  "exclude": ["node_modules"]
-}
