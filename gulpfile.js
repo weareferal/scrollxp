@@ -210,148 +210,9 @@ function vendor() {
 
 exports.vendor = vendor;
 
-// function typescript() {
-//   return browserify({
-//     entries: `${paths.lib}/src/index.ts`,
-//     debug: true,
-//     cache: {},
-//     packageCache: {}
-//   })
-//   .plugin(tsify)
-//   .transform(babelify, {
-//     presets: ['@babel/preset-env'],
-//     extensions: ['.ts']
-//   })
-//   .bundle()
-//   .on('error', function (err) {
-//     console.error(err);
-//     this.emit('end');
-//   })
-//   .pipe(source('lib.js'))
-//   .pipe(buffer())
-//   .pipe(rename('lib.min.js'))
-//   .pipe(sourcemaps.init({ loadMaps: true }))
-//   .pipe(uglify())
-//   .pipe(sourcemaps.write('.'))
-//   .pipe(gulp.dest(`${paths.build}/js/`))
-//   .pipe(browserSync.reload({ stream: true }));
-// }
-
-// function typescript() {
-//   return browserify({
-//     entries: `./scrollxp/index.ts`,
-//     debug: true,
-//     cache: {},
-//     packageCache: {}
-//   })
-//   .plugin(tsify)
-//   .bundle()
-//   .on('error', function (err) {
-//     console.error(err);
-//     this.emit('end');
-//   })
-//   .pipe(source('scrollxp.js'))
-//   .pipe(gulp.dest(`${paths.lib}/dist/`));
-// }
-
-// function bundleTS() {
-//   return browserify({
-//     entries: `${paths.lib}/build/index.js`,
-//     debug: true
-//   })
-//   .transform(babelify, {
-//     presets: ['@babel/preset-env']
-//   })
-//   .bundle()
-//   .on('error', function (err) {
-//     console.error(err);
-//     this.emit('end');
-//   })
-//   .pipe(source('scrollxp.js'))
-//   .pipe(buffer())
-//   .pipe(sourcemaps.init({ loadMaps: true }))
-//   .pipe(uglify())
-//   .pipe(sourcemaps.write('.'))
-//   .pipe(gulp.dest(`${paths.lib}/dist/`));
-// }
-
-// function bundleTS() {
-//   return browserify({
-//     entries: `${paths.lib}/dist/index.js`,
-//     debug: true
-//   })
-//   .bundle()
-//   .pipe(source('scrollxp.js'))
-//   .pipe(buffer())
-//   .pipe(gulp.dest(`${paths.lib}/`));
-// }
-
-// function lib() {
-//   notify('Building lib...');
-//   let tsProject = ts.createProject('tsconfig.json');
-//   return tsProject.src()
-//     .pipe(tsProject())
-//     .pipe(gulp.dest(`${paths.lib}/dist/`));
-// }
-
-// exports.lib = gulp.series(lib, bundleTS);
-
-// function lib() {
-//   return browserify({
-//     basedir: `${paths.lib}`,
-//     debug: true,
-//     entries: ['src/index.ts'],
-//     cache: {},
-//     packageCache: {}
-//   })
-//   .plugin(tsify)
-//   .bundle()
-//   .pipe(source('scrollxp.js'))
-//   .pipe(gulp.dest(`${paths.lib}/`));
-// }
-
-// exports.lib = lib;
-
-// function compileUMD() {
-//   notify('Building UMD lib...');
-//   return browserify({
-//     basedir: `${paths.lib}`,
-//     debug: true,
-//     entries: ['src/index.ts'],
-//     cache: {},
-//     packageCache: {}
-//   })
-//   .plugin(tsify, {
-//     noImplicitAny: true,
-//     target: "es5",
-//     module: "commonjs",
-//     strict: true,
-//     esModuleInterop: true,
-//     forceConsistentCasingInFileNames: true
-//   })
-//   .bundle()
-//   .pipe(source('scrollxp.js'))
-//   .pipe(gulp.dest(`${paths.lib}/dist`));
-// }
-
-// function compileESM() {
-//   notify('Building ESM lib...');
-//   return gulp.src(`${paths.lib}/src/**/*.ts`)
-//     .pipe(ts({
-//         noImplicitAny: true,
-//         declaration: true,
-//         target: "es2015",
-//         module: "es2020",
-//         strict: true,
-//         esModuleInterop: true,
-//         forceConsistentCasingInFileNames: true
-//     }))
-//     .pipe(gulp.dest(`${paths.lib}/`));
-// }
-
-// exports.lib = gulp.parallel(compileESM, compileUMD);
-
 /**
+ * Compile Lib Task
+ * 
  * Compile TypeScript files and create CommonJS modules
  */
 function compileLib() {
@@ -367,6 +228,8 @@ function compileLib() {
 }
 
 /**
+ * Bundle Lib Task
+ * 
  * Compile & bundle TypeScript files, creating the file dist/scrollxp.js and
  * exposing the module through the namespace ScrollXP
  */
