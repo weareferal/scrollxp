@@ -1,10 +1,14 @@
-class Bla {
-  message: string;
+import ScrollView from './ScrollView';
 
-  constructor() {
-    this.message = 'BLAHH!';
-    console.log(`HEY I AM ${this.message}!`);
-  }
-}
+// class Bla {
+//   message: string;
 
-module.exports = Bla;
+//   constructor() {
+//     this.message = 'BLAHH!';
+//     console.log(`HEY I AM ${this.message}!`);
+//   }
+// }
+
+// TODO: There is no way to use ScrollMagic with TS, so I'm going to need to create ScrollMagic with TS first
+
+module.exports = ScrollView;

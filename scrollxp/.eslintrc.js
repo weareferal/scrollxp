@@ -2,12 +2,13 @@ module.exports = {
   root: true,
   env: {
     es6: true,
+    browser: true
   },
   parser: '@typescript-eslint/parser', // Specifies the ESLint parser
   parserOptions: {
     ecmaVersion: 2015, // Allows for the parsing of modern ECMAScript features
     sourceType: 'module', // Allows for the use of imports
-    project: "tsconfig.json"
+    project: 'tsconfig.json'
   },
   plugins: [
     '@typescript-eslint',
@@ -38,5 +39,14 @@ module.exports = {
         },
       },
     ],
+    ''
+  },
+  settings: {
+    // More info: https://github.com/kriasoft/react-starter-kit/issues/1180#issuecomment-447109110
+    'import/resolver': {
+      'node': {
+        'extensions': ['.ts']
+      }
+    }
   }
 };
