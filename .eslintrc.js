@@ -1,52 +1,20 @@
 module.exports = {
-  root: true,
-  env: {
-    es6: true,
-    browser: true
-  },
-  parser: '@typescript-eslint/parser', // Specifies the ESLint parser
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2015, // Allows for the parsing of modern ECMAScript features
-    sourceType: 'module', // Allows for the use of imports
-    project: 'tsconfig.json'
+    sourceType: 'module',
+    project: './tsconfig.json',
   },
-  plugins: [
-    '@typescript-eslint',
-    'jsdoc',
-    'import',
-    'prefer-arrow',
-    'unicorn'
-  ],
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended', // Uses the recommended rules from @typescript-eslint/eslint-plugin
-    'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
-    'plugin:import/errors',
-    'plugin:import/warnings',
-    'plugin:jsdoc/recommended',
-    'plugin:unicorn/recommended',
-    'plugin:prettier/recommended'
+  extends:  [
+    'plugin:@typescript-eslint/recommended',  // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+    'prettier/@typescript-eslint',  // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+    'plugin:prettier/recommended',  // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
   ],
   rules: {
-    // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
-    'unicorn/filename-case': [
+    "@typescript-eslint/no-explicit-any": [
       'warn',
       {
-        cases: {
-          camelCase: true,
-          pascalCase: true,
-        },
-      },
-    ],
-    ''
-  },
-  settings: {
-    // More info: https://github.com/kriasoft/react-starter-kit/issues/1180#issuecomment-447109110
-    'import/resolver': {
-      'node': {
-        'extensions': ['.ts']
+        'ignoreRestArgs': true // Specify if arrays from the rest operator are considered okay
       }
-    }
+    ]
   }
-};
+}
