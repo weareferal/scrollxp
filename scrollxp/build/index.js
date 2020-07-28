@@ -1,8 +1,4 @@
-var Bla = /** @class */ (function () {
-    function Bla() {
-        this.message = 'BLAHH!';
-        console.log("HEY I AM " + this.message + "!");
-    }
-    return Bla;
-}());
-module.exports = Bla;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var ScrollView_1 = require("./ScrollView");
+module.exports = ScrollView_1.default;

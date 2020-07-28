@@ -6,8 +6,10 @@
 	],
 	"settings": {
 		"path-autocomplete.pathMappings": {
-			"$root": "${folder}/"
+			"$root": "${folder}"
 		},
-		"javascript.implicitProjectConfig.experimentalDecorators": true
+		"javascript.implicitProjectConfig.experimentalDecorators": true,
+		"typescript.preferences.quoteStyle": "single",
+		"javascript.preferences.quoteStyle": "single"
 	}
 }
