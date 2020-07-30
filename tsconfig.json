@@ -16,6 +16,7 @@
     "importHelpers": true,
     "declaration": true,
     "sourceMap": true,
+    "resolveJsonModule": true,
     "paths": {
       "scrollmagic": ["__demo__/src/index"],
       "scrollmagic/*": ["__demo__/src/*"]
