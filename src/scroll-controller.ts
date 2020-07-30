@@ -67,8 +67,8 @@ export default class ScrollController {
 
       this.controller = new Controller(this.options)
 
-      this.controller.scrollTo((newPos) => {
-        TweenMax.to(this.container, 2, {
+      this.controller.scrollTo(function (this: HTMLElement, newPos: number) {
+        TweenMax.to(this, 2, {
           scrollTo: {
             y: newPos,
           },
