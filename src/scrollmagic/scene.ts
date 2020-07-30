@@ -1717,7 +1717,7 @@ export default class Scene {
     if (options.offset !== undefined) {
       newOptions.offset = options.offset
     }
-    this._offset = newOptions.offset
+    this._offset = this.validateOffset(newOptions.offset)
 
     if (options.triggerElement !== undefined) {
       newOptions.triggerElement = options.triggerElement
@@ -1965,6 +1965,13 @@ export default class Scene {
     return <number>value
   }
 
+  public validateOffset(value: string | number): number {
+    if (Type.isString(value)) {
+      value = parseFloat(<string>value)
+    }
+    return <number>value
+  }
+
   public validateTriggerElement(value: string | HTMLElement): HTMLElement {
     const elem = <HTMLElement>DomUtils.getElements(value)[0]
     if (elem && elem.parentNode) {
@@ -2008,6 +2015,9 @@ export default class Scene {
     switch (attribute) {
       case "duration":
         this.duration = this.validateDuration(<string | number | (() => number)>value)
+        break
+      case "offset":
+        this.offset = this.validateOffset(<string | number>value)
         break
       case "triggerElement":
         this.triggerElement = this.validateTriggerElement(<string | HTMLElement>value)
