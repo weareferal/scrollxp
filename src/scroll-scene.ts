@@ -164,7 +164,7 @@ export default class ScrollScene {
   }
 
   public refresh(): ScrollScene {
-    this.scene.refresh
+    this.scene.refresh()
     return this
   }
 }

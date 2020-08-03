@@ -145,7 +145,9 @@ export default class ScrollController {
       damping: 0.05,
     })
 
-    this.addScrollbarListener(() => this.scenes.forEach((scene) => scene.refresh()))
+    this.addScrollbarListener(() => {
+      this.scenes.forEach((scene) => scene.refresh())
+    })
   }
 
   private removeScrollbars(): void {

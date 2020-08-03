@@ -550,7 +550,9 @@ export default class ScrollView {
       triggerElement: this.content,
       triggerHook: "onLeave",
       duration: this.content.offsetHeight,
-    }).on("update", () => this.updateParallaxItems(items, this.controller.getScrollPos()))
+    }).on("update", () => {
+      this.updateParallaxItems(items, this.controller.getScrollPos())
+    })
 
     this.scenes.push(scene)
     this.controller.addScene(scene)
