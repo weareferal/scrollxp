@@ -5,6 +5,8 @@ import Type from "./utils/type"
 import AnimationUtils from "./utils/animation"
 import Scene from "./scene"
 import SceneEvent from "./scene-event"
+import { Scrollbar } from "smooth-scrollbar/scrollbar"
+import { ScrollListener } from "smooth-scrollbar/interfaces"
 
 export enum ScrollDirection {
   Forward = "FORWARD",
@@ -26,6 +28,7 @@ export interface ControllerInfo {
   size: number
   scrollPos: number
   scrollDirection: ScrollDirection
+  smoothScrolling: boolean
 }
 
 export interface ControllerOptions {
@@ -35,6 +38,7 @@ export interface ControllerOptions {
   logLevel?: number
   refreshInterval?: number
   addIndicators?: boolean
+  smoothScrolling?: boolean
 }
 
 export default class Controller {
@@ -46,6 +50,7 @@ export default class Controller {
   private updateTimeout: () => void
   private sceneObjects: Scene[] = []
   private refreshTimeout: number
+  private scrollbarListener?: ScrollListener
 
   // Options
   private isVertical: boolean
@@ -53,11 +58,13 @@ export default class Controller {
   private globalSceneOptions: any
   private refreshInterval: number
   private addIndicators: boolean
+  private smoothScrolling: boolean
   public container: HTMLElement | Window
 
   // Public
   public indicators: ControllerIndicators
   public enabled = true
+  public _scrollbar?: Scrollbar
 
   public static NAMESPACE = "Controller"
 
@@ -199,6 +206,23 @@ export default class Controller {
     }
   }
 
+  get scrollbar(): Scrollbar | undefined {
+    return this._scrollbar
+  }
+
+  set scrollbar(newValue: Scrollbar | undefined) {
+    if (this._scrollbar && this.scrollbarListener) {
+      this._scrollbar.removeListener(this.scrollbarListener)
+      this.scrollbarListener = undefined
+    } else {
+      this.scrollbarListener = this.onChange.bind(this)
+      this._scrollbar = newValue
+      if (this._scrollbar && this.scrollbarListener) {
+        this._scrollbar.addListener(this.scrollbarListener)
+      }
+    }
+  }
+
   /**
    * Schedule the next execution of the refresh function
    */
@@ -212,6 +236,9 @@ export default class Controller {
    * Default function to get scroll pos - overwriteable using `Controller.scrollPos(newFunction)`
    */
   private getScrollPos(): number {
+    if (this.smoothScrolling && this.scrollbar) {
+      return this.isVertical ? this.scrollbar.offset.y : this.scrollbar.offset.x
+    }
     return this.isVertical ? DomUtils.getScrollTop(this.container) : DomUtils.getScrollLeft(this.container)
   }
 
@@ -379,6 +406,7 @@ export default class Controller {
       logLevel: 2,
       refreshInterval: 100,
       addIndicators: false,
+      smoothScrolling: false,
     }
 
     if (options) {
@@ -405,6 +433,10 @@ export default class Controller {
       if (options.addIndicators !== undefined) {
         newOptions.addIndicators = options.addIndicators
       }
+
+      if (options.smoothScrolling !== undefined) {
+        newOptions.smoothScrolling = options.smoothScrolling
+      }
     }
 
     const container = DomUtils.getContainer(newOptions.container)
@@ -422,6 +454,7 @@ export default class Controller {
     this.logLevel = newOptions.logLevel
     this.refreshInterval = newOptions.refreshInterval
     this.addIndicators = newOptions.addIndicators
+    this.smoothScrolling = newOptions.smoothScrolling
   }
 
   private handleBoundsPositionChange(): void {
@@ -795,6 +828,7 @@ export default class Controller {
       container: this.container,
       scrollPos: this._scrollPos,
       scrollDirection: this.scrollDirection,
+      smoothScrolling: this.smoothScrolling,
     }
   }
 

@@ -5,7 +5,6 @@ import { ScrollListener } from "smooth-scrollbar/interfaces"
 
 export interface ScrollControllerOptions extends ControllerOptions {
   container?: Window | HTMLElement
-  smoothScrolling?: boolean
 }
 
 export default class ScrollController {
@@ -59,7 +58,7 @@ export default class ScrollController {
     if (this._smoothScrolling) {
       console.debug("[ScrollController] Smooth scrolling activated")
 
-      this.controller = new Controller(Object.assign(this.options, { refreshInterval: 0 }))
+      this.controller = new Controller(Object.assign(this.options, { smoothScrolling: true, refreshInterval: 0 }))
 
       this.createScrollbars()
     } else {
@@ -148,6 +147,8 @@ export default class ScrollController {
     this.addScrollbarListener(() => {
       this.scenes.forEach((scene) => scene.refresh())
     })
+
+    this.controller.scrollbar = this.scrollbar
   }
 
   private removeScrollbars(): void {

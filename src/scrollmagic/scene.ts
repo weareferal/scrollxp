@@ -1439,6 +1439,7 @@ export default class Scene {
 
   /**
    * Updates the position of the triggerElement, if present.
+   *
    * This method is called ...
    *  - ... when the triggerElement is changed
    *  - ... when the scene is added to a (new) controller

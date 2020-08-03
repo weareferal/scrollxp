@@ -70,7 +70,14 @@ export default class Indicator {
 
     // No parent supplied or doesnt exist
     if (!this.options.parent || DomUtils.getElements(this.options.parent)[0]) {
-      this.boundsContainer = isDocument ? document.body : <HTMLElement>this.controller.info().container // Check if window/document (then use body)
+      if (isDocument) {
+        this.boundsContainer = document.body // Check if window/document (then use body)
+      } else if (this.controller.info().smoothScrolling) {
+        // Add indicator inside smooth scrolling container
+        this.boundsContainer = <HTMLElement>(<HTMLElement>this.controller.info().container).children[0]
+      } else {
+        this.boundsContainer = <HTMLElement>this.controller.info().container
+      }
     }
 
     if (!isDocument && DomUtils.css(<HTMLElement>this.boundsContainer, "position") === "static") {
