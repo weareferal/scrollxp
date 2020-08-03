@@ -2,6 +2,7 @@ import { Breakpoints, BreakpointListener, BreakpointListenerResult } from "./uti
 import PropertyHelper from "./utils/property-helper"
 import ScrollScene from "./scroll-scene"
 import ScrollController from "./scroll-controller"
+import SceneEvent from "./scrollmagic/scene-event"
 
 declare let __SCROLLXP_VERSION__: string
 
@@ -565,12 +566,9 @@ export default class ScrollView {
         duration: item.duration,
         offset: item.offset,
       })
-        .on("update", () => {
-          const triggerElement = scene.triggerElement()
-          if (during && triggerElement) {
-            const startPos = triggerElement.offsetTop - scene.triggerHook() * scene.duration()
-
-            const delta = this.controller.getScrollPos() - startPos
+        .on("update", (e?: SceneEvent) => {
+          if (during && e?.vars?.startPos) {
+            const delta = this.controller.getScrollPos() - e.vars.startPos
 
             this.updateParallaxItems([item], delta)
           }
