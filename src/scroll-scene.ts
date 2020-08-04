@@ -125,6 +125,7 @@ export default class ScrollScene {
 
           this.pinnedElement.style.position = "fixed"
           this.pinnedElement.style.top = `${top}px`
+          this.pinnedElement.style.left = ""
           this.pinnedElement.style.width = `${width}px`
         }
 
