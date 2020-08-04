@@ -47,6 +47,20 @@ export default class ScrollScene {
     return this.scene.duration
   }
 
+  public offset(value?: string | number): number {
+    if (value !== undefined) {
+      this.scene.offset = this.scene.validateOffset(value)
+    }
+    return this.scene.offset
+  }
+
+  public reverse(value?: boolean): boolean {
+    if (value !== undefined) {
+      this.scene.reverse = this.scene.validateReverse(value)
+    }
+    return this.scene.reverse
+  }
+
   public progress(value?: number): number {
     if (value !== undefined) {
       this.scene.progress = value

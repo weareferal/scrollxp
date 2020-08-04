@@ -167,6 +167,10 @@ export interface ParallaxItem {
   indicator?: string
 }
 
+export interface SceneModifier {
+  (domScene: HTMLElement): { [key: string]: any }
+}
+
 export default class ScrollView {
   static version = __SCROLLXP_VERSION__
 
@@ -206,6 +210,7 @@ export default class ScrollView {
   private domElements: HTMLElement[] = []
   private tweens: TimelineMax[] = []
   private scenes: ScrollScene[] = []
+  private sceneModifiers: { [key: string]: SceneModifier } = {}
 
   constructor(options: ScrollViewOptions) {
     this.container = options.container || window
@@ -280,6 +285,10 @@ export default class ScrollView {
     this.rebuild()
   }
 
+  registerSceneModifier(modifierName: string, modifierFunction: SceneModifier): void {
+    this.sceneModifiers[modifierName] = modifierFunction
+  }
+
   private rebuild(): void {
     setTimeout(() => {
       this.resetScenes()
@@ -308,7 +317,7 @@ export default class ScrollView {
               ? document.body.querySelector(trigger)
               : this.container.querySelector(trigger)
         }
-        const scene = new ScrollScene({
+        let scene = new ScrollScene({
           triggerElement: triggerElement || domScene,
           triggerHook: this.helper.getSceneProperty(domScene, "hook") || this.defaults.scene.triggerHook,
           duration: this.helper.getSceneProperty(domScene, "duration") || this.defaults.scene.duration,
@@ -324,14 +333,14 @@ export default class ScrollView {
 
         const classToggle = this.helper.getSceneProperty(domScene, "class-toggle") || this.defaults.scene.classToggle
         const pin = this.helper.getSceneProperty(domScene, "pin") || this.defaults.scene.pin
-        // const sceneName = this.helper.getSceneProperty(domScene, "scene", this.defaults.scene.name)
+        const sceneName = this.helper.getSceneProperty(domScene, "scene") || this.defaults.scene.name
 
         if (classToggle) {
           scene.setClassToggle(domScene, classToggle)
         } else if (pin) {
           scene.setPin(domScene)
-          // } else if (sceneName) {
-          // this.createCustomAnimation(scene, domScene, sceneName)
+        } else if (sceneName) {
+          scene = this.applySceneModifier(sceneName, scene, domScene)
         } else {
           this.createAnimation(scene, domScene)
         }
@@ -484,6 +493,69 @@ export default class ScrollView {
     scene.setTween(tween, easing)
 
     this.tweens.push(tween)
+  }
+
+  // TODO: Refactor this. Custom scenes must be implemented outside ScrollView and applied here
+  /**
+   * A modifier must be registered in the scroll view in order to be applied.
+   *
+   * As data-* attributes can't cover eveything we want to do with scenes, we can apply custom behavior
+   * to it through scene modifiers.
+   *
+   * @param {*} modifierName
+   * @param {*} scene
+   * @param {*} domScene
+   */
+  private applySceneModifier(modifierName: string, scene: ScrollScene, domScene: HTMLElement): ScrollScene {
+    const modifierFunction = this.sceneModifiers[modifierName]
+
+    if (modifierFunction) {
+      const modifier = modifierFunction(domScene)
+
+      if (modifier.tween !== undefined) {
+        const tween = new TimelineMax().add(modifier.tween)
+
+        scene.setTween(tween)
+
+        this.tweens.push(tween)
+      }
+
+      if (modifier.duration !== undefined) {
+        scene.duration(modifier.duration)
+      }
+
+      if (modifier.triggerHook !== undefined) {
+        scene.triggerHook(modifier.triggerHook)
+      }
+
+      if (modifier.onEnter !== undefined) {
+        scene.on("enter", () => {
+          modifier.onEnter(scene)
+        })
+      }
+
+      if (modifier.onProgress !== undefined) {
+        scene.on("progress", () => {
+          modifier.onProgress(scene)
+        })
+      }
+
+      if (modifier.offset !== undefined) {
+        scene.offset(modifier.offset)
+      }
+
+      if (modifier.pin !== undefined) {
+        scene.setPin(modifier.pin)
+      }
+
+      if (modifier.reverse !== undefined) {
+        scene.reverse(modifier.reverse)
+      }
+
+      this.domElements.push(domScene)
+    }
+
+    return scene
   }
 
   private buildParallaxScenes(): void {

@@ -2009,7 +2009,7 @@ export default class Scene {
     throw ['Invalid value for option "triggerHook": ', value]
   }
 
-  private validateReverse(value?: boolean): boolean {
+  public validateReverse(value?: boolean): boolean {
     return !!value // Force boolean
   }
 
