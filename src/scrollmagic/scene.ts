@@ -79,6 +79,7 @@ export default class Scene {
 
   // Animation plugin
   private tween?: TimelineMax
+  private easing = false
 
   // Debug plugin
   private autoIndex = 0
@@ -1234,7 +1235,9 @@ export default class Scene {
    * @param {object} params - The parameters for the tween
    * @returns {Scene} Parent object for chaining.
    */
-  public setTween(tween: TweenMax | TimelineMax): Scene {
+  public setTween(tween: TweenMax | TimelineMax, easing?: boolean): Scene {
+    this.easing = !!easing
+
     let newTween: TimelineMax
 
     try {
@@ -1891,6 +1894,16 @@ export default class Scene {
           if (this.tweenChanges && this.tween.tweenTo) {
             // Go smooth
             this.tween.tweenTo(progress * this.tween.duration())
+          } else if (this.easing) {
+            // Apply ease for every tween progress, making the animaton smooth
+            const tweens = this.tween.getChildren()
+            tweens.forEach((tween) => {
+              if (tween.vars.data?.ease && tween.vars.data?.momentum) {
+                gsap.to(tween, tween.vars.data.momentum, { progress: progress, ease: tween.vars.data.ease })
+              } else {
+                tween.totalProgress(progress).pause()
+              }
+            })
           } else {
             // Just hard set it
             this.tween.totalProgress(progress).pause() // Use totalProgress because it considers repeat property

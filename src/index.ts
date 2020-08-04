@@ -35,8 +35,8 @@ export interface ViewOptions {
     duration?: number
     position?: string
     stagger?: number
-    transition?: string
     ease?: string
+    momentum?: number
     repeat?: number
     yoyo?: boolean
     delay?: number
@@ -105,8 +105,8 @@ export interface ImmutableViewOptions {
     duration: number
     position: string
     stagger?: number
-    transition?: string
     ease?: string
+    momentum?: number
     repeat: number
     yoyo: boolean
     delay: number
@@ -200,6 +200,7 @@ export default class ScrollView {
       repeat: 0,
       yoyo: false,
       delay: 0,
+      momentum: 0,
     },
   }
   private domElements: HTMLElement[] = []
@@ -346,6 +347,8 @@ export default class ScrollView {
 
     const domElements = domScene.querySelectorAll("[data-animate]")
 
+    let easing = false
+
     domElements.forEach((elem) => {
       const domElement = <HTMLElement>elem
 
@@ -388,13 +391,6 @@ export default class ScrollView {
         },
       }
 
-      const extraProps = {
-        ease: eval(this.helper.getAnimationProperty(domElement, "ease") || `${this.defaults.animation.ease}`),
-        repeat: eval(this.helper.getAnimationProperty(domElement, "repeat") || `${this.defaults.animation.repeat}`),
-        yoyo: eval(this.helper.getAnimationProperty(domElement, "yoyo") || `${this.defaults.animation.yoyo}`),
-        delay: eval(this.helper.getAnimationProperty(domElement, "delay") || `${this.defaults.animation.delay}`),
-      }
-
       const duration = parseFloat(
         this.helper.getAnimationProperty(domElement, "duration") || `${this.defaults.animation.duration}`,
       )
@@ -403,11 +399,34 @@ export default class ScrollView {
         this.helper.getAnimationProperty(domElement, "stagger") || `${this.defaults.animation.stagger}`,
       )
       const label = this.helper.getAnimationProperty(domElement, "label") || this.defaults.animation.label
-      const transition =
-        this.helper.getAnimationProperty(domElement, "transition") || this.defaults.animation.transition
 
       const fromProps = this.buildState("from", animationProps)
       const toProps = this.buildState("to", animationProps)
+
+      let extraProps = {
+        repeat: eval(this.helper.getAnimationProperty(domElement, "repeat") || `${this.defaults.animation.repeat}`),
+        yoyo: eval(this.helper.getAnimationProperty(domElement, "yoyo") || `${this.defaults.animation.yoyo}`),
+        delay: eval(this.helper.getAnimationProperty(domElement, "delay") || `${this.defaults.animation.delay}`),
+      }
+
+      const ease = eval(this.helper.getAnimationProperty(domElement, "ease") || `${this.defaults.animation.ease}`)
+      const momentum = parseFloat(
+        this.helper.getAnimationProperty(domElement, "momentum") || `${this.defaults.animation.momentum}`,
+      )
+
+      if (momentum > 0) {
+        extraProps = Object.assign(extraProps, {
+          data: {
+            ease: ease,
+            momentum: momentum,
+          },
+        })
+        easing = true
+      } else {
+        extraProps = Object.assign(extraProps, {
+          ease: ease,
+        })
+      }
 
       if (!animation) {
         const hasProperties = fromProps || toProps
@@ -460,13 +479,9 @@ export default class ScrollView {
       if (label) {
         tween.add(label)
       }
-
-      if (transition) {
-        domElement.style.transition = transition
-      }
     })
 
-    scene.setTween(tween)
+    scene.setTween(tween, easing)
 
     this.tweens.push(tween)
   }
@@ -569,8 +584,8 @@ export default class ScrollView {
         offset: item.offset,
       })
         .on("update", (e?: SceneEvent) => {
-          if (during && e?.vars?.startPos) {
-            const delta = this.controller.getScrollPos() - e.vars.startPos
+          if (during && e?.vars?.scrollPos && e?.vars?.startPos) {
+            const delta = e.vars.scrollPos - e.vars.startPos
 
             this.updateParallaxItems([item], delta)
           }

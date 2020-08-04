@@ -54,8 +54,15 @@ export default class ScrollScene {
     return this.scene.progress
   }
 
-  public setTween(tween: TweenMax | TimelineMax): ScrollScene {
-    this.scene.setTween(tween)
+  public tweenChanges(value?: boolean): boolean {
+    if (value !== undefined) {
+      this.scene.tweenChanges = value
+    }
+    return this.scene.tweenChanges
+  }
+
+  public setTween(tween: TweenMax | TimelineMax, easing?: boolean): ScrollScene {
+    this.scene.setTween(tween, easing)
     return this
   }
 
