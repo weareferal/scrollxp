@@ -19,7 +19,10 @@
     "compile": "tsc -p ./build",
     "postcompile": "rimraf ./build/tsconfig.json",
     "prebundle": "npm-run-all clean:dist",
-    "bundle": "webpack --config ./scripts/webpack.prod.js"
+    "bundle": "webpack --config ./scripts/webpack.prod.js",
+    "preghpages": "rimraf ./.tmp",
+    "ghpages": "webpack --config ./scripts/webpack.ghpages.js",
+    "deploy": "./scripts/deploy.sh"
   },
   "nyc": {
     "extension": [

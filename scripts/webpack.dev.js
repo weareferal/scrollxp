@@ -30,7 +30,6 @@ module.exports = merge(baseConfig, {
         include: [joinRoot('src'),joinRoot('__demo__')],
       },
     ],
-
   }
 });
 
