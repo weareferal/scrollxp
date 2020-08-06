@@ -1,0 +1,79 @@
+{
+  "name": "scrollxp",
+  "version": "0.0.1",
+  "description": "A toolkit for common scrolling animations.",
+  "main": "dist/scrollxp.js",
+  "module": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "start": "node ./scripts/serve.js",
+    "test": "nyc mocha -r ts-node/register -r jsdom-global/register tests/**/*.spec.ts",
+    "lint": "eslint --fix ./src/*",
+    "clean:compile": "rimraf ./build",
+    "clean:dist": "rimraf ./dist",
+    "clean": "npm-run-all clean:compile clean:dist",
+    "copy:src": "cpx './src/**' ./build/src",
+    "copy:conf": "cpx ./tsconfig.json ./build",
+    "copy": "npm-run-all copy:src copy:conf",
+    "precompile": "npm-run-all clean:compile copy",
+    "compile": "tsc -p ./build",
+    "postcompile": "rimraf ./build/tsconfig.json",
+    "prebundle": "npm-run-all clean:dist",
+    "bundle": "webpack --config ./scripts/webpack.prod.js",
+    "preghpages": "rimraf ./.tmp",
+    "ghpages": "webpack --config ./scripts/webpack.ghpages.js",
+    "deploy": "./scripts/deploy.sh"
+  },
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "src/**/*"
+    ],
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "reporter": [
+      "text"
+    ],
+    "all": true
+  },
+  "author": "Thiago Rossener",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
+    "browser-sync": "^2.26.10",
+    "browser-sync-webpack-plugin": "^2.2.2",
+    "chai": "^4.2.0",
+    "circular-dependency-plugin": "^5.2.0",
+    "cpx": "^1.5.0",
+    "eslint": "^7.4.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-prettier": "^3.1.4",
+    "ip": "^1.1.5",
+    "jsdom": "^16.3.0",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^8.0.1",
+    "npm-run-all": "^4.1.5",
+    "nyc": "^15.1.0",
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
+    "ts-loader": "^8.0.1",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.7",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^5.0.9"
+  },
+  "dependencies": {
+    "gsap": "^3.4.2",
+    "smooth-scrollbar": "^8.5.0"
+  }
+}

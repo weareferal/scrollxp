@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": ".",
+    "baseUrl": ".",
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["dom", "es6"],
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "importHelpers": true,
+    "declaration": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "scrollmagic": ["__demo__/src/index"],
+      "scrollmagic/*": ["__demo__/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "build", "dist"]
+}
