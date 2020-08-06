@@ -30,3 +30,4 @@ node_modules
 # build file
 .tmp
 build
+out
