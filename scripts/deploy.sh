@@ -5,10 +5,10 @@ SOURCE_BRANCH="master"
 TARGET_BRANCH="gh-pages"
 
 # Pull requests and commits to other branches shouldn't try to deploy, just build to verify
-if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" ]; then
-    echo "Skipping deploy; just doing a build."
-    exit 0
-fi
+# if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" ]; then
+#     echo "Skipping deploy; just doing a build."
+#     exit 0
+# fi
 
 # Save some useful information
 REPO=`git config remote.origin.url`
@@ -18,7 +18,7 @@ SSH_REPO=${REPO/\/\/github.com/\/\/$GITHUB_TOKEN@github.com}
 SHA=`git rev-parse --verify HEAD`
 
 # Clone the existing gh-pages for this repo into out/
-# Create a new empty branch if gh-pages doesn't exist yet (should only happen on first deply)
+# Create a new empty branch if gh-pages doesn't exist yet (should only happen on first deploy)
 git clone $REPO out
 cd out
 
@@ -36,7 +36,7 @@ npm run ghpages
 # Copy files
 echo "Copying new contents"
 cp -v ./__demo__/index.html ./out
-cp -vr ./__demo__/images ./out
+cp -vr ./__demo__/assets ./out
 cp -vr ./.tmp/* ./out
 cd ./out
 
