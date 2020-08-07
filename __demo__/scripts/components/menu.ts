@@ -1,14 +1,12 @@
-import { findComponent } from '../utils'
-import ScrollContainer from './scroll-container'
-import Component from "../component"
+import ScrollContainer from "./scroll-container"
+import { Component, component } from "../component"
 
+@component("menu")
 class Menu extends Component {
-  public static componentName = "menu"
-
   constructor(element, options?) {
     super(element, options)
 
-    const scrollContainer = findComponent(ScrollContainer)
+    const scrollContainer = <ScrollContainer>Component.find(ScrollContainer)
     if (scrollContainer) {
       const anchors = element.querySelectorAll('a[href^="#"]')
       scrollContainer.bindAnchors(anchors)

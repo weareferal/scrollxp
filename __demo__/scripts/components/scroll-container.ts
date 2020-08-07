@@ -1,12 +1,10 @@
 import * as breakpoints from '../breakpoints.json'
 import ScrollXP from 'scrollxp'
-import Component from "../component"
+import { Component, component } from "../component"
 import ScrollScene from "src/scroll-scene"
 
-
-class ScrollContainer extends Component  {
-  public static componentName = "scrollContainer"
-
+@component("scrollContainer")
+class ScrollContainer extends Component {
   private view: ScrollXP
 
   constructor(element, options?) {

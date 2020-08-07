@@ -1,33 +1,28 @@
-import { findComponent } from '../utils'
 import ScrollContainer from './scroll-container'
-import Component from "../component"
+import { Component, component } from "../component"
 
-
+@component("toggleButton")
 class ToggleButton extends Component  {
-  public static componentName = "toggleButton"
-
   private isActive: boolean
 
   constructor(element, options?) {
     super(element, options)
 
-    this.element = element
-
-    const scrollContainer = findComponent(ScrollContainer)
+    const scrollContainer = <ScrollContainer>Component.find(ScrollContainer)
     if (scrollContainer) {
       this.isActive = scrollContainer.smoothScrolling()
 
-      this.element.addEventListener('click', () => {
+      this.element.addEventListener("click", () => {
         this.isActive = !this.isActive;
 
         scrollContainer.smoothScrolling(this.isActive)
 
         this.updateState()
-      });
+      })
 
       this.updateState()
     } else {
-      console.error('[ToggleButton] Couldn\'t find ScrollContainer component.')
+      console.error("[ToggleButton] Couldn\'t find ScrollContainer component.")
     }
   }
 
