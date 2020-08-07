@@ -2,7 +2,11 @@ import "reflect-metadata"
 
 const nameKey = Symbol("component")
 
-// Based on utils from https://blog.garstasio.com/you-dont-need-jquery/utils/
+/**
+ * Map the DOM element to its component instance.
+ * 
+ * Based on utils from https://blog.garstasio.com/you-dont-need-jquery/utils/
+ */
 const data = window.WeakMap ? new WeakMap() : (function () {
   let lastId = 0,
       store = {};
@@ -26,16 +30,16 @@ const data = window.WeakMap ? new WeakMap() : (function () {
  * To perserve class name through mangling.
  *
  * @example
- * @component("customer")
- * class Customer {}
+ * @component("foo")
+ * class Foo {}
+ *
  * @param className
  */
 export function component(className: string): ClassDecorator {
-  return (Reflect as any).metadata(nameKey, className)
+  return Reflect.metadata(nameKey, className)
 }
 
 export class Component {
-  public name: string
   protected element: HTMLElement
   protected options: any
 
@@ -44,7 +48,18 @@ export class Component {
     this.options = options
   }
 
-  public static find(className: Function): Component {
+  /**
+   * Find component instance based on component class.
+   * 
+   * @example
+   * import Foo from "./components/foo"
+   * const foo = Component.find(Foo)
+   *
+   * @param class
+   *
+   * @returns Instance of class
+   */
+  public static find<T extends { new (...args: any[]): Component }>(className: T): InstanceType<T> {
     const obj = data.get(document.querySelector(`[data-component="${Component.getName(className)}"]`))
     if (!obj) {
       throw Error(`[Component] Couldn\'t find instance of ${Component.getName(className)} component. Check declaration order.`)
@@ -53,34 +68,46 @@ export class Component {
   }
 
   /**
+   * Get the component name set in the decorator.
+   *
    * @example
-   * const type = Customer;
-   * getName(type); // 'Customer'
+   * const type = Foo;
+   * getName(type); // 'Foo'
    * @param type
    */
-  public static getName(type: Function): string {
-    return (Reflect as any).getMetadata(nameKey, type)
+  public static getName<T extends { new (...args: any[]): Component }>(type: T): string {
+    return Reflect.getMetadata(nameKey, type)
   }
 
-  public static getInstance(element: HTMLElement): Component {
+  /**
+   * Get instance of the component bound to the element.
+   *
+   * @param element
+   *
+   * @returns Component
+   */
+  public static getInstance<T extends { new (...args: any[]): Component }>(element: HTMLElement): InstanceType<T> {
     return data.get(element).component
   }
 
   /**
-   * @example
-   * const instance = new Customer();
-   * getInstanceName(instance); // 'Customer'
-   * @param instance
+   * Check if component is bound to the element.
+   * 
+   * @params element
+   * 
+   * @returns boolean
    */
-  public static getInstanceName(instance: Object): string {
-    return (Reflect as any).getMetadata(nameKey, instance.constructor)
-  }
-
   public static isLoaded(element: HTMLElement): boolean {
     return data.get(element) && data.get(element).component !== undefined
   }
 
-  public static load(element: HTMLElement, component: Component): void {
+  /**
+   * Bind component to the element.
+   *
+   * @param element
+   * @param component
+   */
+  public static load<T extends Component>(element: HTMLElement, component: T): void {
     data.set(element, { component: component })
   }
 }

@@ -8,7 +8,7 @@ class ToggleButton extends Component  {
   constructor(element, options?) {
     super(element, options)
 
-    const scrollContainer = <ScrollContainer>Component.find(ScrollContainer)
+    const scrollContainer = Component.find(ScrollContainer)
     if (scrollContainer) {
       this.isActive = scrollContainer.smoothScrolling()
 
@@ -21,8 +21,6 @@ class ToggleButton extends Component  {
       })
 
       this.updateState()
-    } else {
-      console.error("[ToggleButton] Couldn\'t find ScrollContainer component.")
     }
   }
 
