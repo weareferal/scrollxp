@@ -171,6 +171,8 @@ export interface SceneModifier {
   (domScene: HTMLElement): { [key: string]: any }
 }
 
+export { ScrollScene }
+
 export default class ScrollView {
   static version = __SCROLLXP_VERSION__
 

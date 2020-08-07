@@ -1,6 +1,6 @@
 import "reflect-metadata"
 
-const nameKey = Symbol("component")
+const nameKey = Symbol("dataComponent")
 
 /**
  * Map the DOM element to its component instance.
@@ -27,16 +27,16 @@ const data = window.WeakMap ? new WeakMap() : (function () {
 }())
 
 /**
- * To perserve class name through mangling.
+ * Decorator to set the component name which will be used on templates.
  *
  * @example
- * @component("foo")
+ * @DataComponent("foo")
  * class Foo {}
  *
- * @param className
+ * @param componentName
  */
-export function component(className: string): ClassDecorator {
-  return Reflect.metadata(nameKey, className)
+export function DataComponent(componentName: string): ClassDecorator {
+  return Reflect.metadata(nameKey, componentName)
 }
 
 export class Component {
@@ -60,23 +60,14 @@ export class Component {
    * @returns Instance of class
    */
   public static find<T extends { new (...args: any[]): Component }>(className: T): InstanceType<T> {
-    const obj = data.get(document.querySelector(`[data-component="${Component.getName(className)}"]`))
-    if (!obj) {
-      throw Error(`[Component] Couldn\'t find instance of ${Component.getName(className)} component. Check declaration order.`)
+    const elements = document.querySelectorAll(`[data-component="${Component.getName(className)}"]`)
+    if (!elements.length) {
+      throw Error(`[Component] Couldn\'t find element with [data-component="${Component.getName(className)}"].`)
     }
-    return obj.component
-  }
-
-  /**
-   * Get the component name set in the decorator.
-   *
-   * @example
-   * const type = Foo;
-   * getName(type); // 'Foo'
-   * @param type
-   */
-  public static getName<T extends { new (...args: any[]): Component }>(type: T): string {
-    return Reflect.getMetadata(nameKey, type)
+    if (elements.length > 1) {
+      console.warn(`[Component] Found more than 1 element with [data-component="${Component.getName(className)}"]. Returning the first one.`)
+    }
+    return Component.getInstance(<HTMLElement>elements[0])
   }
 
   /**
@@ -87,7 +78,28 @@ export class Component {
    * @returns Component
    */
   public static getInstance<T extends { new (...args: any[]): Component }>(element: HTMLElement): InstanceType<T> {
-    return data.get(element).component
+    const obj = data.get(element)
+    if (!obj) {
+      throw Error(`[Component] Couldn\'t find instance of "${element.getAttribute("data-component")}" component. Check declaration order.`)
+    }
+    return obj.component
+  }
+
+  /**
+   * Get the component name set in the decorator.
+   *
+   * @example
+   * @DataComponent("foo")
+   * class Foo extends Component {}
+   *
+   * getName(Foo) // 'foo'
+   *
+   * @param clazz
+   *
+   * @returns string
+   */
+  public static getName<T extends { new (...args: any[]): Component }>(clazz: T): string {
+    return Reflect.getMetadata(nameKey, clazz)
   }
 
   /**

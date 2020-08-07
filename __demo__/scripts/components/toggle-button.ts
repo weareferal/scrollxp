@@ -1,8 +1,8 @@
 import ScrollContainer from './scroll-container'
-import { Component, component } from "../component"
+import { Component, DataComponent } from "../component"
 
-@component("toggleButton")
-class ToggleButton extends Component  {
+@DataComponent("toggleButton")
+export default class ToggleButton extends Component  {
   private isActive: boolean
 
   constructor(element, options?) {
@@ -38,6 +38,4 @@ class ToggleButton extends Component  {
       }
     }
   }
-};
-
-export default ToggleButton
+}

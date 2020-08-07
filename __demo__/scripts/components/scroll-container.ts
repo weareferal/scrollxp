@@ -1,10 +1,9 @@
 import * as breakpoints from '../breakpoints.json'
-import ScrollXP from 'scrollxp'
-import { Component, component } from "../component"
-import ScrollScene from "src/scroll-scene"
+import ScrollXP, { ScrollScene } from "scrollxp"
+import { Component, DataComponent } from "../component"
 
-@component("scrollContainer")
-class ScrollContainer extends Component {
+@DataComponent("scrollContainer")
+export default class ScrollContainer extends Component {
   private view: ScrollXP
 
   constructor(element, options?) {
@@ -50,6 +49,4 @@ class ScrollContainer extends Component {
     }
     return this.view.smoothScrolling
   }
-};
-
-export default ScrollContainer
+}
