@@ -35,7 +35,7 @@ $ npm install
 Then:
 
 ```
-$ gulp
+$ npm run start
 ```
 
 ## Initialize
@@ -68,7 +68,7 @@ Then, create a container to wrap up your content:
 Now, initialize the container in your JavaScript:
 
 ```
-var view = new ScrollView({
+var view = new ScrollXP({
   container: document.querySelector('.wrapper'),
   smoothScrolling: false
 });
@@ -82,18 +82,18 @@ However, instead of creating the scene in the JavaScript, you're going to use `d
 
 Add `data-scene` to your scene container, it will indicate you're creating a scene.
 
-Then, in the same DOM element, you can setup the scene by adding those optional properties:
+Then, in the same DOM element, you can setup the scene by adding properties like `data-scene-[property]`:
 
-| Name                      | Type                 | Default     | Description                                                                                                                                                                               |
-| ------------------------- | -------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `data-scene-trigger`      | `string`             | DOM element | Selector that defines the start of the scene. If undefined, the scene will start at the `data-scene` element.                                                                             |
-| `data-scene-hook`         | `string` or `number` | `onCenter`  | Can be `onEnter`, `onCenter`, `onLeave` or a float number between 0-1                                                                                                                     |
-| `data-scene-duration`     | `string` or `number` | `0`         | The duration of the scene. `100%` will keep the duration always exactly at the inner height of the scroll container. `0` means that the scene is 'open end' and no end will be triggered. |
-| `data-scene-reverse`      | `boolean`            | `true`      | Should the scene reverse, when scrolling up?                                                                                                                                              |
-| `data-scene-enabled`      | `boolean`            | `true`      | Use it to disable the scene for other screen sizes. Check out breakpoints section.                                                                                                        |
-| `data-scene-indicator`    | `string`             | `null`      | Add visual indicators. Use it to debug.                                                                                                                                                   |
-| `data-scene-class-toggle` | `string`             | `null`      | One or more Classnames (separated by space) that should be added to the element during the scene.                                                                                         |
-| `data-scene-pin`          | `boolean`            | `false`     | Pin the element for the duration of the scene.                                                                                                                                            |
+| Property       | Type                 | Default     | Description                                                                                                                                                                               |
+| -------------- | -------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `trigger`      | `string`             | DOM element | Selector that defines the start of the scene. If undefined, the scene will start at the `data-scene` element.                                                                             |
+| `hook`         | `string` \| `number` | `onCenter`  | Can be `onEnter`, `onCenter`, `onLeave` or a float number between 0-1                                                                                                                     |
+| `duration`     | `string` \| `number` | `0`         | The duration of the scene. `100%` will keep the duration always exactly at the inner height of the scroll container. `0` means that the scene is 'open end' and no end will be triggered. |
+| `reverse`      | `boolean`            | `true`      | Should the scene reverse, when scrolling up?                                                                                                                                              |
+| `enabled`      | `boolean`            | `true`      | Use it to disable the scene for other screen sizes. Check out breakpoints section.                                                                                                        |
+| `indicator`    | `string`             | `undefined` | Add visual indicators. Use it to debug.                                                                                                                                                   |
+| `class-toggle` | `string`             | `undefined` | One or more Classnames (separated by space) that should be added to the element during the scene.                                                                                         |
+| `pin`          | `boolean`            | `false`     | Pin the element for the duration of the scene.                                                                                                                                            |
 
 **Limitations**
 
@@ -103,7 +103,7 @@ At the moment, scenes have some limitations:
 - If you use `data-scene-pin`, animations and scene modifiers won't apply.
 - If you use scene modifiers, animations won't apply.
 
-**TODO:**
+**TO DO:**
 
 - [ ] Add `data-scene-offset`
 - [ ] Add `data-scene-log-level`
@@ -113,50 +113,49 @@ At the moment, scenes have some limitations:
 
 When you create a scene, _ScrollXP_ will generate a [TimelineMax](https://greensock.com/timelinemax/).
 
-Creating animations is like creating [GSAP tweens](https://greensock.com/docs/v2/GSAP/Tween), but with `data-*` attributes.
+Creating animations is like creating [GSAP tweens](https://greensock.com/docs/v2/GSAP/Tween).
 
-For each DOM element inside the `data-scene` you want animate, just add `data-animate` to it.
+For each DOM element inside the `data-scene` you want to animate, just add `data-animate` to it.
 
-Then, you can setup your animation by adding those properties:
+Then, in the same DOm element, you can setup your animation by adding properties like `data-animate-[property]`:
 
-| Name                            | Type      | Default | Description                                                                                                                                                                                                      |
-| ------------------------------- | --------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `data-animate-from-alpha`       | `number`  | `null`  | Number between 0-1. Changes element opacity.                                                                                                                                                                     |
-| `data-animate-to-alpha`         | `number`  | `null`  | Number between 0-1. Changes element opacity.                                                                                                                                                                     |
-| `data-animate-from-x`           | `number`  | `null`  | Moves element horizontally. Sets initial position.                                                                                                                                                               |
-| `data-animate-to-x`             | `number`  | `null`  | Moves element horizontally. Sets final position.                                                                                                                                                                 |
-| `data-animate-from-y`           | `number`  | `null`  | Moves element vertically. Sets initial position.                                                                                                                                                                 |
-| `data-animate-to-y`             | `number`  | `null`  | Moves element vertically. Sets initial position.                                                                                                                                                                 |
-| `data-animate-from-x-percent`   | `number`  | `null`  | Moves element horizontally. Sets initial position in percentage.                                                                                                                                                 |
-| `data-animate-to-x-percent`     | `number`  | `null`  | Moves element horizontally. Sets final position in percentage.                                                                                                                                                   |
-| `data-animate-from-y-percent`   | `number`  | `null`  | Moves element vertically. Sets initial position in percentage.                                                                                                                                                   |
-| `data-animate-to-y-percent`     | `number`  | `null`  | Moves element vertically. Sets final position in percentage.                                                                                                                                                     |
-| `data-animate-from-scale`       | `number`  | `null`  | Changes element scale. Sets initial scale.                                                                                                                                                                       |
-| `data-animate-to-scale`         | `number`  | `null`  | Changes element scale. Sets final scale.                                                                                                                                                                         |
-| `data-animate-from-rotation`    | `number`  | `null`  | Rotates element. Sets initial degree.                                                                                                                                                                            |
-| `data-animate-to-rotation`      | `number`  | `null`  | Rotates element. Sets final degree.                                                                                                                                                                              |
-| `data-animate-from-rotation-x`  | `number`  | `null`  | Rotates element along X-axis. Sets initial degree.                                                                                                                                                               |
-| `data-animate-to-rotation-x`    | `number`  | `null`  | Rotates element along X-axis. Sets final degree.                                                                                                                                                                 |
-| `data-animate-from-rotation-y`  | `number`  | `null`  | Rotates element along Y-axis. Sets initial degree.                                                                                                                                                               |
-| `data-animate-to-rotation-y`    | `number`  | `null`  | Rotates element along Y-axis. Sets final degree.                                                                                                                                                                 |
-| `data-animate-from-skew-x`      | `number`  | `null`  | Skews element along X-axis. Sets initial degree.                                                                                                                                                                 |
-| `data-animate-to-skew-x`        | `number`  | `null`  | Skews element along X-axis. Sets final degree.                                                                                                                                                                   |
-| `data-animate-from-skew-y`      | `number`  | `null`  | Skews element along Y-axis. Sets initial degree.                                                                                                                                                                 |
-| `data-animate-to-skew-y`        | `number`  | `null`  | Skews element along Y-axis. Sets final degree.                                                                                                                                                                   |
-| `data-animate-from-width`       | `number`  | `null`  | Resizes element. Sets initial width.                                                                                                                                                                             |
-| `data-animate-to-width`         | `number`  | `null`  | Resizes element. Sets final width.                                                                                                                                                                               |
-| `data-animate-from-height`      | `number`  | `null`  | Resizes element. Sets initial height.                                                                                                                                                                            |
-| `data-animate-to-height`        | `number`  | `null`  | Resizes element. Sets final height.                                                                                                                                                                              |
-| `data-animate-delay`            | `number`  | `null`  | Animation's initial which is the length of time in seconds before the animation should begin. See [documentation](<https://greensock.com/docs/v2/TimelineMax/delay()>).                                          |
-| `data-animate-label`            | `string`  | `null`  | Adds a label to the timeline, making it easy to mark important positions/times. See [documentation](<https://greensock.com/docs/v2/TimelineMax/addLabel()>).                                                     |
-| `data-animate-transition`       | `string`  | `null`  | CSS transition, it's the same than add an inline transition style                                                                                                                                                |
-| `data-animate-position`         | `string`  | `null`  | The timeline position where the animation should begin. Use `start` to trigger animation when the scene begins, leave it undefined to animate sequentially.                                                      |
-| `data-animate-ease`             | `string`  | `null`  | Sets a GSAP ease function. See [ease visualizer](https://greensock.com/ease-visualizer/).                                                                                                                        |
-| `data-animate-repeat`           | `boolean` | `null`  | Sets the number of times that the timeline should repeat after its first iteration. See [documentation](<https://greensock.com/docs/v2/TimelineMax/repeat()>).                                                   |
-| `data-animate-yoyo`             | `boolean` | `null`  | Sets the timeline's yoyo state, where `true` causes the timeline to go back and forth, alternating backward and forward on each repeat. See [documentation](<https://greensock.com/docs/v2/TimelineMax/yoyo()>). |
-| `data-animate-transform-origin` | `string`  | `null`  | Sets element transform origin. Look for "transformOrigin" in GSAP [documentation](https://greensock.com/docs/v2/Plugins/CSSPlugin).                                                                              |
-| `data-animate-duration`         | `number`  | `null`  | Sets the animation's duration.                                                                                                                                                                                   |
-| `data-animate-stagger`          | `number`  | `null`  | Amount of time in seconds to stagger the start time of each tween. **The DOM element children will be animated instead.**                                                                                        |
+| Property           | Type      | Default     | Description                                                                                                                                                                                                      |
+| ------------------ | --------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `from-alpha`       | `number`  | `undefined` | Number between 0-1. Changes element opacity.                                                                                                                                                                     |
+| `to-alpha`         | `number`  | `undefined` | Number between 0-1. Changes element opacity.                                                                                                                                                                     |
+| `from-x`           | `number`  | `undefined` | Moves element horizontally. Sets initial position.                                                                                                                                                               |
+| `to-x`             | `number`  | `undefined` | Moves element horizontally. Sets final position.                                                                                                                                                                 |
+| `from-y`           | `number`  | `undefined` | Moves element vertically. Sets initial position.                                                                                                                                                                 |
+| `to-y`             | `number`  | `undefined` | Moves element vertically. Sets initial position.                                                                                                                                                                 |
+| `from-x-percent`   | `number`  | `undefined` | Moves element horizontally. Sets initial position in percentage.                                                                                                                                                 |
+| `to-x-percent`     | `number`  | `undefined` | Moves element horizontally. Sets final position in percentage.                                                                                                                                                   |
+| `from-y-percent`   | `number`  | `undefined` | Moves element vertically. Sets initial position in percentage.                                                                                                                                                   |
+| `to-y-percent`     | `number`  | `undefined` | Moves element vertically. Sets final position in percentage.                                                                                                                                                     |
+| `from-scale`       | `number`  | `undefined` | Changes element scale. Sets initial scale.                                                                                                                                                                       |
+| `to-scale`         | `number`  | `undefined` | Changes element scale. Sets final scale.                                                                                                                                                                         |
+| `from-rotation`    | `number`  | `undefined` | Rotates element. Sets initial degree.                                                                                                                                                                            |
+| `to-rotation`      | `number`  | `undefined` | Rotates element. Sets final degree.                                                                                                                                                                              |
+| `from-rotation-x`  | `number`  | `undefined` | Rotates element along X-axis. Sets initial degree.                                                                                                                                                               |
+| `to-rotation-x`    | `number`  | `undefined` | Rotates element along X-axis. Sets final degree.                                                                                                                                                                 |
+| `from-rotation-y`  | `number`  | `undefined` | Rotates element along Y-axis. Sets initial degree.                                                                                                                                                               |
+| `to-rotation-y`    | `number`  | `undefined` | Rotates element along Y-axis. Sets final degree.                                                                                                                                                                 |
+| `from-skew-x`      | `number`  | `undefined` | Skews element along X-axis. Sets initial degree.                                                                                                                                                                 |
+| `to-skew-x`        | `number`  | `undefined` | Skews element along X-axis. Sets final degree.                                                                                                                                                                   |
+| `from-skew-y`      | `number`  | `undefined` | Skews element along Y-axis. Sets initial degree.                                                                                                                                                                 |
+| `to-skew-y`        | `number`  | `undefined` | Skews element along Y-axis. Sets final degree.                                                                                                                                                                   |
+| `from-width`       | `number`  | `undefined` | Resizes element. Sets initial width.                                                                                                                                                                             |
+| `to-width`         | `number`  | `undefined` | Resizes element. Sets final width.                                                                                                                                                                               |
+| `from-height`      | `number`  | `undefined` | Resizes element. Sets initial height.                                                                                                                                                                            |
+| `to-height`        | `number`  | `undefined` | Resizes element. Sets final height.                                                                                                                                                                              |
+| `delay`            | `number`  | `undefined` | Animation's initial which is the length of time in seconds before the animation should begin. See [documentation](<https://greensock.com/docs/v2/TimelineMax/delay()>).                                          |
+| `label`            | `string`  | `undefined` | Adds a label to the timeline, making it easy to mark important positions/times. See [documentation](<https://greensock.com/docs/v2/TimelineMax/addLabel()>).                                                     |
+| `position`         | `string`  | `undefined` | The timeline position where the animation should begin. Use `start` to trigger animation when the scene begins, leave it undefined to animate sequentially.                                                      |
+| `ease`             | `string`  | `undefined` | Sets a GSAP ease function. See [ease visualizer](https://greensock.com/ease-visualizer/).                                                                                                                        |
+| `repeat`           | `boolean` | `undefined` | Sets the number of times that the timeline should repeat after its first iteration. See [documentation](<https://greensock.com/docs/v2/TimelineMax/repeat()>).                                                   |
+| `yoyo`             | `boolean` | `undefined` | Sets the timeline's yoyo state, where `true` causes the timeline to go back and forth, alternating backward and forward on each repeat. See [documentation](<https://greensock.com/docs/v2/TimelineMax/yoyo()>). |
+| `transform-origin` | `string`  | `undefined` | Sets element transform origin. Look for "transformOrigin" in GSAP [documentation](https://greensock.com/docs/v2/Plugins/CSSPlugin).                                                                              |
+| `duration`         | `number`  | `undefined` | Sets the animation's duration.                                                                                                                                                                                   |
+| `stagger`          | `number`  | `undefined` | Amount of time in seconds to stagger the start time of each tween. **The DOM element children will be animated instead.**                                                                                        |
 
 **Under the hood:**
 
@@ -172,7 +171,7 @@ When you add a `data-animate-stagger` attribute to your element, the _tween_ use
 - TimelineMax method `staggerFrom()` in the case you're only using `data-animate-from-*`. See [reference](<https://greensock.com/docs/v2/TweenMax/static.staggerFrom()>).
 - TimelineMax method `staggerTo()` in the case you're only using `data-animate-to-*`. See [reference](<https://greensock.com/docs/v2/TweenMax/static.staggerTo()>).
 
-**TODO:**
+**TO DO:**
 
 - [ ] Add more animation options
 
@@ -184,15 +183,15 @@ You may wish to setup the same scene in many places of your website, or call a c
 
 For those cases, you can't simply use `data-*` attributes, but it's still possible by registering a scene.
 
-TODO: Explain why and how to use in JS and HTML (explaing priorities as well)
+TO DO: Explain why and how to use in JS and HTML (explaing priorities as well)
 
-TODO:
+TO DO:
 
 - [ ] Improve priorities
 
 ### Registering custom animation
 
-TODO: Explain why and how to use in JS and HTML
+TO DO: Explain why and how to use in JS and HTML
 
 ## Parallax Scene
 
