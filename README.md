@@ -91,8 +91,8 @@ Then, in the same DOM element, you can setup the scene by adding properties like
 | `trigger`                                                                                    |       `string`       | DOM element | Selector that defines the start of the scene. If undefined, the scene will start at the `data-scene` element.                                                                             |
 | `hook`                                                                                       | `string` or `number` | `onCenter`  | Can be `onEnter`, `onCenter`, `onLeave` or a float number between 0-1                                                                                                                     |
 | `duration`                                                                                   | `string` or `number` |     `0`     | The duration of the scene. `100%` will keep the duration always exactly at the inner height of the scroll container. `0` means that the scene is 'open end' and no end will be triggered. |
-| `reverse`                                                                                    |      `boolean`       |   `true`    | Should the scene reverse when scrolling up?                                                                                                                                              |
-| `enabled`                                                                                    |      `boolean`       |   `true`    | Use it to disable the scene for other screen sizes. Check out breakpoints section.                                                                                                        |
+| `reverse`                                                                                    |      `boolean`       |   `true`    | Should the scene reverse when scrolling up?                                                                                                                                               |
+| `enabled`                                                                                    |      `boolean`       |   `true`    | Use it to disable the scene for other screen sizes. Check out the breakpoints section.                                                                                                    |
 | `indicator`                                                                                  |       `string`       | `undefined` | Add visual indicators. Use it to debug.                                                                                                                                                   |
 | `class-toggle`                                                                               |       `string`       | `undefined` | One or more Classnames (separated by space) that should be added to the element during the scene.                                                                                         |
 | `pin`                                                                                        |      `boolean`       |   `false`   | Pin the element for the duration of the scene.                                                                                                                                            |
@@ -189,9 +189,28 @@ TO DO:
 
 TO DO: Explain why and how to use in JS and HTML
 
-## Parallax Scene
+## Parallax effect
 
-## Parallax Global
+There are two ways to set up parallax elements with _ScrollXP_, you have **global** elements and **scene** elements.
+
+For default, every parallax element is created as a **global** element.
+
+### Global parallax
+
+A global parallax element will be active throughout the extension of the _ScrollXP_ container.
+
+To define such component, you just need to add the attribute `data-parallax` on a DOM element.
+
+Then, in the same DOM element, you can setup the parallax effect by adding properties like `data-parallax-[property]="[value]"`:
+
+| Property   |   Type    |      Default      | Description                                                                                                                                                                                                                   |
+| ---------- | :-------: | :---------------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `speed`    | `number`  |        `1`        | Sets the speed ratio. When scrolling, the element will move 1/`speed` times the original distance, i.e. the further from zero, the slower it moves. Negative values make the element move to the scroll opposite direction.   |
+| `momentum` | `number`  |       `0.3`       | Sets the time in seconds that the element will take to reach its final position.                                                                                                                                              |
+| `ease`     | `string`  | `Power0.easeNone` | Sets a GSAP ease function, which will be for the momentum to move the element until its final position. For default, the element moves over a linear function. See [ease visualizer](https://greensock.com/ease-visualizer/). |
+| `enabled`  | `boolean` |      `true`       | Use it to disable the parallax for other screen sizes. Check out the breakpoints section.                                                                                                                                     |
+
+## Scene parallax
 
 ## Working with breakpoints
 
