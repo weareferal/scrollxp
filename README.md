@@ -1,6 +1,6 @@
 # ScrollXP
 
-A toolkit for common scrolling animations using [ScrollMagic](http://scrollmagic.io/) + [GSAP](https://greensock.com/) + [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/).
+A library for scrolling animations based on [ScrollMagic](http://scrollmagic.io/) + [GSAP](https://greensock.com/) + [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/).
 
 > _Stop suffering, focus on creating amazing pages._
 
@@ -38,6 +38,8 @@ Then:
 $ npm run start
 ```
 
+Then access `http://localhost:3000`
+
 ## Initialize
 
 First, you need to make sure you're initializing it into a scrollable container.
@@ -74,7 +76,7 @@ var view = new ScrollXP({
 });
 ```
 
-## Creating Scenes
+## Creating scenes
 
 A scene works like a [ScrollMagic scene](https://scrollmagic.io/docs/ScrollMagic.Scene.html).
 
@@ -95,19 +97,19 @@ Then, in the same DOM element, you can setup the scene by adding properties like
 | `class-toggle`                                                                               |       `string`       | `undefined` | One or more Classnames (separated by space) that should be added to the element during the scene.                                                                                         |
 | `pin`                                                                                        |      `boolean`       |   `false`   | Pin the element for the duration of the scene.                                                                                                                                            |
 
-**Limitations**
+## Pinned scenes (or sticky elements)
+
+You can create sticky elements by setting `data-scene-pin="true"`. It's going to work like in this [ScrollMagic example](https://scrollmagic.io/examples/basic/simple_pinning.html).
+
+Its duration is defined through `data-scene-duration`. If the scene duration isn't set, the element remains sticky till the page end.
+
+## Scene limitations
 
 At the moment, scenes have some limitations:
 
 - If you use `data-scene-class-toggle`, pins, animations and scene modifiers won't apply.
 - If you use `data-scene-pin`, animations and scene modifiers won't apply.
 - If you use scene modifiers, animations won't apply.
-
-**TO DO:**
-
-- [ ] Add `data-scene-offset`
-- [ ] Add `data-scene-log-level`
-- [ ] Work on limitations
 
 ## Adding animations
 
@@ -157,7 +159,7 @@ Then, in the same DOm element, you can setup your animation by adding properties
 | `duration`                                                                                                                                                           | `number`  | `undefined` | Sets the animation's duration.                                                                                                                                                                                   |
 | `stagger`                                                                                                                                                            | `number`  | `undefined` | Amount of time in seconds to stagger the start time of each tween. **The DOM element children will be animated instead.**                                                                                        |
 
-**Under the hood:**
+## Animations "Under the Hood"
 
 When you set an attribute of `data-animate-from-*` or `data-animate-to-*`, the _tween_ uses:
 
@@ -170,12 +172,6 @@ When you add a `data-animate-stagger` attribute to your element, the _tween_ use
 - TimelineMax method `staggerFromTo()` in the case you're using at least one property of each. See [reference](<https://greensock.com/docs/v2/TweenMax/static.staggerFromTo()>).
 - TimelineMax method `staggerFrom()` in the case you're only using `data-animate-from-*`. See [reference](<https://greensock.com/docs/v2/TweenMax/static.staggerFrom()>).
 - TimelineMax method `staggerTo()` in the case you're only using `data-animate-to-*`. See [reference](<https://greensock.com/docs/v2/TweenMax/static.staggerTo()>).
-
-**TO DO:**
-
-- [ ] Add more animation options
-
-### Pinned Scenes
 
 ### Registering custom scene
 
@@ -201,10 +197,6 @@ TO DO: Explain why and how to use in JS and HTML
 
 ## Bind menu to page sections
 
-## Limitations
-
-TODO: Talk about restrictions
-
 ## Motivation
 
 _ScrollMagic_ is a fantastic library to handle animations when scrolling website pages. However, sooner or later, you'll find out that your project is becoming a huge plate of JavaScript spaghetti.
@@ -218,6 +210,13 @@ With that in mind, _ScrollXP_ purposes:
 - Use of _ScrollMagic_ + _GSAP_ without messing around with your JS files
 - Easily allow responsive animations
 - Enabling/disabling smooth scrolling with one line
+
+## TO DO
+
+- [ ] Add `data-scene-offset`
+- [ ] Add `data-scene-log-level`
+- [ ] Work on scene limitations
+- [ ] Add more animation options
 
 ## Versions
 
