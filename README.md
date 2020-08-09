@@ -231,6 +231,47 @@ So, in the same DOM element, you can add the properties below:
 
 ## Working with breakpoints
 
+One of the most useful things about _ScrollXP_ is its capability of working with breakpoints.
+
+For default, the breakpoints that the library works with looks like:
+
+```
+{
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200,
+  xxl: 1600
+}
+```
+
+You can change those values by setting a new JSON object when initializing the library, for example:
+
+```
+var view = new ScrollXP({
+  container: document.querySelector('main'),
+  breakpoints: {
+    sm: 480,
+    md: 768,
+    lg: 1024
+  }
+})
+```
+
+> **Note:** In the above example, it'll only be used the specfied breakpoints, `xl` and `xxl` won't exist anymore.
+
+To make the properties responsive, you have to specify the breakpoints when adding properties with `data-*`.
+
+The breakpoint key comes right after `data` and before the property.
+
+For example, if you want to enable a scene for the `md` breakpoint only, you need to disable the scene for `xs` and then enable it for `md`, like:
+
+```
+<div data-scene data-xs-scene-enable="false" data-md-scene-enable="true"></div>
+```
+
+All the properties accept this syntax.
+
 ## Bind menu to page sections
 
 ## Motivation
