@@ -208,9 +208,26 @@ Then, in the same DOM element, you can setup the parallax effect by adding prope
 | `speed`    | `number`  |        `1`        | Sets the speed ratio. When scrolling, the element will move 1/`speed` times the original distance, i.e. the further from zero, the slower it moves. Negative values make the element move to the scroll opposite direction.   |
 | `momentum` | `number`  |       `0.3`       | Sets the time in seconds that the element will take to reach its final position.                                                                                                                                              |
 | `ease`     | `string`  | `Power0.easeNone` | Sets a GSAP ease function, which will be for the momentum to move the element until its final position. For default, the element moves over a linear function. See [ease visualizer](https://greensock.com/ease-visualizer/). |
+| `stagger`  | `number`  |    `undefined`    | Amount of time in seconds to stagger the start time of each tween. **The DOM element children will be animated instead.**                                                                                                     |
 | `enabled`  | `boolean` |      `true`       | Use it to disable the parallax for other screen sizes. Check out the breakpoints section.                                                                                                                                     |
 
-## Scene parallax
+### Scene parallax
+
+This type of parallax effect has a start and an end, behaving like a common animation scene.
+
+To define the element, you need to add the attribute `data-parallax="scene"`.
+
+All the global parallax properties are used for this type of effect too, but you can also provide properties for the scene itself.
+
+So, in the same DOM element, you can add the properties below:
+
+| Property    |         Type         |   Default   | Description                                                                                                                                                                               |
+| ----------- | :------------------: | :---------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `trigger`   |       `string`       | DOM element | Selector that defines the start of the scene. If undefined, the scene will start at the `data-scene` element.                                                                             |
+| `hook`      | `string` or `number` | `onCenter`  | Can be `onEnter`, `onCenter`, `onLeave` or a float number between 0-1                                                                                                                     |
+| `duration`  | `string` or `number` |     `0`     | The duration of the scene. `100%` will keep the duration always exactly at the inner height of the scroll container. `0` means that the scene is 'open end' and no end will be triggered. |
+| `offset`    |       `number`       |     `0`     | The offset in pixels for the scene start.                                                                                                                                                 |
+| `indicator` |       `string`       | `undefined` | Add visual indicators. Use it to debug.                                                                                                                                                   |
 
 ## Working with breakpoints
 
