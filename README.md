@@ -274,6 +274,46 @@ All the properties accept this syntax.
 
 ## Bind menu to page sections
 
+Two common features request that comes up when working with scroll animations are:
+
+1. Highlight the menu when entering a page section
+2. Scroll to the section when clicking on a menu option
+
+_ScrollXP_ covers this feature with the method `bindAnchors()`.
+
+You just need to pass a list of DOM elements with the **anchors** for the section.
+
+For example, you have an HTML like this:
+
+```
+<ul>
+  <li>
+    <a href="#section1">Section 1</a>
+  </li>
+  <li>
+    <a href="#section2">Section 2</a>
+  </li>
+  <li>
+    <a href="#section3">Section 3</a>
+  </li>
+</ul>
+
+<section id="section1">...</section>
+<section id="section2">...</section>
+<section id="section3">...</section>
+```
+
+Then, you can call the method for those anchors like:
+
+```
+var view = new ScrollXP(...)
+
+var anchors = document.querySelectorAll("a[href^='#']")
+view.bindAnchors(anchors)
+```
+
+Doing so, when clicking on a menu item or entering/leaving a page section, the class `is-active` is added/removed from the menu item.
+
 ## Motivation
 
 _ScrollMagic_ is a fantastic library to handle animations when scrolling website pages. However, sooner or later, you'll find out that your project is becoming a huge plate of JavaScript spaghetti.
