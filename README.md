@@ -1,12 +1,10 @@
 # ScrollXP
 
-A library for scrolling animations based on [ScrollMagic](http://scrollmagic.io/) + [GSAP](https://greensock.com/) + [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/).
+A library for scrolling animations.
 
-> _Stop suffering, focus on creating amazing pages._
+It's based on [ScrollMagic](http://scrollmagic.io/) codebase and depends on [GSAP](https://greensock.com/) and [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/) _(optional, just for the smooth scrolling feature)_.
 
 See [demo](https://weareferal.github.io/scrollxp/) here.
-
-![Scroll](https://www.goodfreephotos.com/albums/vector-images/ancient-medieval-scroll.png)
 
 ## Features
 
@@ -22,7 +20,7 @@ _ScrollXP_ allows you to:
 
 - [Installation](https://github.com/weareferal/scrollxp#installation)
 - [Running local](https://github.com/weareferal/scrollxp#running-local)
-- [Initialize](https://github.com/weareferal/scrollxp#initialize)
+- [Usage](https://github.com/weareferal/scrollxp#usage)
 - [Smooth scrolling](https://github.com/weareferal/scrollxp#smooth-scrolling)
 - [Debugging](https://github.com/weareferal/scrollxp#debugging)
 - [Creating scenes](https://github.com/weareferal/scrollxp#creating-scenes)
@@ -40,10 +38,9 @@ _ScrollXP_ allows you to:
 - [Motivation](https://github.com/weareferal/scrollxp#motivation)
 - [TO DO](https://github.com/weareferal/scrollxp#to-do)
 - [Versions](https://github.com/weareferal/scrollxp#versions)
+- [License](https://github.com/weareferal/scrollxp#license)
 
 ## Installation
-
-TODO: Publish into npm
 
 ```
 $ npm install scrollxp --save
@@ -65,7 +62,7 @@ $ npm run start
 
 Then access `http://localhost:3000`
 
-## Initialize
+## Usage
 
 First, you need to make sure you're initializing it into a scrollable container.
 
@@ -92,12 +89,26 @@ Then, create a container to wrap up your content:
 }
 ```
 
-Now, initialize the container in your JavaScript:
+Since this package has a [pkg.module](https://github.com/rollup/rollup/wiki/pkg.module) field, it's highly recommended to import it as an ES6 module with some bundlers like [webpack](https://webpack.js.org/) or [rollup](https://rollupjs.org/):
 
-```
+```js
+import ScrollXP from 'scrollxp'
+
 var view = new ScrollXP({
   container: document.querySelector('.wrapper')
 })
+```
+
+If you are not using any bundlers, you can just load the UMD bundle:
+
+```html
+<script src="dist/scrollxp.js"></script>
+
+<script>
+  var view = new ScrollXP({
+    container: document.querySelector('.wrapper')
+  })
+</script>
 ```
 
 ## Smooth scrolling
@@ -483,5 +494,9 @@ There are still **a ton** of work to do here, above are just a few of them:
 
 ## Versions
 
-### 0.0.1
-Initial release
+### v0.0.1
+- Initial release
+
+## License
+
+[MIT](https://github.com/weareferal/scrollxp/blob/master/LICENSE)
