@@ -112,6 +112,73 @@ If you are not using any bundlers, you can just load the UMD bundles:
 </script>
 ```
 
+### Full example
+
+If you just want to make it work to play around, download the [scrollxp.js](https://github.com/weareferal/scrollxp/blob/master/dist/scrollxp.js) file and create a page with the following:
+
+```
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/gsap.min.js"></script>
+    <script src="scrollxp.js"></script>
+    <style>
+      body {
+        height: 100vh;
+        overflow: hidden;
+      }
+      .wrapper {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+      }
+      .content {
+        display: flex;
+        align-items: center;
+        height: 200vh;
+      }
+      .section {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .element {
+        width: 300px;
+        height: 300px;
+        background-color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="content">
+        <section
+          class="section"
+          data-scene
+          data-scene-duration="100%"
+          data-scene-indicator="box"
+        >
+          <div
+            class="element"
+            data-animate
+            data-animate-to-rotation="360"
+          ></div>
+        </section>
+      </div>
+    </div>
+    <script>
+      new ScrollXP({
+        container: document.querySelector(".wrapper"),
+      });
+    </script>
+  </body>
+</html>
+```
+
+You should see a black square spinning around when scrolling.
+
 ## Smooth scrolling
 
 It's possible to active the smooth scrolling through a constructor parameter by setting:
@@ -483,6 +550,7 @@ With that in mind, _ScrollXP_ purposes:
 
 There are still **a ton** of work to do here, above are just a few of them:
 
+- [ ] Remove GSAP from the packaged library (currently it's being added twice)
 - [ ] Clean up the library
 - [ ] Write tests
 - [ ] Add CI
