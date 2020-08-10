@@ -154,17 +154,8 @@ If you just want to make it work to play around, download the [scrollxp.js](http
   <body>
     <div class="wrapper">
       <div class="content">
-        <section
-          class="section"
-          data-scene
-          data-scene-duration="100%"
-          data-scene-indicator="box"
-        >
-          <div
-            class="element"
-            data-animate
-            data-animate-to-rotation="360"
-          ></div>
+        <section class="section" data-scene data-scene-duration="100%" data-scene-indicator="box">
+          <div class="element" data-animate data-animate-to-rotation="360"></div>
         </section>
       </div>
     </div>
