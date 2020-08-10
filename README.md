@@ -23,6 +23,7 @@ _ScrollXP_ allows you to:
 - [Installation](https://github.com/weareferal/scrollxp#installation)
 - [Running local](https://github.com/weareferal/scrollxp#running-local)
 - [Initialize](https://github.com/weareferal/scrollxp#initialize)
+- [Smooth scrolling](https://github.com/weareferal/scrollxp#smooth-scrolling)
 - [Creating scenes](https://github.com/weareferal/scrollxp#creating-scenes)
 - [Pinned scenes (or sticky elements)](https://github.com/weareferal/scrollxp#pinned-scenes-or-sticky-elements)
 - [Custom scenes](https://github.com/weareferal/scrollxp#custom-scenes)
@@ -93,10 +94,31 @@ Now, initialize the container in your JavaScript:
 
 ```
 var view = new ScrollXP({
-  container: document.querySelector('.wrapper'),
-  smoothScrolling: false
-});
+  container: document.querySelector('.wrapper')
+})
 ```
+
+## Smooth scrolling
+
+It's possible to active the smooth scrolling through a constructor parameter by setting:
+
+```
+var view = new ScrollXP({
+  container: document.querySelector('.wrapper'),
+  smoothScrolling: true
+})
+```
+
+Or simply calling the method:
+
+```
+var view = new ScrollXP({
+  container: document.querySelector('.wrapper')
+})
+view.smoothScrolling(true)
+```
+
+The smooth scrolling feature uses the [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/) under the hood.
 
 ## Creating scenes
 
