@@ -2,7 +2,7 @@
 
 A library for scrolling animations.
 
-It's based on [ScrollMagic](http://scrollmagic.io/) codebase and depends on [GSAP](https://greensock.com/) and [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/) _(optional, just for the smooth scrolling feature)_.
+It's based on [ScrollMagic](http://scrollmagic.io/) codebase and depends on [GSAP 3](https://greensock.com/).
 
 See [demo](https://weareferal.github.io/scrollxp/) here.
 
@@ -43,7 +43,7 @@ _ScrollXP_ allows you to:
 ## Installation
 
 ```
-$ npm install scrollxp --save
+$ npm install gsap scrollxp --save
 ```
 
 ## Running local
@@ -92,21 +92,22 @@ Then, create a container to wrap up your content:
 Since this package has a [pkg.module](https://github.com/rollup/rollup/wiki/pkg.module) field, it's highly recommended to import it as an ES6 module with some bundlers like [webpack](https://webpack.js.org/) or [rollup](https://rollupjs.org/):
 
 ```js
-import ScrollXP from 'scrollxp'
+import ScrollXP from "scrollxp"
 
 var view = new ScrollXP({
-  container: document.querySelector('.wrapper')
+  container: document.querySelector(".wrapper"),
 })
 ```
 
-If you are not using any bundlers, you can just load the UMD bundle:
+If you are not using any bundlers, you can just load the UMD bundles:
 
 ```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/gsap.min.js"></script>
 <script src="dist/scrollxp.js"></script>
 
 <script>
   var view = new ScrollXP({
-    container: document.querySelector('.wrapper')
+    container: document.querySelector(".wrapper"),
   })
 </script>
 ```
@@ -495,6 +496,7 @@ There are still **a ton** of work to do here, above are just a few of them:
 ## Versions
 
 ### v0.0.1
+
 - Initial release
 
 ## License
