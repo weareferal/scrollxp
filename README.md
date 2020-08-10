@@ -24,6 +24,7 @@ _ScrollXP_ allows you to:
 - [Running local](https://github.com/weareferal/scrollxp#running-local)
 - [Initialize](https://github.com/weareferal/scrollxp#initialize)
 - [Smooth scrolling](https://github.com/weareferal/scrollxp#smooth-scrolling)
+- [Debugging](https://github.com/weareferal/scrollxp#debugging)
 - [Creating scenes](https://github.com/weareferal/scrollxp#creating-scenes)
 - [Pinned scenes (or sticky elements)](https://github.com/weareferal/scrollxp#pinned-scenes-or-sticky-elements)
 - [Custom scenes](https://github.com/weareferal/scrollxp#custom-scenes)
@@ -34,6 +35,7 @@ _ScrollXP_ allows you to:
   - [Global parallax](https://github.com/weareferal/scrollxp#global-parallax)
   - [Scene parallax](https://github.com/weareferal/scrollxp#scene-parallax)
 - [Working with breakpoints](https://github.com/weareferal/scrollxp#working-with-breakpoints)
+- [Changing defaults](https://github.com/weareferal/scrollxp#changing-defaults)
 - [Bind menu to page sections](https://github.com/weareferal/scrollxp#bind-menu-to-page-sections)
 - [Motivation](https://github.com/weareferal/scrollxp#motivation)
 - [TO DO](https://github.com/weareferal/scrollxp#to-do)
@@ -360,6 +362,54 @@ For example, if you want to enable a scene for the `md` breakpoint only, you nee
 ```
 
 All the properties accept this syntax.
+
+## Changing defaults
+
+You might need all your animations have a duration of `0.3` seconds, for example. Instead of setting `data-animate-duration="0.3"` for all your animations, you could simply change the animations default duration in the constructor:
+
+```
+var view = new ScrollXP({
+  container: document.querySelector('main'),
+  defaults: {
+    animation: {
+      duration: 0.3
+    }
+  }
+})
+```
+
+Check below all the properties default values:
+
+```
+{
+  parallax: {
+    enabled: true,
+    type: "global",
+    speed: 1,
+    momentum: 0.3,
+    ease: "Power0.easeNone",
+    trigger: document.body,
+    duration: "100%",
+    offset: 0,
+    hook: "onCenter",
+  },
+  scene: {
+    triggerHook: 0.5,
+    duration: 0,
+    reverse: true,
+    pin: false,
+    enabled: true,
+  },
+  animation: {
+    duration: 1,
+    position: "+=0",
+    repeat: 0,
+    yoyo: false,
+    delay: 0,
+    momentum: 0,
+  }
+}
+```
 
 ## Bind menu to page sections
 
