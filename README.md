@@ -16,6 +16,26 @@ _ScrollXP_ allows you to:
 - Bind menu active item to page section
 - Enable/disable smooth scrolling
 
+## Quick access
+
+- [Installation](https://github.com/weareferal/scrollxp#installation)
+- [Running local](https://github.com/weareferal/scrollxp#running-local)
+- [Initialize](https://github.com/weareferal/scrollxp#initialize)
+- [Creating scenes](https://github.com/weareferal/scrollxp#creating-scenes)
+- [Pinned scenes (or sticky elements)](https://github.com/weareferal/scrollxp#pinned-scenes-or-sticky-elements)
+- [Custom scenes](https://github.com/weareferal/scrollxp#custom-scenes)
+- [Scene limitations](https://github.com/weareferal/scrollxp#scene-limitations)
+- [Adding animations](https://github.com/weareferal/scrollxp#adding-animations)
+- [Animations "Under the Hood"](https://github.com/weareferal/scrollxp#animations-under-the-hood)
+- [Parallax effect](https://github.com/weareferal/scrollxp#parallax-effect)
+  - [Global parallax](https://github.com/weareferal/scrollxp#global-parallax)
+  - [Scene parallax](https://github.com/weareferal/scrollxp#scene-parallax)
+- [Working with breakpoints](https://github.com/weareferal/scrollxp#working-with-breakpoints)
+- [Bind menu to page sections](https://github.com/weareferal/scrollxp#bind-menu-to-page-sections)
+- [Motivation](https://github.com/weareferal/scrollxp#motivation)
+- [TO DO](https://github.com/weareferal/scrollxp#to-do)
+- [Versions](https://github.com/weareferal/scrollxp#versions)
+
 ## Installation
 
 TODO: Publish into npm
@@ -362,12 +382,19 @@ With that in mind, _ScrollXP_ purposes:
 
 ## TO DO
 
-- [ ] Add `data-scene-offset`
-- [ ] Add `data-scene-log-level`
+There are still **a ton** of work to do here, above are just a few of them:
+
+- [ ] Clean up the library
+- [ ] Write tests
+- [ ] Add CI
+- [ ] Validate library inputs
+- [ ] Add scene property `data-scene-offset`
+- [ ] Add scene property `data-scene-log-level`
 - [ ] Work on scene limitations
 - [ ] Add more animation options
 - [ ] Support more parameters on custom scenes
 
 ## Versions
 
-TODO: Add versions
+### 0.0.1
+Initial release
