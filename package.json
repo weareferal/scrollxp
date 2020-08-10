@@ -1,7 +1,7 @@
 {
   "name": "scrollxp",
   "version": "0.0.1",
-  "description": "A toolkit for common scrolling animations.",
+  "description": "A library for scrolling animations.",
   "main": "dist/scrollxp.js",
   "module": "index.js",
   "types": "index.d.ts",
@@ -24,6 +24,21 @@
     "ghpages": "webpack --config ./scripts/webpack.ghpages.js",
     "deploy": "./scripts/deploy.sh"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weareferal/scrollxp.git"
+  },
+  "keywords": [
+    "scrolling",
+    "animation",
+    "smooth"
+  ],
+  "author": "Feral <thiago@weareferal.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/weareferal/scrollxp/issues"
+  },
+  "homepage": "https://github.com/weareferal/scrollxp#readme",
   "nyc": {
     "extension": [
       ".ts"
@@ -39,8 +54,6 @@
     ],
     "all": true
   },
-  "author": "Thiago Rossener",
-  "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.2.11",
     "@types/mocha": "^8.0.0",
