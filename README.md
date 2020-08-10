@@ -173,21 +173,53 @@ When you add a `data-animate-stagger` attribute to your element, the _tween_ use
 - TimelineMax method `staggerFrom()` in the case you're only using `data-animate-from-*`. See [reference](<https://greensock.com/docs/v2/TweenMax/static.staggerFrom()>).
 - TimelineMax method `staggerTo()` in the case you're only using `data-animate-to-*`. See [reference](<https://greensock.com/docs/v2/TweenMax/static.staggerTo()>).
 
-### Registering custom scene
+## Custom scenes
 
 You may wish to setup the same scene in many places of your website, or call a custom method when a scene begin or end, for example.
 
-For those cases, you can't simply use `data-*` attributes, but it's still possible by registering a scene.
+For those cases, you can't simply use `data-*` attributes, but it's still possible by registering a custom scene.
 
-TO DO: Explain why and how to use in JS and HTML (explaing priorities as well)
+To create a custom scene, first you need to register a scene modifier on JavaScript.
 
-TO DO:
+The first parameter is the name of the scene, the second one is a function that returns the properties.
 
-- [ ] Improve priorities
+For the moment, only some properties and methods are supported:
 
-### Registering custom animation
+```
+var view = new ScrollXP(...)
 
-TO DO: Explain why and how to use in JS and HTML
+this.view.registerSceneModifier("my-custom-scene",
+  function (domScene) {
+    return {
+      // Animation attributes inside custom scenes don't work, you can specify them here
+      tween: TweenMax.to('#element', 1, { autoAlpha: 0 }),
+      // Scene duration
+      duration: 400,
+      // Scene hook
+      hook: "onEnter",
+      // Scene start offset in pixels
+      offset: 100,
+      // Scene pin element
+      pin: domScene,
+      // Scene reverse
+      reverse: false,
+      // onEnter callback
+      onEnter(scene) {
+        ...
+      },
+      // onProgress callback
+      onProgress(scene) {
+
+      }
+    }
+  })
+```
+
+Then, on the HTML you just need to set the scene like:
+
+```
+<div data-scene="my-custom-scene"></div>
+```
 
 ## Parallax effect
 
@@ -334,6 +366,7 @@ With that in mind, _ScrollXP_ purposes:
 - [ ] Add `data-scene-log-level`
 - [ ] Work on scene limitations
 - [ ] Add more animation options
+- [ ] Support more parameters on custom scenes
 
 ## Versions
 
