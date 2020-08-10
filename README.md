@@ -495,7 +495,7 @@ There are still **a ton** of work to do here, above are just a few of them:
 
 ## Versions
 
-### v0.0.1
+### v1.0.0
 
 - Initial release
 
