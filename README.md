@@ -120,6 +120,19 @@ view.smoothScrolling(true)
 
 The smooth scrolling feature uses the [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/) under the hood.
 
+## Debugging
+
+To debug your scenes and animations you can add indicators to all of them through a flag in the library constructor:
+
+```
+var view = new ScrollXP({
+  container: document.querySelector('.wrapper'),
+  addIndicators: true
+})
+```
+
+Labels will be added to your page to show you the triggers and scenes positioning.
+
 ## Creating scenes
 
 A scene works like a [ScrollMagic scene](https://scrollmagic.io/docs/ScrollMagic.Scene.html).
