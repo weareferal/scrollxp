@@ -42,8 +42,6 @@ _ScrollXP_ allows you to:
 
 ## Installation
 
-TODO: Publish into npm
-
 ```
 $ npm install scrollxp --save
 ```
