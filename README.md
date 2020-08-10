@@ -6,6 +6,8 @@ A library for scrolling animations based on [ScrollMagic](http://scrollmagic.io/
 
 See [demo](https://weareferal.github.io/scrollxp/) here.
 
+![Scroll](https://www.goodfreephotos.com/albums/vector-images/ancient-medieval-scroll.png)
+
 ## Features
 
 _ScrollXP_ allows you to:
