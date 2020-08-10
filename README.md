@@ -40,6 +40,7 @@ _ScrollXP_ allows you to:
 - [Motivation](https://github.com/weareferal/scrollxp#motivation)
 - [TO DO](https://github.com/weareferal/scrollxp#to-do)
 - [Versions](https://github.com/weareferal/scrollxp#versions)
+- [License](https://github.com/weareferal/scrollxp#license)
 
 ## Installation
 
@@ -483,5 +484,9 @@ There are still **a ton** of work to do here, above are just a few of them:
 
 ## Versions
 
-### 0.0.1
-Initial release
+### v0.0.1
+- Initial release
+
+## License
+
+[MIT](https://github.com/weareferal/scrollxp/blob/master/LICENSE)
