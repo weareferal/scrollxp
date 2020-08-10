@@ -13,6 +13,8 @@ export default class ScrollController {
   private options: ScrollControllerOptions
   private scrollbar: Scrollbar
   private scrollbarListeners: ScrollListener[] = []
+  private latestTargetId?: string
+  private isScrollingTo = false
 
   private _smoothScrolling: boolean
 
@@ -91,7 +93,12 @@ export default class ScrollController {
         this.scrollbar.scrollIntoView(element)
       }
     } else {
-      this.controller.scrollTo(targetId)
+      this.latestTargetId = targetId
+
+      this.isScrollingTo = true
+      this.controller.scrollTo(targetId, () => {
+        this.isScrollingTo = false
+      })
     }
   }
 
@@ -130,6 +137,29 @@ export default class ScrollController {
       this.scrollbarListeners = this.scrollbarListeners.filter(function (current) {
         return current !== listener
       })
+    }
+  }
+
+  public setScrollOffset(offset: number): void {
+    if (!this._smoothScrolling) {
+      this.controller.scrollTo(function (this: HTMLElement, newPos: number, callback?: () => void) {
+        TweenMax.to(this, 2, {
+          scrollTo: {
+            y: newPos + offset,
+          },
+          onComplete: function () {
+            if (callback) callback()
+          },
+          ease: Power4.easeOut,
+        })
+      })
+
+      // This is necessary because if the offset changes while the page is animating,
+      // it goes to the wrong position. So we need to animate it to the right one.
+      if (this.isScrollingTo && this.latestTargetId) {
+        this.scrollTo(this.latestTargetId)
+        this.latestTargetId = undefined
+      }
     }
   }
 

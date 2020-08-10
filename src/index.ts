@@ -3,6 +3,7 @@ import PropertyHelper from "./utils/property-helper"
 import ScrollScene from "./scroll-scene"
 import ScrollController from "./scroll-controller"
 import SceneEvent from "./scrollmagic/scene-event"
+import { TweenMax } from "gsap"
 
 declare let __SCROLLXP_VERSION__: string
 
@@ -154,6 +155,8 @@ export interface ScrollViewOptions {
   smoothScrolling?: boolean
   defaults?: ViewOptions
   addIndicators?: boolean
+  scrollOffset?: number
+  anchors?: HTMLAnchorElement[]
 }
 
 export interface ParallaxItem {
@@ -247,68 +250,111 @@ export default class ScrollView {
   private domElements: HTMLElement[] = []
   private tweens: TimelineMax[] = []
   private scenes: ScrollScene[] = []
+  private anchorScenes: ScrollScene[] = []
   private sceneModifiers: { [key: string]: SceneModifier } = {}
   private animations: { [key: string]: any } = {}
+  private scrollOffset: number
 
   constructor(options: ScrollViewOptions) {
     this.container = options.container || window
+
     this.content =
       this.container instanceof Window
         ? <HTMLElement>document.body.children[0]
         : <HTMLElement>this.container.children[0]
-    this._smoothScrolling = options.smoothScrolling || false
-    this.helper = new PropertyHelper(options.breakpoints)
-    this.defaults = Object.assign(this.defaults, options.defaults)
-    this.controller = new ScrollController({
-      container: this.container,
-      smoothScrolling: this.smoothScrolling,
-      addIndicators: options.addIndicators || false,
-    })
 
+    this.scrollOffset = options.scrollOffset || 0
+
+    this._smoothScrolling = options.smoothScrolling || false
+
+    this.helper = new PropertyHelper(options.breakpoints)
+
+    this.defaults = Object.assign(this.defaults, options.defaults)
+
+    // TODO: Instead of checking for xs, check for isMobile somehow (actual devices)
     new BreakpointListener((result: BreakpointListenerResult) => {
       if (result.hasChanged) {
-        // Disable smooth scrolling on mobile
-        if (this.smoothScrolling) {
-          if (result.screenSize === "xs") {
-            this.controller.smoothScrolling = false
-          } else {
-            this.controller.smoothScrolling = true
+        // First load
+        if (!this.controller) {
+          this.controller = new ScrollController({
+            container: this.container,
+            smoothScrolling: this.smoothScrolling,
+            addIndicators: options.addIndicators || false,
+          })
+        } else {
+          // Disable smooth scrolling on mobile
+          if (this.smoothScrolling) {
+            if (result.screenSize === "xs") {
+              this.controller.smoothScrolling = false
+            } else {
+              this.controller.smoothScrolling = true
+            }
           }
         }
+
         console.debug("[ScrollView] Rebuiling scenes for:", result.screenSize)
         this.rebuild()
       }
+
+      // Update content scene duration, so the scroll progress is adjusted
+      // if (this.contentScene) {
+      //   this.contentScene.duration(this.content.offsetHeight)
+      // }
     }, this.helper.breakpoints)
+
+    // Set up scrollTo anchors
+    if (options.anchors && options.anchors.length > 0) {
+      const anchors = Array.from(options.anchors).filter((anchor) => anchor.hash.length > 1)
+      this.setUpScrollTo(anchors)
+    }
+  }
+
+  public setUpScrollTo(anchors: HTMLElement[]): void {
+    anchors.forEach((anchor) => {
+      anchor.addEventListener("click", (e) => {
+        anchors.forEach((anchor) => anchor.classList.remove("is-active"))
+
+        if (e.currentTarget) {
+          const currentTarget = <HTMLElement>e.currentTarget
+          currentTarget.classList.add("is-active")
+
+          const id = currentTarget.getAttribute("href")
+          if (id && id.length > 0) {
+            e.preventDefault()
+
+            this.controller.scrollTo(id)
+          }
+        }
+      })
+    })
   }
 
   public bindAnchors(anchors: HTMLElement[]): void {
-    anchors.forEach((anchor) => {
-      // Bind scroll to anchor
-      anchor.addEventListener("click", (e: Event) => {
-        const target = <HTMLElement>e.currentTarget
-        const id = target.getAttribute("href")
-        if (id && id.length > 0) {
-          e.preventDefault()
+    this.setUpScrollTo(anchors)
 
-          this.controller.scrollTo(id)
-        }
-      })
-      // Bind anchor to scroll
+    // Bind anchor to scroll scenes
+    anchors.forEach((anchor) => {
       const id = anchor.getAttribute("href")
       if (id) {
         const section =
           this.container instanceof Window ? document.body.querySelector(id) : this.container.querySelector(id)
         if (section) {
           const elem = <HTMLElement>section
-          this.controller.addScene(
-            new ScrollScene({
-              triggerElement: elem,
-              triggerHook: "onLeave",
-              duration: elem.offsetHeight,
-            })
-              .on("enter", () => anchor.classList.add("is-active"))
-              .on("leave", () => anchor.classList.remove("is-active")),
-          )
+
+          const anchorScene = new ScrollScene({
+            triggerElement: elem,
+            triggerHook: "0.01", // BUGFIX: Sometimes the scene isn't triggered for 1px difference, using this value fixes the issue.
+            offset: this.scrollOffset,
+            duration: function () {
+              return elem.offsetHeight
+            },
+          })
+            .on("enter", () => anchor.classList.add("is-active"))
+            .on("leave", () => anchor.classList.remove("is-active"))
+
+          this.anchorScenes.push(anchorScene)
+
+          this.controller.addScene(anchorScene)
         }
       }
     })
@@ -323,11 +369,16 @@ export default class ScrollView {
     this.rebuild()
   }
 
-  registerSceneModifier(modifierName: string, modifierFunction: SceneModifier): void {
+  public setScrollOffset(offset: number): void {
+    this.anchorScenes.forEach((scene) => scene.offset(offset))
+    this.controller.setScrollOffset(offset)
+  }
+
+  public registerSceneModifier(modifierName: string, modifierFunction: SceneModifier): void {
     this.sceneModifiers[modifierName] = modifierFunction
   }
 
-  registerAnimation(animationName: string, animationProps: { [key: string]: any }) {
+  public registerAnimation(animationName: string, animationProps: { [key: string]: any }): void {
     this.animations[animationName] = animationProps
   }
 
@@ -468,7 +519,7 @@ export default class ScrollView {
           yoyo: this.animations[animation].yoyo,
           transformOrigin: this.animations[animation].transformOrigin || transformOrigin,
         }
-        ease = this.animations[animation].ease
+        ease = <string>this.animations[animation].ease
         momentum = this.animations[animation].momentum
         duration = this.animations[animation].duration
         stagger = this.animations[animation].stagger
@@ -483,7 +534,7 @@ export default class ScrollView {
           yoyo: eval(this.helper.getAnimationProperty(domElement, "yoyo") || `${this.defaults.animation.yoyo}`),
           transformOrigin: transformOrigin,
         }
-        ease = eval(this.helper.getAnimationProperty(domElement, "ease") || `${this.defaults.animation.ease}`)
+        ease = <string>eval(this.helper.getAnimationProperty(domElement, "ease") || `${this.defaults.animation.ease}`)
         momentum = parseFloat(
           this.helper.getAnimationProperty(domElement, "momentum") || `${this.defaults.animation.momentum}`,
         )
