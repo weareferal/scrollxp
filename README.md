@@ -1,8 +1,8 @@
 # ScrollXP
 
-A library for scrolling animations based on [ScrollMagic](http://scrollmagic.io/) + [GSAP](https://greensock.com/) + [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/).
+A library for scrolling animations.
 
-> _Stop suffering, focus on creating amazing pages._
+It's based on [ScrollMagic](http://scrollmagic.io/) codebase and depends on [GSAP](https://greensock.com/) and [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/) _(optional, just for the smooth scrolling feature)_.
 
 See [demo](https://weareferal.github.io/scrollxp/) here.
 
