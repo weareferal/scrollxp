@@ -73,6 +73,7 @@ export interface ViewOptions {
       from?: number
       to?: number
     }
+    transformOrigin?: string
   }
 }
 
@@ -143,6 +144,7 @@ export interface ImmutableViewOptions {
       from?: number
       to?: number
     }
+    transformOrigin?: string
   }
 }
 
@@ -173,6 +175,38 @@ export interface SceneModifier {
 
 export { ScrollScene }
 
+/**
+ * !!!IMPORTANT!!!
+ * 
+ * How it works:
+ * - The attribute [data-scene] creates a scene with duration = 0,
+ *   use [data-scene-*] to change the scene
+ * - The attribute [data-animate] creates an animation,
+ *   use [data-animate-*] to change the animation
+ * - Animations get stacked in a timeline as they are declared
+ * 
+ * Rules:
+ * - [data-animate-*] only works inside an unregistered scene, i.e., [data-scene]
+ *   (if we change that, we have trouble with nested scenes)
+ * - [data-scene="NAME"] can have nested scenes (registered and unregistered)
+ * - [data-scene] can have only unregistered nested scenes
+ * 
+ * Registering scenes and animations:
+ * - Animations can be customized to be reused, we do that by registering animations
+ *   JS: this.view.registerAnimation('fade-in', duration: 1, { from: { autoAlpha: 0 } });
+ *   HTML: <div data-animate="fade-in"></div>
+ * - Scenes can be customized to allow more control over HTML elements, we do that by registering scenes
+ *   JS: this.view.registerSceneModifier("reveal", function(
+          domScene
+        ) {
+          return {
+            onEnter: function() {
+              domScene.classList.add("is-visible");
+            },
+            triggerHook: "0.8"
+          };
+      HTML: <div data-scene="reveal"></div>
+ */
 export default class ScrollView {
   static version = __SCROLLXP_VERSION__
 
@@ -207,12 +241,14 @@ export default class ScrollView {
       yoyo: false,
       delay: 0,
       momentum: 0,
+      transformOrigin: "50% 50%",
     },
   }
   private domElements: HTMLElement[] = []
   private tweens: TimelineMax[] = []
   private scenes: ScrollScene[] = []
   private sceneModifiers: { [key: string]: SceneModifier } = {}
+  private animations: { [key: string]: any } = {}
 
   constructor(options: ScrollViewOptions) {
     this.container = options.container || window
@@ -289,6 +325,10 @@ export default class ScrollView {
 
   registerSceneModifier(modifierName: string, modifierFunction: SceneModifier): void {
     this.sceneModifiers[modifierName] = modifierFunction
+  }
+
+  registerAnimation(animationName: string, animationProps: { [key: string]: any }) {
+    this.animations[animationName] = animationProps
   }
 
   private rebuild(): void {
@@ -402,28 +442,58 @@ export default class ScrollView {
         },
       }
 
-      const duration = parseFloat(
-        this.helper.getAnimationProperty(domElement, "duration") || `${this.defaults.animation.duration}`,
-      )
-      const position = this.helper.getAnimationProperty(domElement, "position") || this.defaults.animation.position
-      const stagger = parseFloat(
-        this.helper.getAnimationProperty(domElement, "stagger") || `${this.defaults.animation.stagger}`,
-      )
+      // Can be set by data-* attributes ONLY
+      const delay = eval(this.helper.getAnimationProperty(domElement, "delay") || `${this.defaults.animation.delay}`)
       const label = this.helper.getAnimationProperty(domElement, "label") || this.defaults.animation.label
 
-      const fromProps = this.buildState("from", animationProps)
-      const toProps = this.buildState("to", animationProps)
+      // Can be set by data-* attribute AND modified by registered animation
+      let position = this.helper.getAnimationProperty(domElement, "position") || this.defaults.animation.position
+      const transformOrigin =
+        this.helper.getAnimationProperty(domElement, "transform-origin") || this.defaults.animation.transformOrigin
 
-      let extraProps = {
-        repeat: eval(this.helper.getAnimationProperty(domElement, "repeat") || `${this.defaults.animation.repeat}`),
-        yoyo: eval(this.helper.getAnimationProperty(domElement, "yoyo") || `${this.defaults.animation.yoyo}`),
-        delay: eval(this.helper.getAnimationProperty(domElement, "delay") || `${this.defaults.animation.delay}`),
+      // Can be set by data-* attribute OR registered animation
+      let fromProps, toProps, extraProps, ease, momentum, duration, stagger
+
+      // Retrieve registered animation
+      if (animation) {
+        if (!this.animations[animation]) {
+          console.error(`[ScrollView] Can\'t find animation "${animation}". You need to register it.`)
+          return
+        }
+
+        fromProps = this.animations[animation].from
+        toProps = this.animations[animation].to
+        extraProps = {
+          repeat: this.animations[animation].repeat,
+          yoyo: this.animations[animation].yoyo,
+          transformOrigin: this.animations[animation].transformOrigin || transformOrigin,
+        }
+        ease = this.animations[animation].ease
+        momentum = this.animations[animation].momentum
+        duration = this.animations[animation].duration
+        stagger = this.animations[animation].stagger
+        position = this.animations[animation].position || position
       }
-
-      const ease = eval(this.helper.getAnimationProperty(domElement, "ease") || `${this.defaults.animation.ease}`)
-      const momentum = parseFloat(
-        this.helper.getAnimationProperty(domElement, "momentum") || `${this.defaults.animation.momentum}`,
-      )
+      // Build animation from DOM attributes
+      else {
+        fromProps = this.buildState("from", animationProps)
+        toProps = this.buildState("to", animationProps)
+        extraProps = {
+          repeat: eval(this.helper.getAnimationProperty(domElement, "repeat") || `${this.defaults.animation.repeat}`),
+          yoyo: eval(this.helper.getAnimationProperty(domElement, "yoyo") || `${this.defaults.animation.yoyo}`),
+          transformOrigin: transformOrigin,
+        }
+        ease = eval(this.helper.getAnimationProperty(domElement, "ease") || `${this.defaults.animation.ease}`)
+        momentum = parseFloat(
+          this.helper.getAnimationProperty(domElement, "momentum") || `${this.defaults.animation.momentum}`,
+        )
+        duration = parseFloat(
+          this.helper.getAnimationProperty(domElement, "duration") || `${this.defaults.animation.duration}`,
+        )
+        stagger = parseFloat(
+          this.helper.getAnimationProperty(domElement, "stagger") || `${this.defaults.animation.stagger}`,
+        )
+      }
 
       if (momentum > 0) {
         extraProps = Object.assign(extraProps, {
@@ -439,51 +509,53 @@ export default class ScrollView {
         })
       }
 
-      if (!animation) {
-        const hasProperties = fromProps || toProps
-        if (hasProperties) {
-          if (stagger) {
-            if (fromProps && toProps) {
-              tween.fromTo(
-                domElement.children,
-                fromProps,
-                Object.assign(
-                  {
-                    duration: duration,
-                    stagger: stagger,
-                  },
-                  toProps,
-                  extraProps,
-                ),
-                position,
-              )
-            } else if (fromProps) {
-              tween.from(
-                domElement.children,
-                Object.assign({ duration: duration, stagger: stagger }, fromProps, extraProps),
-                position,
-              )
-            } else {
-              tween.to(
-                domElement.children,
-                Object.assign({ duration: duration, stagger: stagger }, toProps, extraProps),
-                position,
-              )
-            }
-            for (let i = 0; i < domElement.children.length; i++) {
-              const element = domElement.children[i]
-              this.domElements.push(<HTMLElement>element)
-            }
+      if (delay) {
+        tween.delay(delay)
+      }
+
+      const hasProperties = fromProps || toProps
+      if (hasProperties) {
+        if (stagger) {
+          if (fromProps && toProps) {
+            tween.fromTo(
+              domElement.children,
+              fromProps,
+              Object.assign(
+                {
+                  duration: duration,
+                  stagger: stagger,
+                },
+                toProps,
+                extraProps,
+              ),
+              position,
+            )
+          } else if (fromProps) {
+            tween.from(
+              domElement.children,
+              Object.assign({ duration: duration, stagger: stagger }, fromProps, extraProps),
+              position,
+            )
           } else {
-            if (fromProps && toProps) {
-              tween.fromTo(domElement, fromProps, Object.assign({ duration: duration }, toProps, extraProps), position)
-            } else if (fromProps) {
-              tween.from(domElement, Object.assign({ duration: duration }, fromProps, extraProps), position)
-            } else {
-              tween.to(domElement, Object.assign({ duration: duration }, toProps, extraProps), position)
-            }
-            this.domElements.push(domElement)
+            tween.to(
+              domElement.children,
+              Object.assign({ duration: duration, stagger: stagger }, toProps, extraProps),
+              position,
+            )
           }
+          for (let i = 0; i < domElement.children.length; i++) {
+            const element = domElement.children[i]
+            this.domElements.push(<HTMLElement>element)
+          }
+        } else {
+          if (fromProps && toProps) {
+            tween.fromTo(domElement, fromProps, Object.assign({ duration: duration }, toProps, extraProps), position)
+          } else if (fromProps) {
+            tween.from(domElement, Object.assign({ duration: duration }, fromProps, extraProps), position)
+          } else {
+            tween.to(domElement, Object.assign({ duration: duration }, toProps, extraProps), position)
+          }
+          this.domElements.push(domElement)
         }
       }
 

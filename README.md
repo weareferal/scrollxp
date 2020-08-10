@@ -28,6 +28,7 @@ _ScrollXP_ allows you to:
 - [Custom scenes](https://github.com/weareferal/scrollxp#custom-scenes)
 - [Scene limitations](https://github.com/weareferal/scrollxp#scene-limitations)
 - [Adding animations](https://github.com/weareferal/scrollxp#adding-animations)
+- [Reusable animations](https://github.com/weareferal/scrollxp#reusable-animations)
 - [Animations "Under the Hood"](https://github.com/weareferal/scrollxp#animations-under-the-hood)
 - [Parallax effect](https://github.com/weareferal/scrollxp#parallax-effect)
   - [Global parallax](https://github.com/weareferal/scrollxp#global-parallax)
@@ -335,6 +336,38 @@ Then, in the same DOM element, you can setup your animation by adding properties
 | `transform-origin`                                                                                                                                                   | `string`  | `undefined` | Sets element transform origin. Look for "transformOrigin" in GSAP [documentation](https://greensock.com/docs/v2/Plugins/CSSPlugin).                                                                              |
 | `duration`                                                                                                                                                           | `number`  | `undefined` | Sets the animation's duration.                                                                                                                                                                                   |
 | `stagger`                                                                                                                                                            | `number`  | `undefined` | Amount of time in seconds to stagger the start time of each tween. **The DOM element children will be animated instead.**                                                                                        |
+
+## Reusable animations
+
+Like [custom scenes](https://github.com/weareferal/scrollxp#custom-scenes), you can avoid adding the same properties for a large amount of elements by creating an animation on JavaScript and setting it on HTML.
+
+It's possible through the method `registerAnimation(name, properties)`.
+
+For example, if you want to create a "fade in up" animation, first you have to register the animation on JS:
+
+```
+var view = new ScrollXP(...)
+
+view.registerAnimation("fade-in-up", {
+  duration: 1,
+  from: {
+    autoAlpha: 0,
+    y: 20
+  },
+  to: {
+    autoAlpha: 1,
+    y: 0
+  }
+})
+```
+
+Then, in the HTML, you set the name for the animation:
+
+```
+<div data-scene>
+  <div data-animate="fade-in-up"></div>
+</div>
+```
 
 ## Animations "Under the Hood"
 
