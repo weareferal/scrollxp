@@ -3,7 +3,7 @@ import PropertyHelper from "./utils/property-helper"
 import ScrollScene from "./scroll-scene"
 import ScrollController from "./scroll-controller"
 import SceneEvent from "./scrollmagic/scene-event"
-import { TweenMax } from "gsap"
+import gsap from "gsap"
 
 declare let __SCROLLXP_VERSION__: string
 
@@ -248,7 +248,7 @@ export default class ScrollView {
     },
   }
   private domElements: HTMLElement[] = []
-  private tweens: TimelineMax[] = []
+  private tweens: GSAPTimeline[] = []
   private scenes: ScrollScene[] = []
   private anchorScenes: ScrollScene[] = []
   private sceneModifiers: { [key: string]: SceneModifier } = {}
@@ -445,7 +445,7 @@ export default class ScrollView {
   }
 
   private createAnimation(scene: ScrollScene, domScene: HTMLElement): void {
-    const tween = new TimelineMax().add("start")
+    const tween = gsap.timeline().add("start")
 
     const domElements = domScene.querySelectorAll("[data-animate]")
 
@@ -638,7 +638,7 @@ export default class ScrollView {
       const modifier = modifierFunction(domScene)
 
       if (modifier.tween !== undefined) {
-        const tween = new TimelineMax().add(modifier.tween)
+        const tween = gsap.timeline().add(modifier.tween)
 
         scene.setTween(tween)
 
@@ -744,7 +744,7 @@ export default class ScrollView {
           sceneItems.push(item)
         }
       } else {
-        TweenMax.set(domElement, { clearProps: "all" })
+        gsap.set(domElement, { clearProps: "all" })
       }
     })
 
@@ -810,23 +810,14 @@ export default class ScrollView {
             each: item.stagger,
           },
         })
-        // TweenMax.staggerTo(
-        //   item.domElement.children,
-        //   item.momentum,
-        //   {
-        //     y: offsetY / item.speed,
-        //     ease: item.ease,
-        //   },
-        //   item.stagger,
-        // )
       } else {
         if (item.momentum > 0) {
-          TweenMax.to(item.domElement, item.momentum, {
+          gsap.to(item.domElement, item.momentum, {
             y: offsetY / item.speed,
             ease: item.ease,
           })
         } else {
-          TweenMax.set(item.domElement, {
+          gsap.set(item.domElement, {
             y: offsetY / item.speed,
           })
         }
@@ -842,7 +833,7 @@ export default class ScrollView {
       this.controller.removeScene(scene)
     })
 
-    TweenMax.set(this.domElements, {
+    gsap.set(this.domElements, {
       clearProps: "all",
     })
 

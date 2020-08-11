@@ -32,7 +32,8 @@ export default class ScrollContainer extends Component {
     this.view.registerSceneModifier("slide-in-sidebar",
       (domScene) => {
         return {
-          tween: TweenMax.from(domScene, 1, {
+          tween: gsap.from(domScene, {
+            duration: 1,
             xPercent: 100
           })
         }

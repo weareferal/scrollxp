@@ -75,7 +75,7 @@ export default class ScrollScene {
     return this.scene.tweenChanges
   }
 
-  public setTween(tween: TweenMax | TimelineMax, easing?: boolean): ScrollScene {
+  public setTween(tween: GSAPTimeline, easing?: boolean): ScrollScene {
     this.scene.setTween(tween, easing)
     return this
   }

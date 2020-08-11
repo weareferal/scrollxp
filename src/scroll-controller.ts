@@ -69,7 +69,8 @@ export default class ScrollController {
       this.controller = new Controller(this.options)
 
       this.controller.scrollTo(function (this: HTMLElement, newPos: number) {
-        TweenMax.to(this, 2, {
+        gsap.to(this, {
+          duration: 2,
           scrollTo: {
             y: newPos,
           },
@@ -143,7 +144,8 @@ export default class ScrollController {
   public setScrollOffset(offset: number): void {
     if (!this._smoothScrolling) {
       this.controller.scrollTo(function (this: HTMLElement, newPos: number, callback?: () => void) {
-        TweenMax.to(this, 2, {
+        gsap.to(this, {
+          duration: 2,
           scrollTo: {
             y: newPos + offset,
           },

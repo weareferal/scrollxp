@@ -2,7 +2,7 @@ import Controller, { ControllerInfo, ScrollDirection } from "./controller"
 import Logger from "./utils/logger"
 import SceneEvent, { SceneEventVars } from "./scene-event"
 import DomUtils, { OffsetParam, CSSProperty } from "./utils/dom"
-import { TweenMax, TimelineMax } from "gsap"
+import gsap from "gsap"
 import Type from "./utils/type"
 import Indicator, { IndicatorOptions } from "./indicator"
 
@@ -78,7 +78,7 @@ export default class Scene {
   private cssClassElems: HTMLElement[] = []
 
   // Animation plugin
-  private tween?: TimelineMax
+  private tween?: GSAPTimeline
   private easing = false
 
   // Debug plugin
@@ -1207,123 +1207,45 @@ export default class Scene {
    * For a scene with a duration of `0`, the tween will be triggered when scrolling forward past the scene's trigger position and reversed, when scrolling back.
    * To gain better understanding, check out the [Simple Tweening example](../examples/basic/simple_tweening.html).
    *
-   * Instead of supplying a tween this method can also be used as a shorthand for `TweenMax.to()` (see example below).
+   * Instead of supplying a tween this method can also be used as a shorthand for `gsap.to()` (see example below).
    *
    * @example
    * // Add a single tween via variable
-   * let tween = TweenMax.to("obj"), 1, {x: 100}
+   * let tween = gsap.to("obj"), 1, {x: 100}
    * scene.setTween(tween)
    *
    * // Add multiple tweens, wrapped in a timeline.
-   * let timeline = new TimelineMax()
-   * let tween1 = TweenMax.from("obj1", 1, {x: 100})
-   * let tween2 = TweenMax.to("obj2", 1, {y: 100})
+   * let timeline = gsap.timeline()
+   * let tween1 = gsap.from("obj1", 1, {x: 100})
+   * let tween2 = gsap.to("obj2", 1, {y: 100})
    * timeline
    *   .add(tween1)
    *   .add(tween2);
    * scene.addTween(timeline)
    *
-   * // Short hand to add a TweenMax.to() tween
+   * // Short hand to add a gsap.to() tween
    * scene.setTween("obj3", 0.5, {y: 100})
    *
-   * // Short hand to add a TweenMax.to() tween for 1 second
+   * // Short hand to add a gsap.to() tween for 1 second
    * // This is useful, when the scene has a duration and the tween duration isn't important anyway
    * scene.setTween("obj3", {y: 100})
    *
-   * @param {(TweenObject)} TweenObject - A TweenMax, TweenLite, TimelineMax or TimelineLite object that should be animated in the scene.
+   * @param {(GSAPTimeline)} tween - A Timeline object that should be animated in the scene.
    * @param {(number)} duration - A duration for the tween, or tween parameters. If an object containing parameters are supplied, a default duration of 1 will be used.
    * @param {object} params - The parameters for the tween
    * @returns {Scene} Parent object for chaining.
    */
-  public setTween(tween: TweenMax | TimelineMax, easing?: boolean): Scene {
+  public setTween(tween: GSAPTimeline, easing?: boolean): Scene {
     this.easing = !!easing
 
-    let newTween: TimelineMax
+    tween.pause()
 
-    try {
-      // Wrap Tween into a Timeline Object if not gsap 3 or greater and available to include delay and repeats in the duration and standardize methods.
-      if (tween instanceof TweenMax) {
-        newTween = new TimelineMax({ smoothChildTiming: true }).add(tween)
-      } else {
-        newTween = tween
-      }
-      newTween.pause()
-    } catch (e) {
-      this.log(1, "ERROR calling method 'setTween()': Supplied argument is not a valid TweenObject")
-      return this
-    }
-
+    // Kill old tween?
     if (this.tween) {
-      // Kill old tween?
       this.removeTween()
     }
 
-    this.tween = newTween
-
-    // Some properties need to be transferred it to the wrapper, otherwise they would get lost.
-    if (tween.repeat && tween.repeat() === -1) {
-      // TweenMax or TimelineMax Object?
-      this.tween.repeat(-1)
-      this.tween.yoyo(tween.yoyo())
-    }
-
-    // Some tween validations and debugging helpers
-    if (this.tweenChanges && !this.tween.tweenTo) {
-      this.log(2, "WARNING: tweenChanges will only work if the TimelineMax object is available for ScrollMagic.")
-    }
-
-    // Check if there are position tweens defined for the trigger and warn about it :)
-    // if (this.tween && this.controller && this.triggerElement && this.logLevel >= 2) {
-    //   // Controller is needed to know scroll direction.
-    //   const triggerTweens = gsap.getTweensOf(this.triggerElement)
-    //   const isVertical = this.controller.info().isVertical
-
-    //   triggerTweens.forEach((value?: gsap.core.Tween) => {
-    //     const tweenvars = value?.vars.css || value?.vars
-    //     const condition = isVertical
-    //       ? tweenvars.top !== undefined || tweenvars.bottom !== undefined
-    //       : tweenvars.left !== undefined || tweenvars.right !== undefined
-
-    //     if (condition) {
-    //       this.log(
-    //         2,
-    //         "WARNING: Tweening the position of the trigger element affects the scene timing and should be avoided!",
-    //       )
-    //       return false
-    //     }
-    //   })
-    // }
-
-    // Warn about tween overwrites, when an element is tweened multiple times
-    // if (parseFloat(TweenLite.version) >= 1.14) {
-    //   // onOverwrite only present since GSAP v1.14.0
-    //   // However, onInterrupt deprecated onOverwrite in GSAP v3
-    //   const methodUsed = GSAP3_OR_GREATER ? "onInterrupt" : "onOverwrite"
-    //   const list = this._tween.getChildren ? this._tween.getChildren(true, true, false) : [this._tween] // get all nested tween objects
-
-    //   const newCallback = () => {
-    //     this.log(
-    //       2,
-    //       "WARNING: tween was overwritten by another. To learn how to avoid this issue see here: https://github.com/janpaepke/ScrollMagic/wiki/WARNING:-tween-was-overwritten-by-another",
-    //     )
-    //   }
-
-    //   for (let i = 0, thisTween, oldCallback; i < list.length; i++) {
-    //     thisTween = list[i]
-
-    //     if (oldCallback !== newCallback) {
-    //       // if tweens is added more than once
-    //       oldCallback = thisTween.vars[methodUsed]
-
-    //       thisTween.vars[methodUsed] = function () {
-    //         if (oldCallback) {
-    //           oldCallback.apply(this, arguments)
-    //         }
-    //         newCallback.apply(this, arguments)
-    //       }
-    //     }
-    //   }
-    // }
+    this.tween = tween
 
     this.log(3, "Added tween")
 
