@@ -224,7 +224,7 @@ export default class ScrollView {
       type: "global",
       speed: 1,
       momentum: 0.3,
-      ease: "Power0.easeNone",
+      ease: "none",
       trigger: document.body,
       duration: "100%",
       offset: 0,
@@ -519,7 +519,7 @@ export default class ScrollView {
           yoyo: this.animations[animation].yoyo,
           transformOrigin: this.animations[animation].transformOrigin || transformOrigin,
         }
-        ease = <string>this.animations[animation].ease
+        ease = this.animations[animation].ease
         momentum = this.animations[animation].momentum
         duration = this.animations[animation].duration
         stagger = this.animations[animation].stagger
@@ -534,7 +534,7 @@ export default class ScrollView {
           yoyo: eval(this.helper.getAnimationProperty(domElement, "yoyo") || `${this.defaults.animation.yoyo}`),
           transformOrigin: transformOrigin,
         }
-        ease = <string>eval(this.helper.getAnimationProperty(domElement, "ease") || `${this.defaults.animation.ease}`)
+        ease = this.helper.getAnimationProperty(domElement, "ease") || this.defaults.animation.ease
         momentum = parseFloat(
           this.helper.getAnimationProperty(domElement, "momentum") || `${this.defaults.animation.momentum}`,
         )
@@ -709,7 +709,7 @@ export default class ScrollView {
         const stagger = parseFloat(
           this.helper.getParallaxProperty(domElement, "stagger") || `${this.defaults.parallax.stagger}`,
         )
-        const ease = eval(this.helper.getParallaxProperty(domElement, "ease") || `${this.defaults.parallax.ease}`)
+        const ease = this.helper.getParallaxProperty(domElement, "ease") || this.defaults.parallax.ease
 
         let item: ParallaxItem = {
           domElement: domElement,
