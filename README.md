@@ -556,6 +556,24 @@ view.bindAnchors(anchors)
 
 Doing so, when clicking on a menu item or entering/leaving a page section, the class `is-active` is added/removed from the menu item.
 
+**Important!**
+
+Remember to register [ScrollToPlugin](https://greensock.com/scrolltoplugin/), otherwise it won't work properly:
+
+If you're using a bundler:
+
+```
+import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/all";
+gsap.registerPlugin(ScrollToPlugin);
+```
+
+If not, just add the script:
+
+```
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/ScrollToPlugin.min.js"></script>
+```
+
 ## Motivation
 
 _ScrollMagic_ is a fantastic library to handle animations when scrolling website pages. However, sooner or later, you'll find out that your project is becoming a huge plate of JavaScript spaghetti.

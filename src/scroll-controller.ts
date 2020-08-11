@@ -2,6 +2,7 @@ import ScrollScene, { PinScrollListener } from "./scroll-scene"
 import Controller, { ControllerOptions } from "./scrollmagic/controller"
 import Scrollbar from "smooth-scrollbar"
 import { ScrollListener } from "smooth-scrollbar/interfaces"
+import gsap from "gsap"
 
 export interface ScrollControllerOptions extends ControllerOptions {
   container?: Window | HTMLElement
@@ -74,7 +75,7 @@ export default class ScrollController {
           scrollTo: {
             y: newPos,
           },
-          ease: Power4.easeOut,
+          ease: "power4.out",
         })
       })
 
@@ -152,7 +153,7 @@ export default class ScrollController {
           onComplete: function () {
             if (callback) callback()
           },
-          ease: Power4.easeOut,
+          ease: "power4.out",
         })
       })
 
