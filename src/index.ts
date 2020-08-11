@@ -3,11 +3,12 @@ import PropertyHelper from "./utils/property-helper"
 import ScrollScene from "./scroll-scene"
 import ScrollController from "./scroll-controller"
 import SceneEvent from "./scrollmagic/scene-event"
+import { IObject, deepMerge } from "./scrollmagic/utils"
 import gsap from "gsap"
 
 declare let __SCROLLXP_VERSION__: string
 
-export interface ViewOptions {
+export interface ViewOptions extends IObject {
   parallax?: {
     enabled?: boolean
     type?: string
@@ -78,8 +79,8 @@ export interface ViewOptions {
   }
 }
 
-export interface ImmutableViewOptions {
-  parallax: {
+export interface ImmutableViewOptions extends IObject {
+  parallax?: {
     enabled: boolean
     type: string
     speed: number
@@ -92,7 +93,7 @@ export interface ImmutableViewOptions {
     hook: string | number
     indicator?: string
   }
-  scene: {
+  scene?: {
     name?: string
     triggerHook: number
     duration: number
@@ -102,7 +103,7 @@ export interface ImmutableViewOptions {
     enabled: boolean
     indicator?: string
   }
-  animation: {
+  animation?: {
     name?: string
     duration: number
     position: string
@@ -164,7 +165,7 @@ export interface ParallaxItem {
   speed: number
   momentum: number
   stagger?: number
-  ease: string
+  ease?: string
   trigger?: HTMLElement
   duration?: number
   offset?: number
@@ -256,6 +257,10 @@ export default class ScrollView {
   private scrollOffset: number
 
   constructor(options: ScrollViewOptions) {
+    gsap.config({
+      nullTargetWarn: false,
+    })
+
     this.container = options.container || window
 
     this.content =
@@ -269,7 +274,13 @@ export default class ScrollView {
 
     this.helper = new PropertyHelper(options.breakpoints)
 
-    this.defaults = Object.assign(this.defaults, options.defaults)
+    console.log("DEFAULTS antes", this.defaults)
+
+    if (options.defaults) {
+      this.defaults = deepMerge(this.defaults, options.defaults)
+    }
+
+    console.log("DEFAULTS depois", this.defaults)
 
     // TODO: Instead of checking for xs, check for isMobile somehow (actual devices)
     new BreakpointListener((result: BreakpointListenerResult) => {
@@ -399,7 +410,7 @@ export default class ScrollView {
     domScenes.forEach((scene) => {
       const domScene = <HTMLElement>scene
 
-      const isEnabled = eval(this.helper.getSceneProperty(domScene, "enabled") || `${this.defaults.scene.enabled}`)
+      const isEnabled = eval(this.helper.getSceneProperty(domScene, "enabled") || `${this.defaults.scene?.enabled}`)
 
       if (isEnabled) {
         const trigger = this.helper.getSceneProperty(domScene, "trigger")
@@ -412,21 +423,21 @@ export default class ScrollView {
         }
         let scene = new ScrollScene({
           triggerElement: triggerElement || domScene,
-          triggerHook: this.helper.getSceneProperty(domScene, "hook") || this.defaults.scene.triggerHook,
-          duration: this.helper.getSceneProperty(domScene, "duration") || this.defaults.scene.duration,
-          reverse: eval(this.helper.getSceneProperty(domScene, "reverse") || `${this.defaults.scene.reverse}`),
+          triggerHook: this.helper.getSceneProperty(domScene, "hook") || this.defaults.scene?.triggerHook,
+          duration: this.helper.getSceneProperty(domScene, "duration") || this.defaults.scene?.duration,
+          reverse: eval(this.helper.getSceneProperty(domScene, "reverse") || `${this.defaults.scene?.reverse}`),
         })
 
         scene.triggerElement()
 
-        const indicator = this.helper.getSceneProperty(domScene, "indicator") || this.defaults.scene.indicator
+        const indicator = this.helper.getSceneProperty(domScene, "indicator") || this.defaults.scene?.indicator
         if (indicator) {
           scene.addIndicators({ name: indicator })
         }
 
-        const classToggle = this.helper.getSceneProperty(domScene, "class-toggle") || this.defaults.scene.classToggle
-        const pin = this.helper.getSceneProperty(domScene, "pin") || this.defaults.scene.pin
-        const sceneName = this.helper.getSceneProperty(domScene, "scene") || this.defaults.scene.name
+        const classToggle = this.helper.getSceneProperty(domScene, "class-toggle") || this.defaults.scene?.classToggle
+        const pin = this.helper.getSceneProperty(domScene, "pin") || this.defaults.scene?.pin
+        const sceneName = this.helper.getSceneProperty(domScene, "scene") || this.defaults.scene?.name
 
         if (classToggle) {
           scene.setClassToggle(domScene, classToggle)
@@ -454,53 +465,54 @@ export default class ScrollView {
     domElements.forEach((elem) => {
       const domElement = <HTMLElement>elem
 
-      const animation = this.helper.getAnimationProperty(domElement, "animate") || this.defaults.animation.name
+      const animation = this.helper.getAnimationProperty(domElement, "animate") || this.defaults.animation?.name
 
       const animationProps = {
         autoAlpha: {
-          from: this.helper.getAnimationProperty(domElement, "from-alpha") || this.defaults.animation.alpha?.from,
-          to: this.helper.getAnimationProperty(domElement, "to-alpha") || this.defaults.animation.alpha?.to,
+          from: this.helper.getAnimationProperty(domElement, "from-alpha") || this.defaults.animation?.alpha?.from,
+          to: this.helper.getAnimationProperty(domElement, "to-alpha") || this.defaults.animation?.alpha?.to,
         },
         x: {
-          from: this.helper.getAnimationProperty(domElement, "from-x") || this.defaults.animation.x?.from,
-          to: this.helper.getAnimationProperty(domElement, "to-x") || this.defaults.animation.x?.to,
+          from: this.helper.getAnimationProperty(domElement, "from-x") || this.defaults.animation?.x?.from,
+          to: this.helper.getAnimationProperty(domElement, "to-x") || this.defaults.animation?.x?.to,
         },
         y: {
-          from: this.helper.getAnimationProperty(domElement, "from-y") || this.defaults.animation.y?.from,
-          to: this.helper.getAnimationProperty(domElement, "to-y") || this.defaults.animation.y?.to,
+          from: this.helper.getAnimationProperty(domElement, "from-y") || this.defaults.animation?.y?.from,
+          to: this.helper.getAnimationProperty(domElement, "to-y") || this.defaults.animation?.y?.to,
         },
         xPercent: {
           from:
-            this.helper.getAnimationProperty(domElement, "from-x-percent") || this.defaults.animation.xPercent?.from,
-          to: this.helper.getAnimationProperty(domElement, "to-x-percent") || this.defaults.animation.xPercent?.to,
+            this.helper.getAnimationProperty(domElement, "from-x-percent") || this.defaults.animation?.xPercent?.from,
+          to: this.helper.getAnimationProperty(domElement, "to-x-percent") || this.defaults.animation?.xPercent?.to,
         },
         yPercent: {
           from:
-            this.helper.getAnimationProperty(domElement, "from-y-percent") || this.defaults.animation.yPercent?.from,
-          to: this.helper.getAnimationProperty(domElement, "to-y-percent") || this.defaults.animation.yPercent?.to,
+            this.helper.getAnimationProperty(domElement, "from-y-percent") || this.defaults.animation?.yPercent?.from,
+          to: this.helper.getAnimationProperty(domElement, "to-y-percent") || this.defaults.animation?.yPercent?.to,
         },
         scale: {
-          from: this.helper.getAnimationProperty(domElement, "from-scale") || this.defaults.animation.scale?.from,
-          to: this.helper.getAnimationProperty(domElement, "to-scale") || this.defaults.animation.scale?.to,
+          from: this.helper.getAnimationProperty(domElement, "from-scale") || this.defaults.animation?.scale?.from,
+          to: this.helper.getAnimationProperty(domElement, "to-scale") || this.defaults.animation?.scale?.to,
         },
         rotation: {
-          from: this.helper.getAnimationProperty(domElement, "from-rotation") || this.defaults.animation.rotation?.from,
-          to: this.helper.getAnimationProperty(domElement, "to-rotation") || this.defaults.animation.rotation?.to,
+          from:
+            this.helper.getAnimationProperty(domElement, "from-rotation") || this.defaults.animation?.rotation?.from,
+          to: this.helper.getAnimationProperty(domElement, "to-rotation") || this.defaults.animation?.rotation?.to,
         },
         width: {
-          from: this.helper.getAnimationProperty(domElement, "from-width") || this.defaults.animation.width?.from,
-          to: this.helper.getAnimationProperty(domElement, "to-width") || this.defaults.animation.width?.to,
+          from: this.helper.getAnimationProperty(domElement, "from-width") || this.defaults.animation?.width?.from,
+          to: this.helper.getAnimationProperty(domElement, "to-width") || this.defaults.animation?.width?.to,
         },
       }
 
       // Can be set by data-* attributes ONLY
-      const delay = eval(this.helper.getAnimationProperty(domElement, "delay") || `${this.defaults.animation.delay}`)
-      const label = this.helper.getAnimationProperty(domElement, "label") || this.defaults.animation.label
+      const delay = eval(this.helper.getAnimationProperty(domElement, "delay") || `${this.defaults.animation?.delay}`)
+      const label = this.helper.getAnimationProperty(domElement, "label") || this.defaults.animation?.label
 
       // Can be set by data-* attribute AND modified by registered animation
-      let position = this.helper.getAnimationProperty(domElement, "position") || this.defaults.animation.position
+      let position = this.helper.getAnimationProperty(domElement, "position") || this.defaults.animation?.position
       const transformOrigin =
-        this.helper.getAnimationProperty(domElement, "transform-origin") || this.defaults.animation.transformOrigin
+        this.helper.getAnimationProperty(domElement, "transform-origin") || this.defaults.animation?.transformOrigin
 
       // Can be set by data-* attribute OR registered animation
       let fromProps, toProps, extraProps, ease, momentum, duration, stagger
@@ -530,19 +542,19 @@ export default class ScrollView {
         fromProps = this.buildState("from", animationProps)
         toProps = this.buildState("to", animationProps)
         extraProps = {
-          repeat: eval(this.helper.getAnimationProperty(domElement, "repeat") || `${this.defaults.animation.repeat}`),
-          yoyo: eval(this.helper.getAnimationProperty(domElement, "yoyo") || `${this.defaults.animation.yoyo}`),
+          repeat: eval(this.helper.getAnimationProperty(domElement, "repeat") || `${this.defaults.animation?.repeat}`),
+          yoyo: eval(this.helper.getAnimationProperty(domElement, "yoyo") || `${this.defaults.animation?.yoyo}`),
           transformOrigin: transformOrigin,
         }
-        ease = this.helper.getAnimationProperty(domElement, "ease") || this.defaults.animation.ease
+        ease = this.helper.getAnimationProperty(domElement, "ease") || this.defaults.animation?.ease
         momentum = parseFloat(
-          this.helper.getAnimationProperty(domElement, "momentum") || `${this.defaults.animation.momentum}`,
+          this.helper.getAnimationProperty(domElement, "momentum") || `${this.defaults.animation?.momentum}`,
         )
         duration = parseFloat(
-          this.helper.getAnimationProperty(domElement, "duration") || `${this.defaults.animation.duration}`,
+          this.helper.getAnimationProperty(domElement, "duration") || `${this.defaults.animation?.duration}`,
         )
         stagger = parseFloat(
-          this.helper.getAnimationProperty(domElement, "stagger") || `${this.defaults.animation.stagger}`,
+          this.helper.getAnimationProperty(domElement, "stagger") || `${this.defaults.animation?.stagger}`,
         )
       }
 
@@ -696,20 +708,20 @@ export default class ScrollView {
       const domElement = <HTMLElement>elem
 
       const isEnabled: boolean = eval(
-        this.helper.getParallaxProperty(domElement, "enabled") || `${this.defaults.parallax.enabled}`,
+        this.helper.getParallaxProperty(domElement, "enabled") || `${this.defaults.parallax?.enabled}`,
       )
 
       if (isEnabled) {
         const speed = parseFloat(
-          this.helper.getParallaxProperty(domElement, "speed") || `${this.defaults.parallax.speed}`,
+          this.helper.getParallaxProperty(domElement, "speed") || `${this.defaults.parallax?.speed}`,
         )
         const momentum = parseFloat(
-          this.helper.getParallaxProperty(domElement, "momentum") || `${this.defaults.parallax.momentum}`,
+          this.helper.getParallaxProperty(domElement, "momentum") || `${this.defaults.parallax?.momentum}`,
         )
         const stagger = parseFloat(
-          this.helper.getParallaxProperty(domElement, "stagger") || `${this.defaults.parallax.stagger}`,
+          this.helper.getParallaxProperty(domElement, "stagger") || `${this.defaults.parallax?.stagger}`,
         )
-        const ease = this.helper.getParallaxProperty(domElement, "ease") || this.defaults.parallax.ease
+        const ease = this.helper.getParallaxProperty(domElement, "ease") || this.defaults.parallax?.ease
 
         let item: ParallaxItem = {
           domElement: domElement,
@@ -719,7 +731,7 @@ export default class ScrollView {
           ease: ease,
         }
 
-        const parallaxType = this.helper.getParallaxProperty(domElement, "parallax") || this.defaults.parallax.type
+        const parallaxType = this.helper.getParallaxProperty(domElement, "parallax") || this.defaults.parallax?.type
 
         // Global items
         if (parallaxType === "global") {
@@ -727,11 +739,12 @@ export default class ScrollView {
         }
         // Scene items
         else if (parallaxType === "scene") {
-          const trigger = this.helper.getParallaxProperty(domElement, "trigger") || this.defaults.parallax.trigger
-          const duration = this.helper.getParallaxProperty(domElement, "duration") || this.defaults.parallax.duration
-          const offset = this.helper.getParallaxProperty(domElement, "offset") || this.defaults.parallax.offset
-          const hook = this.helper.getParallaxProperty(domElement, "hook") || this.defaults.parallax.hook
-          const indicator = this.helper.getParallaxProperty(domElement, "indicator") || this.defaults.parallax.indicator
+          const trigger = this.helper.getParallaxProperty(domElement, "trigger") || this.defaults.parallax?.trigger
+          const duration = this.helper.getParallaxProperty(domElement, "duration") || this.defaults.parallax?.duration
+          const offset = this.helper.getParallaxProperty(domElement, "offset") || this.defaults.parallax?.offset
+          const hook = this.helper.getParallaxProperty(domElement, "hook") || this.defaults.parallax?.hook
+          const indicator =
+            this.helper.getParallaxProperty(domElement, "indicator") || this.defaults.parallax?.indicator
 
           item = Object.assign(item, {
             trigger: trigger,
