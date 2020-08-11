@@ -47,6 +47,8 @@ _ScrollXP_ allows you to:
 $ npm install gsap scrollxp --save
 ```
 
+> **Note**: You need to use GSAP 3 or greater.
+
 ## Running local
 
 To get it up and running, run:
@@ -173,7 +175,13 @@ You should see a black square spinning around when scrolling.
 
 ## Smooth scrolling
 
-It's possible to active the smooth scrolling through a constructor parameter by setting:
+First, you need to install [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/):
+
+```
+$ npm install smooth-scrollbar --save
+```
+
+Then, just set the `smoothScrolling` flag in the constructor:
 
 ```
 var view = new ScrollXP({
@@ -182,7 +190,7 @@ var view = new ScrollXP({
 })
 ```
 
-Or simply calling the method:
+Or call the method:
 
 ```
 var view = new ScrollXP({
@@ -190,8 +198,6 @@ var view = new ScrollXP({
 })
 view.smoothScrolling(true)
 ```
-
-The smooth scrolling feature uses the [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/) under the hood.
 
 ## Debugging
 

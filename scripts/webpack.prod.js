@@ -24,6 +24,12 @@ module.exports = merge(baseConfig, {
       commonjs2: "gsap",
       amd: "gsap",
       root: "gsap"
+    },
+    "smooth-scrollbar": {
+      commonjs: "Scrollbar",
+      commonjs2: "Scrollbar",
+      amd: "Scrollbar",
+      root: "Scrollbar"
     }
   },
   plugins: [new UglifyJSPlugin(), new webpack.optimize.ModuleConcatenationPlugin()],
