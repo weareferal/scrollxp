@@ -274,13 +274,9 @@ export default class ScrollView {
 
     this.helper = new PropertyHelper(options.breakpoints)
 
-    console.log("DEFAULTS antes", this.defaults)
-
     if (options.defaults) {
       this.defaults = deepMerge(this.defaults, options.defaults)
     }
-
-    console.log("DEFAULTS depois", this.defaults)
 
     // TODO: Instead of checking for xs, check for isMobile somehow (actual devices)
     new BreakpointListener((result: BreakpointListenerResult) => {
