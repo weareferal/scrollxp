@@ -34,7 +34,7 @@ export interface ControllerInfo {
 export interface ControllerOptions {
   container?: HTMLElement | Window | Document
   isVertical?: boolean
-  globalSceneOptions?: any
+  globalSceneOptions?: any // eslint-disable-line
   logLevel?: number
   refreshInterval?: number
   addIndicators?: boolean
@@ -55,7 +55,7 @@ export default class Controller {
   // Options
   private isVertical: boolean
   private logLevel: number
-  private globalSceneOptions: any
+  private globalSceneOptions: any // eslint-disable-line
   private refreshInterval: number
   private addIndicators: boolean
   private smoothScrolling: boolean
@@ -710,6 +710,7 @@ export default class Controller {
    *
    * @returns {Controller} Parent object for chaining.
    */
+  // eslint-disable-next-line
   scrollTo(scrollTarget: number | string | HTMLElement | ((number) => void), additionalParameter?: any): Controller {
     if (Type.isNumber(scrollTarget)) {
       // Execute

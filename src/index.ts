@@ -8,6 +8,8 @@ import gsap from "gsap"
 import AnimationCreator from "./creator/animation.creator"
 import Parser from "./parser"
 import AnimationParser from "./parsers/animation.parser"
+import TypeHelper from "./helpers/type.helper"
+import AnimationBuilder from "./builders/animation.builder"
 
 declare let __SCROLLXP_VERSION__: string
 
@@ -177,7 +179,7 @@ export interface ParallaxItem {
 }
 
 export interface SceneModifier {
-  (domScene: HTMLElement): { [key: string]: any }
+  (domScene: HTMLElement): { [key: string]: any } // eslint-disable-line
 }
 
 export { ScrollScene }
@@ -214,8 +216,10 @@ export { ScrollScene }
           };
       HTML: <div data-scene="reveal"></div>
  */
-export default class ScrollView {
+export default class ScrollXP {
   static version = __SCROLLXP_VERSION__
+
+  static Animation = AnimationBuilder
 
   private controller: ScrollController
   private container: HTMLElement | Window
@@ -256,7 +260,7 @@ export default class ScrollView {
   private scenes: ScrollScene[] = []
   private anchorScenes: ScrollScene[] = []
   private sceneModifiers: { [key: string]: SceneModifier } = {}
-  private animations: { [key: string]: any } = {}
+  private registeredAnimations: { [key: string]: AnimationDescriptor } = {}
   private scrollOffset: number
   private parser: Parser
 
@@ -390,8 +394,23 @@ export default class ScrollView {
     this.sceneModifiers[modifierName] = modifierFunction
   }
 
-  public registerAnimation(animationName: string, animationProps: { [key: string]: any }): void {
-    this.animations[animationName] = animationProps
+  public register(data: Descriptor | Descriptor[]): void {
+    if (TypeHelper.isAnimationDescriptor(data)) {
+      if (data.name === undefined) {
+        throw Error(`Animation is missing name, it wasn't possible to register it.`)
+      }
+      if (!TypeHelper.isString(name)) {
+        throw Error(`Animation name needs to be a string: "${data.name}"`)
+      }
+      if (data.label !== undefined) {
+        throw Error(
+          `Animations can't be registered with a label, it can only be set using data-* attributes. Please, review "${data.name}".`,
+        )
+      }
+      this.registeredAnimations[data.name] = data
+    } else if (data instanceof Array) {
+      data.forEach((item) => this.register(item))
+    }
   }
 
   private rebuild(): void {
@@ -464,7 +483,19 @@ export default class ScrollView {
 
     const elements = parser.getElements(domScene)
     elements.forEach((element) => {
-      const descriptor = parser.parse(element)
+      let descriptor = parser.parse(element)
+
+      // Is registered animaton?
+      if (descriptor.name) {
+        if (descriptor.name in this.registeredAnimations) {
+          const registeredDescriptor = this.registeredAnimations[descriptor.name]
+          registeredDescriptor.label = descriptor.label
+          registeredDescriptor.position = descriptor.position
+          descriptor = registeredDescriptor
+        } else {
+          throw Error(`Couldn't find animation "${descriptor.name}". Make sure it's registered.`)
+        }
+      }
 
       // Sets flag to render scene properly
       if (descriptor.momentum > 0) {

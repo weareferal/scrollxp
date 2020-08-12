@@ -31,7 +31,7 @@ export default class AnimationParser implements IParser<AnimationDescriptor> {
    * @returns {AnimationDescriptor} - Object with the parsed information
    */
   public parse(el: HTMLElement): AnimationDescriptor {
-    const builder = new AnimationBuilder()
+    const builder = new AnimationBuilder(this.get(el, "name"))
     builder.duration(this.get(el, "duration"))
     builder.position(this.get(el, "position"))
     builder.repeat(this.get(el, "repeat"))

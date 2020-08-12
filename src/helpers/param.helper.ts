@@ -58,10 +58,13 @@ function toBoolean(value: any): boolean {
 function get(item: HTMLElement, breakpoints: Breakpoints, type: string, property: string): ParamString {
   const screenWidth = window.innerWidth
 
-  const key = property === type ? type : `${type}-${property}`
+  const key = property === "name" ? property : `${type}-${property}`
 
+  if (key === "name") {
+    return item.getAttribute(`data-${type}`) || undefined
+  }
   // xs
-  if (breakpoints.sm && screenWidth < breakpoints.sm) {
+  else if (breakpoints.sm && screenWidth < breakpoints.sm) {
     return item.getAttribute(`data-xs-${key}`) || item.getAttribute(`data-${key}`) || undefined
   }
   // sm

@@ -3,6 +3,7 @@ import Controller from "../controller"
 import Template from "./template"
 import DomUtils from "../utils/dom"
 import Logger from "../utils/logger"
+import { SceneEventVars } from "../scene-event"
 
 export interface IndicatorOptions {
   name?: string
@@ -137,7 +138,7 @@ export default class Indicator {
   }
 
   // Event handler for when trigger params change
-  handleTriggerParamsChange(e): void {
+  handleTriggerParamsChange(e: SceneEventVars): void {
     if (e.what === "triggerHook") {
       this.updateTriggerGroup()
     }

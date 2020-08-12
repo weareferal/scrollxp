@@ -20,7 +20,7 @@ export default class AnimationCreator {
   public add(element: HTMLElement, descriptor: AnimationDescriptor): AnimationCreator {
     const target = descriptor.stagger ? element.children : element
 
-    if (descriptor.delay) {
+    if (descriptor.delay !== undefined) {
       this.timeline.delay(descriptor.delay)
     }
 
@@ -38,7 +38,7 @@ export default class AnimationCreator {
       Logger.log(1, "No animation property has been set.")
     }
 
-    if (descriptor.label) {
+    if (descriptor.label !== undefined) {
       this.timeline.add(descriptor.label)
     }
 
@@ -52,35 +52,35 @@ export default class AnimationCreator {
   private getFromVars(descriptor: AnimationDescriptor, hasToVars?: boolean): gsap.TweenVars {
     const vars: gsap.TweenVars = hasToVars ? {} : this.getTweenVars(descriptor)
 
-    if (descriptor.from.alpha) {
+    if (descriptor.from.alpha !== undefined) {
       vars.autoAlpha = descriptor.from.alpha
     }
 
-    if (descriptor.from.x) {
+    if (descriptor.from.x !== undefined) {
       vars.x = descriptor.from.x
     }
 
-    if (descriptor.from.y) {
+    if (descriptor.from.y !== undefined) {
       vars.y = descriptor.from.y
     }
 
-    if (descriptor.from.xPercent) {
+    if (descriptor.from.xPercent !== undefined) {
       vars.xPercent = descriptor.from.xPercent
     }
 
-    if (descriptor.from.yPercent) {
+    if (descriptor.from.yPercent !== undefined) {
       vars.yPercent = descriptor.from.yPercent
     }
 
-    if (descriptor.from.scale) {
+    if (descriptor.from.scale !== undefined) {
       vars.scale = descriptor.from.scale
     }
 
-    if (descriptor.from.rotation) {
+    if (descriptor.from.rotation !== undefined) {
       vars.rotation = descriptor.from.rotation
     }
 
-    if (descriptor.from.width) {
+    if (descriptor.from.width !== undefined) {
       vars.width = descriptor.from.width
     }
 
@@ -90,35 +90,35 @@ export default class AnimationCreator {
   private getToVars(descriptor: AnimationDescriptor): gsap.TweenVars {
     const vars: gsap.TweenVars = this.getTweenVars(descriptor)
 
-    if (descriptor.to.alpha) {
+    if (descriptor.to.alpha !== undefined) {
       vars.autoAlpha = descriptor.to.alpha
     }
 
-    if (descriptor.to.x) {
+    if (descriptor.to.x !== undefined) {
       vars.x = descriptor.to.x
     }
 
-    if (descriptor.to.y) {
+    if (descriptor.to.y !== undefined) {
       vars.y = descriptor.to.y
     }
 
-    if (descriptor.to.xPercent) {
+    if (descriptor.to.xPercent !== undefined) {
       vars.xPercent = descriptor.to.xPercent
     }
 
-    if (descriptor.to.yPercent) {
+    if (descriptor.to.yPercent !== undefined) {
       vars.yPercent = descriptor.to.yPercent
     }
 
-    if (descriptor.to.scale) {
+    if (descriptor.to.scale !== undefined) {
       vars.scale = descriptor.to.scale
     }
 
-    if (descriptor.to.rotation) {
+    if (descriptor.to.rotation !== undefined) {
       vars.rotation = descriptor.to.rotation
     }
 
-    if (descriptor.to.width) {
+    if (descriptor.to.width !== undefined) {
       vars.width = descriptor.to.width
     }
 
