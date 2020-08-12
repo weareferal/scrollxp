@@ -5,7 +5,7 @@ export interface SceneEventVars {
   type?: string
   what?: string
   reason?: string
-  newValue?: any
+  newValue?: any // eslint-disable-line
   startPos?: number
   endPos?: number
   scrollPos?: number

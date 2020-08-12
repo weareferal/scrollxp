@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 interface IIsObject {
   (item: any): boolean
 }

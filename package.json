@@ -7,7 +7,7 @@
   "types": "index.d.ts",
   "scripts": {
     "start": "node ./scripts/serve.js",
-    "test": "nyc mocha -r ts-node/register -r jsdom-global/register tests/**/*.spec.ts",
+    "test": "nyc mocha -r ts-node/register/transpile-only -r jsdom-global/register -r source-map-support/register tests/**/*.spec.ts",
     "lint": "eslint --fix ./src/*",
     "clean:compile": "rimraf ./build",
     "clean:dist": "rimraf ./dist",
@@ -76,6 +76,7 @@
     "nyc": "^15.1.0",
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
+    "source-map-support": "^0.5.19",
     "ts-loader": "^8.0.1",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7",

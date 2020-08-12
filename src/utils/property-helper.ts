@@ -1,5 +1,3 @@
-import { Breakpoints } from "./breakpoints"
-
 /**
  * PropertyHelper
  *

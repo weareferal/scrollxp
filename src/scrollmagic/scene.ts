@@ -1947,6 +1947,7 @@ export default class Scene {
   }
 
   // Need to trigger the "change" event, so that updateScrollOffset gets called
+  // eslint-disable-next-line
   public setValue(attribute: string, value: any): void {
     switch (attribute) {
       case "duration":
