@@ -24,7 +24,11 @@ function isString(value: any): boolean {
 }
 
 function isNumber(value: any): boolean {
-  return !isArray(value) && <any>value - parseFloat(value) + 1 >= 0
+  return !isArray(value) && value - parseFloat(value) + 1 >= 0
+}
+
+function isPercentage(value: any): boolean {
+  return type(value) === "string" && value.match(/^(\.|\d)*\d+%$/)
 }
 
 function isBoolean(value: any): boolean {
@@ -36,6 +40,14 @@ function isBoolean(value: any): boolean {
 
 function isArray(value: any): boolean {
   return Array.isArray(value)
+}
+
+function isFunction(value: any): boolean {
+  return type(value) === "function"
+}
+
+function isHookValue(value: any): boolean {
+  return value === "onLeave" || value === "onCenter" || value === "onEnter"
 }
 
 function toString(value: any): string {
@@ -52,6 +64,18 @@ function toInteger(value: any): number {
 
 function toBoolean(value: any): boolean {
   return toString(value).toLowerCase() === "true" ? true : false
+}
+
+function toHookValue(value: string): number {
+  const values = {
+    onLeave: 0,
+    onCenter: 0.5,
+    onEnter: 1,
+  }
+  if (value in values) {
+    return values[value]
+  }
+  return -1
 }
 
 // TODO: Improve this to be independent from breakpoints, maybe using a recursive function
@@ -127,10 +151,14 @@ function get(item: HTMLElement, breakpoints: Breakpoints, type: string, property
 export default {
   isString,
   isNumber,
+  isPercentage,
   isBoolean,
+  isFunction,
+  isHookValue,
   toString,
   toInteger,
   toFloat,
   toBoolean,
+  toHookValue,
   get,
 }

@@ -42,6 +42,16 @@ interface StateProperty {
   width?: number
 }
 
+interface SceneDescriptor extends Descriptor {
+  enabled: boolean
+  duration: string | number | (() => number)
+  triggerHook: number
+  reverse: boolean
+  classToggle?: string
+  pin?: boolean
+  indicator?: string
+}
+
 interface IBuilder<D extends IDescriptor> {
   build(): D
 }
