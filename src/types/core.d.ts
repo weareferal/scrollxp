@@ -44,8 +44,9 @@ interface StateProperty {
 
 interface SceneDescriptor extends Descriptor {
   enabled: boolean
+  trigger?: HTMLElement
   duration: string | number | (() => number)
-  triggerHook: number
+  hook: number
   reverse: boolean
   classToggle?: string
   pin?: boolean
@@ -57,6 +58,6 @@ interface IBuilder<D extends IDescriptor> {
 }
 
 interface IParser<D extends IDescriptor> {
-  parse(target: HTMLElement): D
+  parse(target: HTMLElement, container?: HTMLElement): D
   getElements(target: HTMLElement): HTMLElement[]
 }

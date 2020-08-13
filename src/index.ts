@@ -10,6 +10,7 @@ import Parser from "./parser"
 import AnimationParser from "./parsers/animation.parser"
 import TypeHelper from "./helpers/type.helper"
 import AnimationBuilder from "./builders/animation.builder"
+import SceneParser from "./parsers/scene.parser"
 
 declare let __SCROLLXP_VERSION__: string
 
@@ -422,51 +423,43 @@ export default class ScrollXP {
   }
 
   private buildScenes(): void {
-    const domScenes =
-      this.container instanceof Window
-        ? document.body.querySelectorAll("[data-scene]")
-        : this.container.querySelectorAll("[data-scene]")
+    const parser = this.parser.create(SceneParser)
 
-    domScenes.forEach((scene) => {
-      const domScene = <HTMLElement>scene
+    const container = this.container instanceof Window ? document.body : this.container
 
-      const isEnabled = eval(this.helper.getSceneProperty(domScene, "enabled") || `${this.defaults.scene?.enabled}`)
+    const elements = parser.getElements(container)
 
-      if (isEnabled) {
-        const trigger = this.helper.getSceneProperty(domScene, "trigger")
-        let triggerElement
-        if (trigger) {
-          triggerElement =
-            this.container instanceof Window
-              ? document.body.querySelector(trigger)
-              : this.container.querySelector(trigger)
-        }
+    elements.forEach((element) => {
+      const descriptor = parser.parse(element, container)
+
+      if (descriptor.enabled) {
         let scene = new ScrollScene({
-          triggerElement: triggerElement || domScene,
-          triggerHook: this.helper.getSceneProperty(domScene, "hook") || this.defaults.scene?.triggerHook,
-          duration: this.helper.getSceneProperty(domScene, "duration") || this.defaults.scene?.duration,
-          reverse: eval(this.helper.getSceneProperty(domScene, "reverse") || `${this.defaults.scene?.reverse}`),
+          triggerElement: descriptor.trigger || element,
+          triggerHook: descriptor.hook,
+          duration: descriptor.duration,
+          reverse: descriptor.reverse,
         })
 
-        scene.triggerElement()
-
-        const indicator = this.helper.getSceneProperty(domScene, "indicator") || this.defaults.scene?.indicator
-        if (indicator) {
-          scene.addIndicators({ name: indicator })
+        // Add indicators?
+        if (descriptor.indicator) {
+          scene.addIndicators({ name: descriptor.indicator })
         }
 
-        const classToggle = this.helper.getSceneProperty(domScene, "class-toggle") || this.defaults.scene?.classToggle
-        const pin = this.helper.getSceneProperty(domScene, "pin") || this.defaults.scene?.pin
-        const sceneName = this.helper.getSceneProperty(domScene, "scene") || this.defaults.scene?.name
-
-        if (classToggle) {
-          scene.setClassToggle(domScene, classToggle)
-        } else if (pin) {
-          scene.setPin(domScene)
-        } else if (sceneName) {
-          scene = this.applySceneModifier(sceneName, scene, domScene)
-        } else {
-          this.createAnimation(scene, domScene)
+        // 1. Has class toggle?
+        if (descriptor.classToggle) {
+          scene.setClassToggle(element, descriptor.classToggle)
+        }
+        // 2. Is pinned?
+        else if (descriptor.pin) {
+          scene.setPin(element)
+        }
+        // 3. Is registered?
+        else if (descriptor.name) {
+          scene = this.applySceneModifier(descriptor.name, scene, element)
+        }
+        // 4. Parse animations
+        else {
+          this.createAnimation(scene, element)
         }
 
         this.controller.addScene(scene)
@@ -477,11 +470,13 @@ export default class ScrollXP {
 
   private createAnimation(scene: ScrollScene, domScene: HTMLElement): void {
     const creator = new AnimationCreator()
+
     const parser = this.parser.create(AnimationParser)
 
     let easing = false
 
     const elements = parser.getElements(domScene)
+
     elements.forEach((element) => {
       let descriptor = parser.parse(element)
 

@@ -1,4 +1,5 @@
 import ParamHelper from "../helpers/param.helper"
+import Logger from "../scrollmagic/utils/logger"
 
 export default class SceneBuilder implements IBuilder<SceneDescriptor> {
   public static NAMESPACE = "SceneBuilder"
@@ -27,6 +28,42 @@ export default class SceneBuilder implements IBuilder<SceneDescriptor> {
     return this
   }
 
+  public trigger(value?: ParamSelector, container?: ParamElement): SceneBuilder {
+    if (value !== undefined) {
+      if (ParamHelper.isHTMLElement(value)) {
+        this._descriptor.trigger = ParamHelper.toHTMLElement(value)
+      } else if (ParamHelper.isString(value)) {
+        if (container !== undefined && ParamHelper.isHTMLElement(container)) {
+          const nodes = container.querySelectorAll(ParamHelper.toString(value))
+          if (nodes.length === 1) {
+            this._descriptor.trigger = ParamHelper.toHTMLElement(nodes[0])
+          } else if (nodes.length > 1) {
+            Logger.log(
+              1,
+              `There are more than 1 element for trigger "${value}" in the given container. Using the first one.`,
+            )
+          } else {
+            throw Error(
+              `[${SceneBuilder.NAMESPACE}] Could't find an element with query "${value}" in the given container.`,
+            )
+          }
+        } else {
+          const nodes = document.body.querySelectorAll(ParamHelper.toString(value))
+          if (nodes.length === 1) {
+            this._descriptor.trigger = ParamHelper.toHTMLElement(nodes[0])
+          } else if (nodes.length > 1) {
+            Logger.log(1, `There are more than 1 element for trigger "${value}" in the body. Using the first one.`)
+          } else {
+            throw Error(`[${SceneBuilder.NAMESPACE}] Could't find an element with query "${value}" in the body.`)
+          }
+        }
+      } else {
+        throw TypeError(`[${SceneBuilder.NAMESPACE}] Value for "trigger" isn't a valid element or selector: "${value}"`)
+      }
+    }
+    return this
+  }
+
   public duration(value?: ParamDuration): SceneBuilder {
     if (value !== undefined) {
       if (ParamHelper.isNumber(value)) {
@@ -34,8 +71,9 @@ export default class SceneBuilder implements IBuilder<SceneDescriptor> {
       } else if (ParamHelper.isPercentage(value)) {
         this._descriptor.duration = ParamHelper.toString(value)
       } else if (ParamHelper.isFunction(value)) {
-        if (ParamHelper.isNumber(value())) {
-          this._descriptor.duration = value
+        const durationMethod = <ParamCallback>value
+        if (durationMethod && ParamHelper.isNumber(durationMethod())) {
+          this._descriptor.duration = durationMethod
         } else {
           throw TypeError(`[${SceneBuilder.NAMESPACE}] Function for "duration" should return a number.`)
         }

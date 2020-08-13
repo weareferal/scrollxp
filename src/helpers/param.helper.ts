@@ -50,6 +50,16 @@ function isHookValue(value: any): boolean {
   return value === "onLeave" || value === "onCenter" || value === "onEnter"
 }
 
+function isHTMLElement(value: any): boolean {
+  return typeof HTMLElement === "object" || typeof HTMLElement === "function"
+    ? value instanceof HTMLElement || (typeof SVGElement !== "undefined" && value instanceof SVGElement)
+    : value &&
+        typeof value === "object" &&
+        value !== null &&
+        value.nodeType === 1 &&
+        typeof value.nodeName === "string"
+}
+
 function toString(value: any): string {
   return `${value}`
 }
@@ -66,7 +76,7 @@ function toBoolean(value: any): boolean {
   return toString(value).toLowerCase() === "true" ? true : false
 }
 
-function toHookValue(value: string): number {
+function toHookValue(value: any): number {
   const values = {
     onLeave: 0,
     onCenter: 0.5,
@@ -76,6 +86,10 @@ function toHookValue(value: string): number {
     return values[value]
   }
   return -1
+}
+
+function toHTMLElement(value: any): HTMLElement {
+  return <HTMLElement>value
 }
 
 // TODO: Improve this to be independent from breakpoints, maybe using a recursive function
@@ -155,10 +169,12 @@ export default {
   isBoolean,
   isFunction,
   isHookValue,
+  isHTMLElement,
   toString,
   toInteger,
   toFloat,
   toBoolean,
   toHookValue,
+  toHTMLElement,
   get,
 }

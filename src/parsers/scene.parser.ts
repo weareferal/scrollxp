@@ -26,9 +26,10 @@ export default class SceneParser implements IParser<SceneDescriptor> {
    *
    * @returns {AnimationDescriptor} - Object with the parsed information
    */
-  public parse(el: HTMLElement): SceneDescriptor {
+  public parse(el: HTMLElement, container?: HTMLElement): SceneDescriptor {
     const builder = new SceneBuilder(this.get(el, "name"))
     builder.enabled(this.get(el, "enabled"))
+    builder.trigger(this.get(el, "trigger"), container)
     builder.duration(this.get(el, "duration"))
     builder.hook(this.get(el, "hook"))
     builder.reverse(this.get(el, "reverse"))

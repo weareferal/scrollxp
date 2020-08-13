@@ -54,14 +54,6 @@ describe(`Scene builder "duration" test`, () => {
     const descriptor = new SceneBuilder().duration(func).build()
     expect(func).to.equal(descriptor.duration)
   })
-  it("Invalid function input should return error", () => {
-    const func = function () {
-      return
-    }
-    expect(() => {
-      new SceneBuilder().duration(func).build()
-    }).to.throw(TypeError)
-  })
   it("Empty input should return 0", () => {
     const descriptor = new SceneBuilder().duration().build()
     expect(0).to.equal(descriptor.duration)
