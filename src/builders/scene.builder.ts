@@ -10,7 +10,7 @@ export default class SceneBuilder implements IBuilder<SceneDescriptor> {
       name: name,
       enabled: true,
       duration: 0,
-      triggerHook: 0.5,
+      hook: 0.5,
       reverse: true,
       pin: false,
     }
@@ -46,21 +46,19 @@ export default class SceneBuilder implements IBuilder<SceneDescriptor> {
     return this
   }
 
-  public triggerHook(value?: ParamNumber): SceneBuilder {
+  public hook(value?: ParamNumber): SceneBuilder {
     if (value !== undefined) {
       if (!ParamHelper.isNumber(value) && ParamHelper.isString(value) && !ParamHelper.isHookValue(value)) {
-        throw TypeError(`[${SceneBuilder.NAMESPACE}] Value for "triggerHook" isn't valid: "${value}"`)
+        throw TypeError(`[${SceneBuilder.NAMESPACE}] Value for "hook" isn't valid: "${value}"`)
       } else {
         if (ParamHelper.isString(value)) {
           value = ParamHelper.toHookValue(value)
         }
         if (ParamHelper.isNumber(value)) {
           if (value >= 0 && value <= 1) {
-            this._descriptor.triggerHook = ParamHelper.toFloat(value)
+            this._descriptor.hook = ParamHelper.toFloat(value)
           } else {
-            throw RangeError(
-              `[${SceneBuilder.NAMESPACE}] Value for "triggerHook" should be between 0 and 1: "${value}"`,
-            )
+            throw RangeError(`[${SceneBuilder.NAMESPACE}] Value for "hook" should be between 0 and 1: "${value}"`)
           }
         }
       }

@@ -73,48 +73,48 @@ describe(`Scene builder "duration" test`, () => {
   })
 })
 
-describe(`Scene builder "triggerHook" test`, () => {
+describe(`Scene builder "hook" test`, () => {
   it("Integer input should return integer number", () => {
-    const descriptor = new SceneBuilder().triggerHook(1).build()
-    expect(1).to.equal(descriptor.triggerHook)
+    const descriptor = new SceneBuilder().hook(1).build()
+    expect(1).to.equal(descriptor.hook)
   })
   it("Float input should return float number", () => {
-    const descriptor = new SceneBuilder().triggerHook(0.3).build()
-    expect(0.3).to.equal(descriptor.triggerHook)
+    const descriptor = new SceneBuilder().hook(0.3).build()
+    expect(0.3).to.equal(descriptor.hook)
   })
   it("String input should return float number", () => {
-    const descriptor = new SceneBuilder().triggerHook("0.2").build()
-    expect(0.2).to.equal(descriptor.triggerHook)
+    const descriptor = new SceneBuilder().hook("0.2").build()
+    expect(0.2).to.equal(descriptor.hook)
   })
   it("< 0 number should return error", () => {
     expect(() => {
-      new SceneBuilder().triggerHook(-1).build()
+      new SceneBuilder().hook(-1).build()
     }).to.throw(RangeError)
   })
   it("> 1 number should return error", () => {
     expect(() => {
-      new SceneBuilder().triggerHook(2).build()
+      new SceneBuilder().hook(2).build()
     }).to.throw(RangeError)
   })
   it('"onLeave" value should return 0', () => {
-    const descriptor = new SceneBuilder().triggerHook("onLeave").build()
-    expect(0).to.equal(descriptor.triggerHook)
+    const descriptor = new SceneBuilder().hook("onLeave").build()
+    expect(0).to.equal(descriptor.hook)
   })
   it('"onCenter" value should return 0.5', () => {
-    const descriptor = new SceneBuilder().triggerHook("onCenter").build()
-    expect(0.5).to.equal(descriptor.triggerHook)
+    const descriptor = new SceneBuilder().hook("onCenter").build()
+    expect(0.5).to.equal(descriptor.hook)
   })
   it('"onEnter" value should return 1', () => {
-    const descriptor = new SceneBuilder().triggerHook("onEnter").build()
-    expect(1).to.equal(descriptor.triggerHook)
+    const descriptor = new SceneBuilder().hook("onEnter").build()
+    expect(1).to.equal(descriptor.hook)
   })
   it("Empty input should return 0.5", () => {
-    const descriptor = new SceneBuilder().triggerHook().build()
-    expect(0.5).to.equal(descriptor.triggerHook)
+    const descriptor = new SceneBuilder().hook().build()
+    expect(0.5).to.equal(descriptor.hook)
   })
   it("Any other input should return error", () => {
     expect(() => {
-      new SceneBuilder().triggerHook("bla").build()
+      new SceneBuilder().hook("bla").build()
     }).to.throw(TypeError)
   })
 })
