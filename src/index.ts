@@ -1,9 +1,9 @@
-import { BreakpointListener } from "./utils/breakpoints"
-import PropertyHelper from "./utils/property-helper"
+import gsap from "gsap"
+
+import { BreakpointListener } from "./utils"
 import ScrollScene from "./scroll-scene"
 import ScrollController from "./scroll-controller"
 import SceneEvent from "./scrollmagic/scene-event"
-import gsap from "gsap"
 import AnimationCreator from "./creator/animation.creator"
 import Parser from "./parser"
 import AnimationParser from "./parsers/animation.parser"
@@ -11,6 +11,7 @@ import TypeHelper from "./helpers/type.helper"
 import AnimationBuilder from "./builders/animation.builder"
 import SceneParser from "./parsers/scene.parser"
 import ParallaxParser from "./parsers/parallax.parser"
+import SceneBuilder from "./builders/scene.builder"
 
 declare let __SCROLLXP_VERSION__: string
 
@@ -33,12 +34,12 @@ export default class ScrollXP {
   static version = __SCROLLXP_VERSION__
 
   static Animation = AnimationBuilder
+  static Scene = SceneBuilder
 
   private controller: ScrollController
   private container: HTMLElement | Window
   private content: HTMLElement
   private _smoothScrolling: boolean
-  private helper: PropertyHelper
   private domElements: HTMLElement[] = []
   private tweens: GSAPTimeline[] = []
   private scenes: ScrollScene[] = []
@@ -64,7 +65,6 @@ export default class ScrollXP {
 
     this._smoothScrolling = options.smoothScrolling || false
 
-    this.helper = new PropertyHelper(options.breakpoints)
     this.parser = new Parser(options.breakpoints)
 
     // TODO: Refactor this
@@ -101,7 +101,7 @@ export default class ScrollXP {
       // if (this.contentScene) {
       //   this.contentScene.duration(this.content.offsetHeight)
       // }
-    }, this.helper.breakpoints)
+    }, this.parser.breakpoints)
 
     // Set up scrollTo anchors
     if (options.anchors && options.anchors.length > 0) {

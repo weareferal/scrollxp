@@ -1,5 +1,5 @@
 export default class Parser {
-  private breakpoints: Breakpoints
+  public readonly breakpoints: Breakpoints
 
   constructor(breakpoints?: Breakpoints) {
     this.breakpoints = breakpoints || {
