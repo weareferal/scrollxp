@@ -24,7 +24,7 @@ export default class SceneParser implements IParser<SceneDescriptor> {
    *
    * @param {HTMLElement} - Element with [data-animate-*] attributes
    *
-   * @returns {AnimationDescriptor} - Object with the parsed information
+   * @returns {SceneDescriptor} - Object with the parsed information
    */
   public parse(el: HTMLElement, container?: HTMLElement): SceneDescriptor {
     const builder = new SceneBuilder(this.get(el, "name"))
@@ -44,7 +44,7 @@ export default class SceneParser implements IParser<SceneDescriptor> {
    *
    * @param {HTMLElement} - Container
    *
-   * @returns {HTMLElement[]} - List of [data-animate] elements
+   * @returns {HTMLElement[]} - List of [data-scene] elements
    */
   public getElements(container: HTMLElement): HTMLElement[] {
     const elements: HTMLElement[] = []

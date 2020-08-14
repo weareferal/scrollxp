@@ -3,7 +3,6 @@ import PropertyHelper from "./utils/property-helper"
 import ScrollScene from "./scroll-scene"
 import ScrollController from "./scroll-controller"
 import SceneEvent from "./scrollmagic/scene-event"
-import { IObject, deepMerge } from "./scrollmagic/utils"
 import gsap from "gsap"
 import AnimationCreator from "./creator/animation.creator"
 import Parser from "./parser"
@@ -11,172 +10,17 @@ import AnimationParser from "./parsers/animation.parser"
 import TypeHelper from "./helpers/type.helper"
 import AnimationBuilder from "./builders/animation.builder"
 import SceneParser from "./parsers/scene.parser"
+import ParallaxParser from "./parsers/parallax.parser"
 
 declare let __SCROLLXP_VERSION__: string
-
-export interface ViewOptions extends IObject {
-  parallax?: {
-    enabled?: boolean
-    type?: string
-    speed?: number
-    momentum?: number
-    stagger?: string
-    ease?: string
-    trigger?: HTMLElement
-    duration?: string | number
-    offset?: number
-    hook?: string | number
-    indicator?: string
-  }
-  scene?: {
-    name?: string
-    triggerHook?: string | number
-    duration?: string | number | (() => void)
-    reverse?: boolean
-    classToggle?: string
-    pin?: boolean
-    enabled?: boolean
-    indicator?: boolean
-  }
-  animation: {
-    name?: string
-    duration?: number
-    position?: string
-    stagger?: number
-    ease?: string
-    momentum?: number
-    repeat?: number
-    yoyo?: boolean
-    delay?: number
-    label?: string
-    alpha?: {
-      from?: number
-      to?: number
-    }
-    x?: {
-      from?: number
-      to?: number
-    }
-    y?: {
-      from?: number
-      to?: number
-    }
-    xPercent?: {
-      from?: number
-      to?: number
-    }
-    yPercent?: {
-      from?: number
-      to?: number
-    }
-    scale?: {
-      from?: number
-      to?: number
-    }
-    rotation?: {
-      from?: number
-      to?: number
-    }
-    width?: {
-      from?: number
-      to?: number
-    }
-    transformOrigin?: string
-  }
-}
-
-export interface ImmutableViewOptions extends IObject {
-  parallax?: {
-    enabled: boolean
-    type: string
-    speed: number
-    momentum: number
-    stagger?: number
-    ease: string
-    trigger: HTMLElement
-    duration: string | number
-    offset: number
-    hook: string | number
-    indicator?: string
-  }
-  scene?: {
-    name?: string
-    triggerHook: number
-    duration: number
-    reverse: boolean
-    classToggle?: string
-    pin: boolean
-    enabled: boolean
-    indicator?: string
-  }
-  animation?: {
-    name?: string
-    duration: number
-    position: string
-    stagger?: number
-    ease?: string
-    momentum?: number
-    repeat: number
-    yoyo: boolean
-    delay: number
-    label?: string
-    alpha?: {
-      from?: number
-      to?: number
-    }
-    x?: {
-      from?: number
-      to?: number
-    }
-    y?: {
-      from?: number
-      to?: number
-    }
-    xPercent?: {
-      from?: number
-      to?: number
-    }
-    yPercent?: {
-      from?: number
-      to?: number
-    }
-    scale?: {
-      from?: number
-      to?: number
-    }
-    rotation?: {
-      from?: number
-      to?: number
-    }
-    width?: {
-      from?: number
-      to?: number
-    }
-    transformOrigin?: string
-  }
-}
 
 export interface ScrollViewOptions {
   container?: HTMLElement | Window
   breakpoints: Breakpoints
   smoothScrolling?: boolean
-  defaults?: ViewOptions
   addIndicators?: boolean
   scrollOffset?: number
   anchors?: HTMLAnchorElement[]
-}
-
-export interface ParallaxItem {
-  domElement: HTMLElement
-  speed: number
-  momentum: number
-  stagger?: number
-  ease?: string
-  trigger?: HTMLElement
-  duration?: number
-  offset?: number
-  hook?: number
-  indicator?: string
 }
 
 export interface SceneModifier {
@@ -185,38 +29,6 @@ export interface SceneModifier {
 
 export { ScrollScene }
 
-/**
- * !!!IMPORTANT!!!
- * 
- * How it works:
- * - The attribute [data-scene] creates a scene with duration = 0,
- *   use [data-scene-*] to change the scene
- * - The attribute [data-animate] creates an animation,
- *   use [data-animate-*] to change the animation
- * - Animations get stacked in a timeline as they are declared
- * 
- * Rules:
- * - [data-animate-*] only works inside an unregistered scene, i.e., [data-scene]
- *   (if we change that, we have trouble with nested scenes)
- * - [data-scene="NAME"] can have nested scenes (registered and unregistered)
- * - [data-scene] can have only unregistered nested scenes
- * 
- * Registering scenes and animations:
- * - Animations can be customized to be reused, we do that by registering animations
- *   JS: this.view.registerAnimation('fade-in', duration: 1, { from: { autoAlpha: 0 } });
- *   HTML: <div data-animate="fade-in"></div>
- * - Scenes can be customized to allow more control over HTML elements, we do that by registering scenes
- *   JS: this.view.registerSceneModifier("reveal", function(
-          domScene
-        ) {
-          return {
-            onEnter: function() {
-              domScene.classList.add("is-visible");
-            },
-            triggerHook: "0.8"
-          };
-      HTML: <div data-scene="reveal"></div>
- */
 export default class ScrollXP {
   static version = __SCROLLXP_VERSION__
 
@@ -227,35 +39,6 @@ export default class ScrollXP {
   private content: HTMLElement
   private _smoothScrolling: boolean
   private helper: PropertyHelper
-  private defaults: ImmutableViewOptions = {
-    parallax: {
-      enabled: true,
-      type: "global",
-      speed: 1,
-      momentum: 0.3,
-      ease: "none",
-      trigger: document.body,
-      duration: "100%",
-      offset: 0,
-      hook: "onCenter",
-    },
-    scene: {
-      triggerHook: 0.5,
-      duration: 0,
-      reverse: true,
-      pin: false,
-      enabled: true,
-    },
-    animation: {
-      duration: 1,
-      position: "+=0",
-      repeat: 0,
-      yoyo: false,
-      delay: 0,
-      momentum: 0,
-      transformOrigin: "50% 50%",
-    },
-  }
   private domElements: HTMLElement[] = []
   private tweens: GSAPTimeline[] = []
   private scenes: ScrollScene[] = []
@@ -284,9 +67,10 @@ export default class ScrollXP {
     this.helper = new PropertyHelper(options.breakpoints)
     this.parser = new Parser(options.breakpoints)
 
-    if (options.defaults) {
-      this.defaults = deepMerge(this.defaults, options.defaults)
-    }
+    // TODO: Refactor this
+    // if (options.defaults) {
+    //   this.defaults = deepMerge(this.defaults, options.defaults)
+    // }
 
     // TODO: Instead of checking for xs, check for isMobile somehow (actual devices)
     new BreakpointListener((result: BreakpointListenerResult) => {
@@ -580,146 +364,93 @@ export default class ScrollXP {
   }
 
   private buildParallaxScenes(): void {
-    const globalItems: ParallaxItem[] = []
-    const sceneItems: ParallaxItem[] = []
+    const parser = this.parser.create(ParallaxParser)
 
-    const domElements =
-      this.container instanceof Window
-        ? document.body.querySelectorAll("[data-parallax]")
-        : this.container.querySelectorAll("[data-parallax]")
+    const container = this.container instanceof Window ? document.body : this.container
 
-    domElements.forEach((elem) => {
-      const domElement = <HTMLElement>elem
+    const elements = parser.getElements(container)
 
-      const isEnabled: boolean = eval(
-        this.helper.getParallaxProperty(domElement, "enabled") || `${this.defaults.parallax?.enabled}`,
-      )
+    const globalDescriptors: ParallaxDescriptor[] = []
 
-      if (isEnabled) {
-        const speed = parseFloat(
-          this.helper.getParallaxProperty(domElement, "speed") || `${this.defaults.parallax?.speed}`,
-        )
-        const momentum = parseFloat(
-          this.helper.getParallaxProperty(domElement, "momentum") || `${this.defaults.parallax?.momentum}`,
-        )
-        const stagger = parseFloat(
-          this.helper.getParallaxProperty(domElement, "stagger") || `${this.defaults.parallax?.stagger}`,
-        )
-        const ease = this.helper.getParallaxProperty(domElement, "ease") || this.defaults.parallax?.ease
+    elements.forEach((element) => {
+      const descriptor = parser.parse(element, container)
 
-        let item: ParallaxItem = {
-          domElement: domElement,
-          speed: speed,
-          momentum: <number>momentum,
-          stagger: stagger,
-          ease: ease,
+      if (descriptor.enabled) {
+        // Global parallax
+        if (descriptor.type === "global") {
+          globalDescriptors.push(descriptor)
+
+          if (globalDescriptors.length === 1) {
+            const scene = new ScrollScene({
+              triggerElement: this.content,
+              triggerHook: "onLeave",
+              duration: this.content.offsetHeight,
+            }).on("update", () => {
+              this.updateParallaxElements(globalDescriptors, this.controller.getScrollPos())
+            })
+            this.scenes.push(scene)
+            this.controller.addScene(scene)
+          }
         }
+        // Scene parallax
+        else {
+          let during = false
 
-        const parallaxType = this.helper.getParallaxProperty(domElement, "parallax") || this.defaults.parallax?.type
-
-        // Global items
-        if (parallaxType === "global") {
-          globalItems.push(item)
-        }
-        // Scene items
-        else if (parallaxType === "scene") {
-          const trigger = this.helper.getParallaxProperty(domElement, "trigger") || this.defaults.parallax?.trigger
-          const duration = this.helper.getParallaxProperty(domElement, "duration") || this.defaults.parallax?.duration
-          const offset = this.helper.getParallaxProperty(domElement, "offset") || this.defaults.parallax?.offset
-          const hook = this.helper.getParallaxProperty(domElement, "hook") || this.defaults.parallax?.hook
-          const indicator =
-            this.helper.getParallaxProperty(domElement, "indicator") || this.defaults.parallax?.indicator
-
-          item = Object.assign(item, {
-            trigger: trigger,
-            duration: duration,
-            offset: offset,
-            hook: hook,
-            indicator: indicator,
+          const scene = new ScrollScene({
+            triggerElement: descriptor.trigger,
+            triggerHook: descriptor.hook,
+            duration: descriptor.duration,
+            offset: descriptor.offset,
           })
+            .on("update", (e?: SceneEvent) => {
+              if (during && e?.vars?.scrollPos && e?.vars?.startPos) {
+                const delta = e.vars.scrollPos - e.vars.startPos
+                this.updateParallaxElements(descriptor, delta)
+              }
+            })
+            .on("enter", () => (during = true))
+            .on("leave", () => (during = false))
 
-          sceneItems.push(item)
+          if (descriptor.indicator) {
+            scene.addIndicators({ name: descriptor.indicator })
+          }
+
+          this.scenes.push(scene)
+          this.controller.addScene(scene)
         }
       } else {
-        gsap.set(domElement, { clearProps: "all" })
+        // In the case the parallax was disabled for this element, clear all styles
+        gsap.set(element, { clearProps: "all" })
       }
     })
-
-    if (globalItems.length > 0) {
-      this.buildGlobalParallax(globalItems)
-    }
-
-    if (sceneItems.length > 0) {
-      this.buildScenesParallax(sceneItems)
-    }
   }
 
-  private buildGlobalParallax(items: ParallaxItem[]): void {
-    const scene = new ScrollScene({
-      triggerElement: this.content,
-      triggerHook: "onLeave",
-      duration: this.content.offsetHeight,
-    }).on("update", () => {
-      this.updateParallaxItems(items, this.controller.getScrollPos())
-    })
-
-    this.scenes.push(scene)
-    this.controller.addScene(scene)
-  }
-
-  private buildScenesParallax(items: ParallaxItem[]): void {
-    items.forEach((item) => {
-      let during = false
-
-      const scene = new ScrollScene({
-        triggerElement: item.trigger,
-        triggerHook: item.hook,
-        duration: item.duration,
-        offset: item.offset,
-      })
-        .on("update", (e?: SceneEvent) => {
-          if (during && e?.vars?.scrollPos && e?.vars?.startPos) {
-            const delta = e.vars.scrollPos - e.vars.startPos
-
-            this.updateParallaxItems([item], delta)
-          }
-        })
-        .on("enter", () => (during = true))
-        .on("leave", () => (during = false))
-
-      if (item.indicator) {
-        scene.addIndicators({ name: item.indicator })
-      }
-
-      this.scenes.push(scene)
-      this.controller.addScene(scene)
-    })
-  }
-
-  private updateParallaxItems(items: ParallaxItem[], offsetY: number): void {
-    items.forEach((item) => {
-      if (item.stagger) {
-        gsap.to(item.domElement.children, {
-          duration: item.momentum,
-          y: offsetY / item.speed,
+  private updateParallaxElements(data: ParallaxDescriptor | ParallaxDescriptor[], offsetY: number) {
+    if (data instanceof Array) {
+      data.forEach((descriptor) => this.updateParallaxElements(descriptor, offsetY))
+    } else if (data.element) {
+      if (data.stagger) {
+        gsap.to(data.element.children, {
+          duration: data.momentum,
+          y: offsetY / data.speed,
           stagger: {
-            ease: item.ease,
-            each: item.stagger,
+            ease: data.ease,
+            each: data.stagger,
           },
         })
       } else {
-        if (item.momentum > 0) {
-          gsap.to(item.domElement, item.momentum, {
-            y: offsetY / item.speed,
-            ease: item.ease,
+        if (data.momentum > 0) {
+          gsap.to(data.element, data.momentum, {
+            y: offsetY / data.speed,
+            ease: data.ease,
           })
         } else {
-          gsap.set(item.domElement, {
-            y: offsetY / item.speed,
+          gsap.set(data.element, {
+            y: offsetY / data.speed,
           })
         }
       }
-    })
+    }
   }
 
   private resetScenes(): void {
