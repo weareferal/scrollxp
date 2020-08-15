@@ -1972,7 +1972,7 @@ export default class Scene {
         this.logLevel = this.valdiateLogLevel(<number>value)
         break
       default:
-        throw Error(`No validator for attribute "${attribute}"`)
+        throw new Error(`No validator for attribute "${attribute}"`)
     }
   }
 }

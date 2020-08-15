@@ -62,7 +62,7 @@ export class Component {
   public static find<T extends { new (...args: any[]): Component }>(className: T): InstanceType<T> {
     const elements = document.querySelectorAll(`[data-component="${Component.getName(className)}"]`)
     if (!elements.length) {
-      throw Error(`[Component] Couldn\'t find element with [data-component="${Component.getName(className)}"].`)
+      throw new Error(`[Component] Couldn\'t find element with [data-component="${Component.getName(className)}"].`)
     }
     if (elements.length > 1) {
       console.warn(`[Component] Found more than 1 element with [data-component="${Component.getName(className)}"]. Returning the first one.`)
@@ -80,7 +80,7 @@ export class Component {
   public static getInstance<T extends { new (...args: any[]): Component }>(element: HTMLElement): InstanceType<T> {
     const obj = data.get(element)
     if (!obj) {
-      throw Error(`[Component] Couldn\'t find instance of "${element.getAttribute("data-component")}" component. Check declaration order.`)
+      throw new Error(`[Component] Couldn\'t find instance of "${element.getAttribute("data-component")}" component. Check declaration order.`)
     }
     return obj.component
   }

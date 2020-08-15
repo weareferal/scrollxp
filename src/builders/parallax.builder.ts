@@ -25,7 +25,7 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
       if (ParamHelper.isHTMLElement(value)) {
         this.descriptor.element = ParamHelper.toHTMLElement(value)
       } else {
-        throw TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "element" isn't a valid DOM element: "${value}"`)
+        throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "element" isn't a valid DOM element: "${value}"`)
       }
     }
     return this
@@ -36,7 +36,7 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
       if (ParamHelper.isBoolean(value)) {
         this.descriptor.enabled = ParamHelper.toBoolean(value)
       } else {
-        throw TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "enabled" isn't a valid boolean: "${value}"`)
+        throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "enabled" isn't a valid boolean: "${value}"`)
       }
     }
     return this
@@ -48,12 +48,12 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
         if (value === "global" || value === "scene") {
           this.descriptor.type = ParamHelper.toString(value)
         } else {
-          throw Error(
+          throw new Error(
             `[${ParallaxBuilder.NAMESPACE}] Value for "type" isn't valid, it should be "global" or "scene": "${value}"`,
           )
         }
       } else {
-        throw TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "type" isn't a valid string: "${value}"`)
+        throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "type" isn't a valid string: "${value}"`)
       }
     }
     return this
@@ -64,7 +64,7 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.speed = ParamHelper.toInteger(value)
       } else {
-        throw TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "speed" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "speed" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -75,7 +75,7 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.momentum = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "momentum" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "momentum" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -86,7 +86,7 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.stagger = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "stagger" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "stagger" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -97,7 +97,7 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
       if (ParamHelper.isString(value)) {
         this.descriptor.ease = ParamHelper.toString(value)
       } else {
-        throw TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "ease" isn't a valid string: "${value}"`)
+        throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "ease" isn't a valid string: "${value}"`)
       }
     }
     return this
@@ -118,7 +118,7 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
               `[${ParallaxBuilder.NAMESPACE}] There are more than 1 element for trigger "${value}" in the given container. Using the first one.`,
             )
           } else {
-            throw Error(
+            throw new Error(
               `[${ParallaxBuilder.NAMESPACE}] Could't find an element with query "${value}" in the given container.`,
             )
           }
@@ -132,11 +132,11 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
               `[${ParallaxBuilder.NAMESPACE}] There are more than 1 element for trigger "${value}" in the body. Using the first one.`,
             )
           } else {
-            throw Error(`[${ParallaxBuilder.NAMESPACE}] Could't find an element with query "${value}" in the body.`)
+            throw new Error(`[${ParallaxBuilder.NAMESPACE}] Could't find an element with query "${value}" in the body.`)
           }
         }
       } else {
-        throw TypeError(
+        throw new TypeError(
           `[${ParallaxBuilder.NAMESPACE}] Value for "trigger" isn't a valid element or selector: "${value}"`,
         )
       }
@@ -155,10 +155,10 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
         if (durationMethod && ParamHelper.isNumber(durationMethod())) {
           this.descriptor.duration = durationMethod
         } else {
-          throw TypeError(`[${ParallaxBuilder.NAMESPACE}] Function for "duration" should return a number.`)
+          throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Function for "duration" should return a number.`)
         }
       } else {
-        throw TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "duration" isn't valid: "${value}"`)
+        throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "duration" isn't valid: "${value}"`)
       }
     }
     return this
@@ -167,7 +167,7 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
   public hook(value?: ParamNumber): ParallaxBuilder {
     if (value !== undefined) {
       if (!ParamHelper.isNumber(value) && ParamHelper.isString(value) && !ParamHelper.isHookValue(value)) {
-        throw TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "hook" isn't valid: "${value}"`)
+        throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "hook" isn't valid: "${value}"`)
       } else {
         if (ParamHelper.isString(value)) {
           value = ParamHelper.toHookValue(value)
@@ -176,7 +176,9 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
           if (value >= 0 && value <= 1) {
             this.descriptor.hook = ParamHelper.toFloat(value)
           } else {
-            throw RangeError(`[${ParallaxBuilder.NAMESPACE}] Value for "hook" should be between 0 and 1: "${value}"`)
+            throw new RangeError(
+              `[${ParallaxBuilder.NAMESPACE}] Value for "hook" should be between 0 and 1: "${value}"`,
+            )
           }
         }
       }
@@ -189,7 +191,7 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.offset = ParamHelper.toInteger(value)
       } else {
-        throw TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "offset" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "offset" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -200,7 +202,7 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
       if (ParamHelper.isString(value)) {
         this.descriptor.indicator = ParamHelper.toString(value)
       } else {
-        throw TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "indicator" isn't a valid string: "${value}"`)
+        throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Value for "indicator" isn't a valid string: "${value}"`)
       }
     }
     return this

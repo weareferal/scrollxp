@@ -7,7 +7,7 @@ export default class App {
       let name = element.getAttribute("data-component")
       let component = components.find(c => Component.getName(c) === name)
       if (!component) {
-        throw Error(`[App] Component "${name}" is not defined`)
+        throw new Error(`[App] Component "${name}" is not defined`)
       } else {
         if (!Component.isLoaded(element)) {
           let options

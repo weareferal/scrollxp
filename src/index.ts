@@ -182,13 +182,13 @@ export default class ScrollXP {
   public register(data: Descriptor | Descriptor[]): void {
     if (TypeHelper.isAnimationDescriptor(data)) {
       if (data.name === undefined) {
-        throw Error(`Animation is missing name, it wasn't possible to register it.`)
+        throw new Error(`Animation is missing name, it wasn't possible to register it.`)
       }
       if (!TypeHelper.isString(name)) {
-        throw Error(`Animation name needs to be a string: "${data.name}"`)
+        throw new Error(`Animation name needs to be a string: "${data.name}"`)
       }
       if (data.label !== undefined) {
-        throw Error(
+        throw new Error(
           `Animations can't be registered with a label, it can only be set using data-* attributes. Please, review "${data.name}".`,
         )
       }
@@ -272,7 +272,7 @@ export default class ScrollXP {
           registeredDescriptor.position = descriptor.position
           descriptor = registeredDescriptor
         } else {
-          throw Error(`Couldn't find animation "${descriptor.name}". Make sure it's registered.`)
+          throw new Error(`Couldn't find animation "${descriptor.name}". Make sure it's registered.`)
         }
       }
 

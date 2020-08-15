@@ -131,7 +131,7 @@ export default {
   },
   addClass(elem?: HTMLElement, classes?: string[]): void {
     if (!elem) {
-      throw Error("[DomUtils] No element passed to add class")
+      throw new Error("[DomUtils] No element passed to add class")
     }
     if (classes) {
       if (elem.classList) {
@@ -145,7 +145,7 @@ export default {
   },
   removeClass(elem?: HTMLElement, classes?: string[]): void {
     if (!elem) {
-      throw Error("[DomUtils] No element passed to remove class")
+      throw new Error("[DomUtils] No element passed to remove class")
     }
     if (classes) {
       if (elem.classList) {

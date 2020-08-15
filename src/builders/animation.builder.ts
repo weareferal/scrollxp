@@ -26,7 +26,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.duration = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "duration" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "duration" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -37,7 +37,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isString(value)) {
         this.descriptor.position = ParamHelper.toString(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "position" isn't a valid string: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "position" isn't a valid string: "${value}"`)
       }
     }
     return this
@@ -48,7 +48,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.repeat = ParamHelper.toInteger(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "repeat" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "repeat" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -59,7 +59,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isBoolean(value)) {
         this.descriptor.yoyo = ParamHelper.toBoolean(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "yoyo" isn't a valid boolean: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "yoyo" isn't a valid boolean: "${value}"`)
       }
     }
     return this
@@ -70,7 +70,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.delay = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "delay" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "delay" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -81,7 +81,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.momentum = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "momentum" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "momentum" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -92,7 +92,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.stagger = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "stagger" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "stagger" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -103,7 +103,9 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isString(value)) {
         this.descriptor.transformOrigin = ParamHelper.toString(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "transformOrigin" isn't a valid string: "${value}"`)
+        throw new TypeError(
+          `[${AnimationBuilder.NAMESPACE}] Value for "transformOrigin" isn't a valid string: "${value}"`,
+        )
       }
     }
     return this
@@ -114,7 +116,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isString(value)) {
         this.descriptor.ease = ParamHelper.toString(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "ease" isn't a valid string: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "ease" isn't a valid string: "${value}"`)
       }
     }
     return this
@@ -125,7 +127,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isString(value)) {
         this.descriptor.label = ParamHelper.toString(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "label" isn't a valid string: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "label" isn't a valid string: "${value}"`)
       }
     }
     return this
@@ -136,7 +138,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.from.alpha = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromAlpha" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromAlpha" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -147,7 +149,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.to.alpha = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toAlpha" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toAlpha" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -158,7 +160,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.from.x = ParamHelper.toInteger(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromX" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromX" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -169,7 +171,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.to.x = ParamHelper.toInteger(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toX" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toX" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -180,7 +182,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.from.y = ParamHelper.toInteger(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromY" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromY" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -191,7 +193,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.to.y = ParamHelper.toInteger(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toY" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toY" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -202,7 +204,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.from.xPercent = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromXPercent" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromXPercent" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -213,7 +215,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.to.xPercent = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toXPercent" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toXPercent" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -224,7 +226,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.from.yPercent = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromYPercent" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromYPercent" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -235,7 +237,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.to.yPercent = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toYPercent" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toYPercent" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -246,7 +248,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.from.scale = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromScale" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromScale" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -257,7 +259,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.to.scale = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toScale" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toScale" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -268,7 +270,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.from.rotation = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromRotation" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromRotation" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -279,7 +281,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.to.rotation = ParamHelper.toFloat(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toRotation" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toRotation" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -290,7 +292,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.from.width = ParamHelper.toInteger(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromWidth" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromWidth" isn't a valid number: "${value}"`)
       }
     }
     return this
@@ -301,7 +303,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       if (ParamHelper.isNumber(value)) {
         this.descriptor.to.width = ParamHelper.toInteger(value)
       } else {
-        throw TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toWidth" isn't a valid number: "${value}"`)
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toWidth" isn't a valid number: "${value}"`)
       }
     }
     return this
