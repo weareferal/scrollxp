@@ -1,6 +1,84 @@
 import AnimationBuilder from "../src/builders/animation.builder"
 import { expect } from "chai"
 
+describe(`Animation builder "default" test`, () => {
+  it("Should set default options", () => {
+    const defaultOptions = new AnimationBuilder()
+      .duration(2)
+      .position("+=1")
+      .repeat(1)
+      .yoyo(true)
+      .delay(1)
+      .ease("power2.out")
+      .momentum(2)
+      .transformOrigin("left left")
+      .fromAlpha(0)
+      .toAlpha(1)
+      .fromX(-100)
+      .toX(100)
+      .fromY(-200)
+      .toY(200)
+      .fromXPercent(30)
+      .toXPercent(60)
+      .fromYPercent(20)
+      .toYPercent(40)
+      .fromScale(0.5)
+      .toScale(1)
+      .fromRotation(180)
+      .toRotation(360)
+      .fromWidth(35)
+      .toWidth(70)
+      .build()
+
+    const descriptor = new AnimationBuilder("custom-name", defaultOptions).build()
+
+    expect(descriptor.duration).to.equal(2)
+    expect(descriptor.position).to.equal("+=1")
+    expect(descriptor.repeat).to.equal(1)
+    expect(descriptor.yoyo).to.equal(true)
+    expect(descriptor.delay).to.equal(1)
+    expect(descriptor.ease).to.equal("power2.out")
+    expect(descriptor.momentum).to.equal(2)
+    expect(descriptor.transformOrigin).to.equal("left left")
+    expect(descriptor.from.alpha).to.equal(0)
+    expect(descriptor.to.alpha).to.equal(1)
+    expect(descriptor.from.x).to.equal(-100)
+    expect(descriptor.to.x).to.equal(100)
+    expect(descriptor.from.y).to.equal(-200)
+    expect(descriptor.to.y).to.equal(200)
+    expect(descriptor.from.xPercent).to.equal(30)
+    expect(descriptor.to.xPercent).to.equal(60)
+    expect(descriptor.from.yPercent).to.equal(20)
+    expect(descriptor.to.yPercent).to.equal(40)
+    expect(descriptor.from.scale).to.equal(0.5)
+    expect(descriptor.to.scale).to.equal(1)
+    expect(descriptor.from.rotation).to.equal(180)
+    expect(descriptor.to.rotation).to.equal(360)
+    expect(descriptor.from.width).to.equal(35)
+    expect(descriptor.to.width).to.equal(70)
+  })
+  it("Shouldn't be possible to set a default name", () => {
+    const defaultOptions = new AnimationBuilder("default-name").build()
+    expect(() => {
+      new AnimationBuilder("custom-animnameation", defaultOptions).build()
+    }).to.throw(Error)
+  })
+  it("Shouldn't be possible to set a default label", () => {
+    const defaultOptions = new AnimationBuilder().label("my-label").build()
+    expect(() => {
+      new AnimationBuilder("custom-name", defaultOptions).build()
+    }).to.throw(Error)
+  })
+})
+
+describe(`Animation builder "name" test`, () => {
+  it("Name should be a string", () => {
+    expect(() => {
+      new AnimationBuilder("123").build()
+    }).to.throw(TypeError)
+  })
+})
+
 describe(`Animation builder "duration" test`, () => {
   it("Integer input should return integer number", () => {
     const descriptor = new AnimationBuilder().duration(55).build()

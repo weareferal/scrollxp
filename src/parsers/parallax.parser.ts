@@ -3,10 +3,12 @@ import ParamHelper from "../helpers/param.helper"
 
 export default class ParallaxParser implements IParser<ParallaxDescriptor> {
   private breakpoints: Breakpoints
+  private defaultOptions?: ParallaxDescriptor
   private key: string
 
-  constructor(breakpoints: Breakpoints) {
+  constructor(breakpoints: Breakpoints, defaultOptions?: ParallaxDescriptor) {
     this.breakpoints = breakpoints
+    this.defaultOptions = defaultOptions
     this.key = "parallax"
   }
 
@@ -27,7 +29,7 @@ export default class ParallaxParser implements IParser<ParallaxDescriptor> {
    * @returns {ParallaxDescriptor} - Object with the parsed information
    */
   public parse(el: HTMLElement, container?: HTMLElement): ParallaxDescriptor {
-    const builder = new ParallaxBuilder(this.get(el, "name"))
+    const builder = new ParallaxBuilder(this.get(el, "name"), this.defaultOptions)
     builder.enabled(this.get(el, "enabled"))
     builder.type(this.get(el, "type"))
     builder.speed(this.get(el, "speed"))

@@ -1,6 +1,56 @@
 import ParallaxBuilder from "../src/builders/parallax.builder"
 import { expect } from "chai"
 
+describe(`Parallax builder "default" test`, () => {
+  it("Should set default options", () => {
+    const div = document.createElement("div")
+
+    const defaultOptions = new ParallaxBuilder()
+      .element(div)
+      .enabled(false)
+      .type("scene")
+      .speed(2)
+      .momentum(1)
+      .stagger(0.8)
+      .ease("power4.out")
+      .trigger(div)
+      .duration(0)
+      .hook(0.8)
+      .offset(50)
+      .indicator("my-indicator")
+      .build()
+
+    const descriptor = new ParallaxBuilder("custom-name", defaultOptions).build()
+
+    expect(descriptor.element).to.equal(div)
+    expect(descriptor.enabled).to.equal(false)
+    expect(descriptor.type).to.equal("scene")
+    expect(descriptor.speed).to.equal(2)
+    expect(descriptor.momentum).to.equal(1)
+    expect(descriptor.stagger).to.equal(0.8)
+    expect(descriptor.ease).to.equal("power4.out")
+    expect(descriptor.trigger).to.equal(div)
+    expect(descriptor.duration).to.equal(0)
+    expect(descriptor.hook).to.equal(0.8)
+    expect(descriptor.offset).to.equal(50)
+    expect(descriptor.indicator).to.equal("my-indicator")
+  })
+  it("Shouldn't be possible to set a default name", () => {
+    const defaultOptions = new ParallaxBuilder("default-name").build()
+    expect(() => {
+      new ParallaxBuilder("custom-name", defaultOptions).build()
+    }).to.throw(Error)
+  })
+})
+
+describe(`Parallax builder "name" test`, () => {
+  it("Name should be a string", () => {
+    expect(() => {
+      new ParallaxBuilder("123").build()
+    }).to.throw(TypeError)
+  })
+})
+
 describe(`Parallax builder "element" test`, () => {
   it("Element input should return element", () => {
     const div = document.createElement("div")

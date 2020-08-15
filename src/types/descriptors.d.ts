@@ -53,3 +53,9 @@ interface StateProperty {
   rotation?: number
   width?: number
 }
+
+interface DefaultDescriptors {
+  animation?: AnimationDescriptor
+  scene?: SceneDescriptor
+  parallax?: ParallaxDescriptor
+}

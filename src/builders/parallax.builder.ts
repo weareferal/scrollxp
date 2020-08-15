@@ -1,23 +1,39 @@
 import ParamHelper from "../helpers/param.helper"
 import Logger from "../scrollmagic/utils/logger"
+import TypeHelper from "../helpers/type.helper"
+import { merge } from "../utils"
 
 export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
   public static NAMESPACE = "ParallaxBuilder"
 
   private readonly descriptor: ParallaxDescriptor
 
-  constructor(name?: string) {
-    this.descriptor = {
-      name: name,
-      enabled: true,
-      type: "global",
-      speed: 1,
-      momentum: 0.3,
-      ease: "none",
-      duration: "100%",
-      hook: 0.5,
-      offset: 0,
+  constructor(name?: string, defaultOptions?: ParallaxDescriptor) {
+    if (name !== undefined && !ParamHelper.isString(name)) {
+      throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Parallax name isn't a valid string: "${name}"`)
     }
+    if (defaultOptions !== undefined && !TypeHelper.isParallaxDescriptor(defaultOptions)) {
+      throw new TypeError(
+        `[${ParallaxBuilder.NAMESPACE}] Parallax default options aren't a valid object: "${defaultOptions}"`,
+      )
+    }
+    if (defaultOptions && defaultOptions.name) {
+      throw new Error(`[${ParallaxBuilder.NAMESPACE}] It's not possible to set a default name.`)
+    }
+    this.descriptor = merge(
+      {
+        name: name,
+        enabled: true,
+        type: "global",
+        speed: 1,
+        momentum: 0.3,
+        ease: "none",
+        duration: "100%",
+        hook: 0.5,
+        offset: 0,
+      },
+      defaultOptions,
+    )
   }
 
   public element(value?: ParamElement): ParallaxBuilder {

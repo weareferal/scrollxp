@@ -1,20 +1,36 @@
 import ParamHelper from "../helpers/param.helper"
 import Logger from "../scrollmagic/utils/logger"
+import TypeHelper from "../helpers/type.helper"
+import { merge } from "../utils"
 
 export default class SceneBuilder implements IBuilder<SceneDescriptor> {
   public static NAMESPACE = "SceneBuilder"
 
   private readonly descriptor: SceneDescriptor
 
-  constructor(name?: string) {
-    this.descriptor = {
-      name: name,
-      enabled: true,
-      duration: 0,
-      hook: 0.5,
-      reverse: true,
-      pin: false,
+  constructor(name?: string, defaultOptions?: SceneDescriptor) {
+    if (name !== undefined && !ParamHelper.isString(name)) {
+      throw new TypeError(`[${SceneBuilder.NAMESPACE}] Scene name isn't a valid string: "${name}"`)
     }
+    if (defaultOptions !== undefined && !TypeHelper.isSceneDescriptor(defaultOptions)) {
+      throw new TypeError(
+        `[${SceneBuilder.NAMESPACE}] Scene default options aren't a valid object: "${defaultOptions}"`,
+      )
+    }
+    if (defaultOptions && defaultOptions.name) {
+      throw new Error(`[${SceneBuilder.NAMESPACE}] It's not possible to set a default name.`)
+    }
+    this.descriptor = merge(
+      {
+        name: name,
+        enabled: true,
+        duration: 0,
+        hook: 0.5,
+        reverse: true,
+        pin: false,
+      },
+      defaultOptions,
+    )
   }
 
   public enabled(value?: ParamBoolean): SceneBuilder {

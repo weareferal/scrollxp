@@ -48,6 +48,7 @@ export default class ScrollXP {
   private registeredAnimations: { [key: string]: AnimationDescriptor } = {}
   private scrollOffset: number
   private parser: Parser
+  private defaults: DefaultDescriptors = {}
 
   constructor(options: ScrollViewOptions) {
     gsap.config({
@@ -66,11 +67,6 @@ export default class ScrollXP {
     this._smoothScrolling = options.smoothScrolling || false
 
     this.parser = new Parser(options.breakpoints)
-
-    // TODO: Refactor this
-    // if (options.defaults) {
-    //   this.defaults = deepMerge(this.defaults, options.defaults)
-    // }
 
     // TODO: Instead of checking for xs, check for isMobile somehow (actual devices)
     new BreakpointListener((result: BreakpointListenerResult) => {
@@ -198,6 +194,18 @@ export default class ScrollXP {
     }
   }
 
+  public setDefault(descriptor: Descriptor): void {
+    if (TypeHelper.isAnimationDescriptor(descriptor)) {
+      this.defaults.animation = descriptor
+    } else if (TypeHelper.isSceneDescriptor(descriptor)) {
+      this.defaults.scene = descriptor
+    } else if (TypeHelper.isParallaxDescriptor(descriptor)) {
+      this.defaults.parallax = descriptor
+    } else {
+      throw new TypeError(`Default value is not a valid descriptor: ${descriptor}`)
+    }
+  }
+
   private rebuild(): void {
     setTimeout(() => {
       this.resetScenes()
@@ -207,7 +215,7 @@ export default class ScrollXP {
   }
 
   private buildScenes(): void {
-    const parser = this.parser.create(SceneParser)
+    const parser = this.parser.create(SceneParser, this.defaults.scene)
 
     const container = this.container instanceof Window ? document.body : this.container
 
@@ -255,7 +263,7 @@ export default class ScrollXP {
   private createAnimation(scene: ScrollScene, domScene: HTMLElement): void {
     const creator = new AnimationCreator()
 
-    const parser = this.parser.create(AnimationParser)
+    const parser = this.parser.create(AnimationParser, this.defaults.animation)
 
     let easing = false
 
@@ -364,7 +372,7 @@ export default class ScrollXP {
   }
 
   private buildParallaxScenes(): void {
-    const parser = this.parser.create(ParallaxParser)
+    const parser = this.parser.create(ParallaxParser, this.defaults.parallax)
 
     const container = this.container instanceof Window ? document.body : this.container
 

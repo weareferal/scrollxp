@@ -3,10 +3,12 @@ import ParamHelper from "../helpers/param.helper"
 
 export default class SceneParser implements IParser<SceneDescriptor> {
   private breakpoints: Breakpoints
+  private defaultOptions?: SceneDescriptor
   private key: string
 
-  constructor(breakpoints: Breakpoints) {
+  constructor(breakpoints: Breakpoints, defaultOptions?: SceneDescriptor) {
     this.breakpoints = breakpoints
+    this.defaultOptions = defaultOptions
     this.key = "scene"
   }
 
@@ -27,7 +29,7 @@ export default class SceneParser implements IParser<SceneDescriptor> {
    * @returns {SceneDescriptor} - Object with the parsed information
    */
   public parse(el: HTMLElement, container?: HTMLElement): SceneDescriptor {
-    const builder = new SceneBuilder(this.get(el, "name"))
+    const builder = new SceneBuilder(this.get(el, "name"), this.defaultOptions)
     builder.enabled(this.get(el, "enabled"))
     builder.trigger(this.get(el, "trigger"), container)
     builder.duration(this.get(el, "duration"))

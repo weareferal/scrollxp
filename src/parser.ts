@@ -11,7 +11,7 @@ export default class Parser {
     }
   }
 
-  public create<D extends Descriptor>(parser: new (Breakpoints) => IParser<D>): IParser<D> {
-    return new parser(this.breakpoints)
+  public create<D extends Descriptor>(parser: new (Breakpoints, D?) => IParser<D>, defaultOptions?: D): IParser<D> {
+    return new parser(this.breakpoints, defaultOptions)
   }
 }

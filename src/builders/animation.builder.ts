@@ -1,24 +1,43 @@
 import ParamHelper from "../helpers/param.helper"
+import TypeHelper from "../helpers/type.helper"
+import { merge } from "../utils"
 
 export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
   public static NAMESPACE = "AnimationBuilder"
 
   private readonly descriptor: AnimationDescriptor
 
-  constructor(name?: string) {
-    this.descriptor = {
-      name: name,
-      duration: 1,
-      position: "+=0",
-      repeat: 0,
-      yoyo: false,
-      delay: 0,
-      ease: "power1.out",
-      momentum: 0,
-      transformOrigin: "center center",
-      from: {},
-      to: {},
+  constructor(name?: string, defaultOptions?: AnimationDescriptor) {
+    if (name !== undefined && !ParamHelper.isString(name)) {
+      throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Animation name isn't a valid string: "${name}"`)
     }
+    if (defaultOptions !== undefined && !TypeHelper.isAnimationDescriptor(defaultOptions)) {
+      throw new TypeError(
+        `[${AnimationBuilder.NAMESPACE}] Animation default options aren't a valid object: "${defaultOptions}"`,
+      )
+    }
+    if (defaultOptions && defaultOptions.name) {
+      throw new Error(`[${AnimationBuilder.NAMESPACE}] It's not possible to set a default name.`)
+    }
+    if (defaultOptions && defaultOptions.label) {
+      throw new Error(`[${AnimationBuilder.NAMESPACE}] It's not possible to set a default label.`)
+    }
+    this.descriptor = merge(
+      {
+        name: name,
+        duration: 1,
+        position: "+=0",
+        repeat: 0,
+        yoyo: false,
+        delay: 0,
+        ease: "power1.out",
+        momentum: 0,
+        transformOrigin: "center center",
+        from: {},
+        to: {},
+      },
+      defaultOptions,
+    )
   }
 
   public duration(value?: ParamNumber): AnimationBuilder {

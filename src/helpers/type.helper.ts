@@ -32,7 +32,24 @@ export default {
   isNodeList(value: any): boolean {
     return type(value) === "nodelist"
   },
+  /**
+   * Method to check if an item is an object. Date and Function are considered
+   * an object, so if you need to exclude those, please update the method accordingly.
+   *
+   * @param item - The item that needs to be checked
+   *
+   * @return {boolean} Whether or not @item is an object
+   */
+  isObject(value: any): boolean {
+    return value === Object(value) && !Array.isArray(value) && !this.isDomElement(value)
+  },
   isAnimationDescriptor(obj: any): obj is AnimationDescriptor {
-    return obj.duration !== undefined
+    return obj.yoyo !== undefined
+  },
+  isSceneDescriptor(obj: any): obj is SceneDescriptor {
+    return obj.hook !== undefined && obj.speed === undefined
+  },
+  isParallaxDescriptor(obj: any): obj is ParallaxDescriptor {
+    return obj.hook !== undefined && obj.speed !== undefined
   }
 }

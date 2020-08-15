@@ -3,10 +3,12 @@ import ParamHelper from "../helpers/param.helper"
 
 export default class AnimationParser implements IParser<AnimationDescriptor> {
   private breakpoints: Breakpoints
+  private defaultOptions?: AnimationDescriptor
   private key: string
 
-  constructor(breakpoints: Breakpoints) {
+  constructor(breakpoints: Breakpoints, defaultOptions?: AnimationDescriptor) {
     this.breakpoints = breakpoints
+    this.defaultOptions = defaultOptions
     this.key = "animate"
   }
 
@@ -31,7 +33,7 @@ export default class AnimationParser implements IParser<AnimationDescriptor> {
    * @returns {AnimationDescriptor} - Object with the parsed information
    */
   public parse(el: HTMLElement): AnimationDescriptor {
-    const builder = new AnimationBuilder(this.get(el, "name"))
+    const builder = new AnimationBuilder(this.get(el, "name"), this.defaultOptions)
     builder.duration(this.get(el, "duration"))
     builder.position(this.get(el, "position"))
     builder.repeat(this.get(el, "repeat"))

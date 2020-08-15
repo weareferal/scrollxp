@@ -1,6 +1,48 @@
 import SceneBuilder from "../src/builders/scene.builder"
 import { expect } from "chai"
 
+describe(`Scene builder "default" test`, () => {
+  it("Should set default options", () => {
+    const div = document.createElement("div")
+
+    const defaultOptions = new SceneBuilder()
+      .enabled(false)
+      .trigger(div)
+      .duration("100%")
+      .hook(0.8)
+      .reverse(true)
+      .pin(true)
+      .classToggle("my-class")
+      .indicator("my-indicator")
+      .build()
+
+    const descriptor = new SceneBuilder("custom-name", defaultOptions).build()
+
+    expect(descriptor.enabled).to.equal(false)
+    expect(descriptor.trigger).to.equal(div)
+    expect(descriptor.duration).to.equal("100%")
+    expect(descriptor.hook).to.equal(0.8)
+    expect(descriptor.reverse).to.equal(true)
+    expect(descriptor.pin).to.equal(true)
+    expect(descriptor.classToggle).to.equal("my-class")
+    expect(descriptor.indicator).to.equal("my-indicator")
+  })
+  it("Shouldn't be possible to set a default name", () => {
+    const defaultOptions = new SceneBuilder("default-name").build()
+    expect(() => {
+      new SceneBuilder("custom-name", defaultOptions).build()
+    }).to.throw(Error)
+  })
+})
+
+describe(`Scene builder "name" test`, () => {
+  it("Name should be a string", () => {
+    expect(() => {
+      new SceneBuilder("123").build()
+    }).to.throw(TypeError)
+  })
+})
+
 describe(`Scene builder "enabled" test`, () => {
   it("Boolean true input should return true", () => {
     const descriptor = new SceneBuilder().enabled(true).build()
@@ -31,6 +73,16 @@ describe(`Scene builder "enabled" test`, () => {
     expect(() => {
       new SceneBuilder().enabled("bla").build()
     }).to.throw(TypeError)
+  })
+})
+
+describe(`Scene builder "trigger" test`, () => {
+  it("Element input should return element", () => {
+    const div = document.createElement("div")
+
+    const descriptor = new SceneBuilder().trigger(div).build()
+
+    expect(descriptor.trigger).to.equal(div)
   })
 })
 
