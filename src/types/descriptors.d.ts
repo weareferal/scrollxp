@@ -26,6 +26,7 @@ interface SceneDescriptor extends Descriptor {
   classToggle?: string
   pin?: boolean
   indicator?: string
+  onEnter?: SceneDescriptorCallback
 }
 
 interface ParallaxDescriptor extends Descriptor {
@@ -58,4 +59,8 @@ interface DefaultDescriptors {
   animation?: AnimationDescriptor
   scene?: SceneDescriptor
   parallax?: ParallaxDescriptor
+}
+
+interface SceneDescriptorCallback {
+  (element: HTMLElement, scene: IScene, vars?: SceneEventVars): void
 }

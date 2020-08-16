@@ -1,50 +1,15 @@
-import Controller, { ControllerInfo, ScrollDirection } from "./controller"
+import Controller, { ScrollDirection } from "./controller"
 import Logger from "./utils/logger"
-import SceneEvent, { SceneEventVars } from "./scene-event"
+import SceneEvent from "./scene-event"
 import DomUtils, { OffsetParam, CSSProperty } from "./utils/dom"
 import gsap from "gsap"
 import Type from "./utils/type"
 import Indicator, { IndicatorOptions } from "./indicator"
 
-export interface SceneOptions {
-  duration?: number | string | (() => number)
-  offset?: number
-  triggerElement?: HTMLElement
-  triggerHook?: number | string
-  reverse?: boolean
-  logLevel?: number
-  tweenChanges?: boolean
-}
-
-interface SceneListener {
-  namespace: string
-  callback: (e?: SceneEventVars) => void
-}
-
-interface SceneListeners {
-  [eventName: string]: SceneListener[]
-}
-
-interface ScrollOffset {
-  start: number
-  end: number
-}
-
-export enum State {
-  Before,
-  During,
-  After,
-}
-
-interface PinOptions {
-  spacer: HTMLElement
-  inFlow: boolean
-  pushFollowers: boolean
-  relSize: {
-    width?: boolean
-    height?: boolean
-    autoFullWidth?: boolean
-  }
+export enum SceneState {
+  Before = "BEFORE",
+  During = "DURING",
+  After = "AFTER",
 }
 
 export default class Scene {
@@ -65,7 +30,7 @@ export default class Scene {
 
   private durationUpdateMethod?: () => number
   private listeners: SceneListeners = {}
-  private state: State = State.Before
+  private state: SceneState = SceneState.Before
 
   private _scrollOffset: ScrollOffset = { start: 0, end: 0 }
 
@@ -112,7 +77,10 @@ export default class Scene {
       const durationChanged = e?.reason === "duration"
 
       // If [duration changed after a scene (inside scene progress updates pin position)] or [duration is 0, we are in pin phase and some other value changed].
-      if ((this.state === State.After && durationChanged) || (this.state === State.During && this._duration === 0)) {
+      if (
+        (this.state === SceneState.After && durationChanged) ||
+        (this.state === SceneState.During && this._duration === 0)
+      ) {
         this.updatePinState()
       }
 
@@ -362,23 +330,23 @@ export default class Scene {
       // Zero duration scenes
       doUpdate = this._progress != newValue
       this._progress = newValue < 1 && reverseOrForward ? 0 : 1
-      this.state = this._progress === 0 ? State.Before : State.During
+      this.state = this._progress === 0 ? SceneState.Before : SceneState.During
     } else {
       // Scenes with start and end
-      if (newValue < 0 && this.state !== State.Before && reverseOrForward) {
+      if (newValue < 0 && this.state !== SceneState.Before && reverseOrForward) {
         // Go back to initial state
         this._progress = 0
-        this.state = State.Before
+        this.state = SceneState.Before
         doUpdate = true
       } else if (newValue >= 0 && newValue < 1 && reverseOrForward) {
         this._progress = newValue
-        this.state = State.During
+        this.state = SceneState.During
         doUpdate = true
-      } else if (newValue >= 1 && this.state !== State.After) {
+      } else if (newValue >= 1 && this.state !== SceneState.After) {
         this._progress = 1
-        this.state = State.After
+        this.state = SceneState.After
         doUpdate = true
-      } else if (this.state === State.During && !reverseOrForward) {
+      } else if (this.state === SceneState.During && !reverseOrForward) {
         this.updatePinState() // In case we scrolled backwards mid-scene and reverse is disabled => update the pin position, so it doesn't move back as well.
       }
     }
@@ -391,9 +359,9 @@ export default class Scene {
 
       if (stateChanged) {
         // Enter events
-        if (oldState !== State.During) {
+        if (oldState !== SceneState.During) {
           this.trigger("enter", eventVars)
-          this.trigger(oldState === State.Before ? "start" : "end", eventVars)
+          this.trigger(oldState === SceneState.Before ? "start" : "end", eventVars)
         }
       }
 
@@ -401,8 +369,8 @@ export default class Scene {
 
       if (stateChanged) {
         // Leave events
-        if (this.state !== State.During) {
-          this.trigger(this.state === State.Before ? "start" : "end", eventVars)
+        if (this.state !== SceneState.During) {
+          this.trigger(this.state === SceneState.Before ? "start" : "end", eventVars)
           this.trigger("leave", eventVars)
         }
       }
@@ -915,7 +883,7 @@ export default class Scene {
           })
 
           this.progress = newProgress
-        } else if (this.pin && this.state === State.During) {
+        } else if (this.pin && this.state === SceneState.During) {
           this.updatePinState(true) // Unpin in position
         }
       } else {
@@ -1148,7 +1116,7 @@ export default class Scene {
    */
   public removePin(reset?: boolean): Scene {
     if (this.pin) {
-      if (this.state === State.During) {
+      if (this.state === SceneState.During) {
         this.updatePinState(true) // Force unpin at position
       }
       if (reset || !this.controller) {
@@ -1449,7 +1417,7 @@ export default class Scene {
       const pinTarget = <HTMLElement>this.pinOptions.spacer.firstChild // May be pin element or another spacer, if cascading pins
 
       // During scene or if duration is 0 and we are past the trigger
-      if (!forceUnpin && this.state === State.During) {
+      if (!forceUnpin && this.state === SceneState.During) {
         // Pinned state
         if (DomUtils.css(pinTarget, "position") != "fixed") {
           // Change state before updating pin spacer (position changes due to fixed collapsing might occur.)
@@ -1489,12 +1457,12 @@ export default class Scene {
         } else if (this._duration > 0) {
           // Only concerns scenes with duration
           if (
-            this.state === State.After &&
+            this.state === SceneState.After &&
             parseFloat(<string>DomUtils.css(this.pinOptions.spacer, "padding-top")) === 0
           ) {
             change = true // If in after state but havent updated spacer yet (jumped past pin)
           } else if (
-            this.state === State.Before &&
+            this.state === SceneState.Before &&
             parseFloat(<string>DomUtils.css(this.pinOptions.spacer, "padding-bottom")) === 0
           ) {
             // Before
@@ -1521,7 +1489,7 @@ export default class Scene {
    * So this function is called on resize and scroll of the document.
    */
   private updatePinInContainer(): void {
-    if (this.controller && this.pin && this.state === State.During && !this.controller.info().isDocument) {
+    if (this.controller && this.pin && this.state === SceneState.During && !this.controller.info().isDocument) {
       this.updatePinState()
     }
   }
@@ -1538,7 +1506,7 @@ export default class Scene {
       this.controller &&
       this.pin && // Well, duh
       this.pinOptions &&
-      this.state === State.During && // element in pinned state? // is width or height relatively sized, but not in relation to body? then we need to recalc.
+      this.state === SceneState.During && // element in pinned state? // is width or height relatively sized, but not in relation to body? then we need to recalc.
       (((this.pinOptions.relSize.width || this.pinOptions.relSize.autoFullWidth) &&
         this.pinOptions.spacer.parentNode &&
         DomUtils.getWidth(window) != DomUtils.getWidth(<HTMLElement>this.pinOptions.spacer.parentNode)) ||
@@ -1558,7 +1526,7 @@ export default class Scene {
   private updatePinDimensions(): void {
     // No spacerresize, if original position is absolute
     if (this.pin && this.controller && this.pinOptions?.inFlow) {
-      const during: boolean = this.state === State.During
+      const during: boolean = this.state === SceneState.During
       const isVertical = this.controller.info().isVertical
       const pinTarget = this.pinOptions?.spacer.firstChild // Usually the pined element but can also be another spacer (cascaded pins)
       const marginCollapse = DomUtils.isMarginCollapseType(<string>DomUtils.css(this.pinOptions?.spacer, "display"))
@@ -1612,7 +1580,7 @@ export default class Scene {
    * If the scene is in fixed state scroll events would be counted towards the body. This forwards the event to the scroll container.
    */
   private onMousewheelOverPin(e: Event): void {
-    if (this.controller && this.pin && this.state === State.During && !this.controller.info().isDocument) {
+    if (this.controller && this.pin && this.state === SceneState.During && !this.controller.info().isDocument) {
       // Un pin state
       e.preventDefault()
 
@@ -1794,9 +1762,9 @@ export default class Scene {
 
       if (this.tween.repeat && this.tween.repeat() === -1) {
         // Infinite loop, so not in relation to progress
-        if (state === State.During && this.tween.paused()) {
+        if (state === SceneState.During && this.tween.paused()) {
           this.tween.play()
-        } else if (state !== State.During && !this.tween.paused()) {
+        } else if (state !== SceneState.During && !this.tween.paused()) {
           this.tween.pause()
         }
       } else if (progress != this.tween.progress()) {

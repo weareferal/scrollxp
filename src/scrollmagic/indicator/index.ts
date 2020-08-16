@@ -3,7 +3,6 @@ import Controller from "../controller"
 import Template from "./template"
 import DomUtils from "../utils/dom"
 import Logger from "../utils/logger"
-import { SceneEventVars } from "../scene-event"
 
 export interface IndicatorOptions {
   name?: string

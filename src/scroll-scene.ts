@@ -1,19 +1,13 @@
-import Scene, { SceneOptions } from "./scrollmagic/scene"
+import Scene from "./scrollmagic/scene"
 import ScrollController from "./scroll-controller"
 import { IndicatorOptions } from "./scrollmagic/indicator"
 import { ScrollListener, ScrollStatus } from "smooth-scrollbar/interfaces"
-import { SceneEventVars } from "./scrollmagic/scene-event"
-
-export interface ScrollOffset {
-  x: number
-  y: number
-}
 
 export interface PinScrollListener extends ScrollListener {
   (status?: ScrollStatus): void
 }
 
-export default class ScrollScene {
+export default class ScrollScene implements IScrollScene {
   private scene: Scene
   private controller: ScrollController | undefined
   private pinnedElement: HTMLElement

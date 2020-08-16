@@ -17,10 +17,10 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       )
     }
     if (defaultOptions && defaultOptions.name) {
-      throw new Error(`[${AnimationBuilder.NAMESPACE}] It's not possible to set a default name.`)
+      throw new Error(`[${AnimationBuilder.NAMESPACE}] It's not possible to set a default "name".`)
     }
     if (defaultOptions && defaultOptions.label) {
-      throw new Error(`[${AnimationBuilder.NAMESPACE}] It's not possible to set a default label.`)
+      throw new Error(`[${AnimationBuilder.NAMESPACE}] It's not possible to set a default "label".`)
     }
     this.descriptor = merge(
       {

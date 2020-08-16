@@ -169,6 +169,17 @@ export default class SceneBuilder implements IBuilder<SceneDescriptor> {
     return this
   }
 
+  public onEnter(value?: SceneDescriptorCallback): SceneBuilder {
+    if (value !== undefined) {
+      if (ParamHelper.isFunction(value)) {
+        this.descriptor.onEnter = <SceneDescriptorCallback>value
+      } else {
+        throw new TypeError(`[${SceneBuilder.NAMESPACE}] Value for "onEnter" isn't a valid function: "${value}"`)
+      }
+    }
+    return this
+  }
+
   public build(): SceneDescriptor {
     return this.descriptor
   }

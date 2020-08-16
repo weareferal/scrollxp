@@ -1,5 +1,5 @@
 import ScrollScene, { PinScrollListener } from "./scroll-scene"
-import Controller, { ControllerOptions } from "./scrollmagic/controller"
+import Controller from "./scrollmagic/controller"
 import Scrollbar from "smooth-scrollbar"
 import { ScrollListener } from "smooth-scrollbar/interfaces"
 import gsap from "gsap"
@@ -8,7 +8,7 @@ export interface ScrollControllerOptions extends ControllerOptions {
   container?: Window | HTMLElement
 }
 
-export default class ScrollController {
+export default class ScrollController implements IScrollController {
   private scenes: ScrollScene[] = []
   private container: HTMLElement | Window
   private options: ScrollControllerOptions

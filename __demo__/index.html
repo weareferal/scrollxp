@@ -297,14 +297,17 @@
             </div>
             <div class="scene__col">
               <div
-                class="scene__sidebar"
-                data-scene="slide-in-sidebar"
+                id="sidebar"
+                data-scene
                 data-scene-trigger="#scene-modifier"
                 data-scene-duration="25%"
                 data-xs-scene-enabled="false"
                 data-md-scene-enabled="true"
+                data-scene-indicator="slide-in-sidebar"
               >
-                scene modifier: "slide-in-sidebar"
+                <div class="scene__sidebar" data-animate data-animate-from-x-percent="150">
+                  Sidebar
+                </div>
               </div>
             </div>
           </div>

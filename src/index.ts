@@ -24,10 +24,6 @@ export interface ScrollViewOptions {
   anchors?: HTMLAnchorElement[]
 }
 
-export interface SceneModifier {
-  (domScene: HTMLElement): { [key: string]: any } // eslint-disable-line
-}
-
 export { ScrollScene }
 
 export default class ScrollXP {
@@ -36,19 +32,23 @@ export default class ScrollXP {
   static Animation = AnimationBuilder
   static Scene = SceneBuilder
 
+  private parser: Parser
+
   private controller: ScrollController
   private container: HTMLElement | Window
   private content: HTMLElement
   private _smoothScrolling: boolean
+  private scrollOffset: number
+
+  private defaults: DefaultDescriptors = {}
+
+  private registeredScenes: { [key: string]: SceneDescriptor } = {}
+  private registeredAnimations: { [key: string]: AnimationDescriptor } = {}
+
   private domElements: HTMLElement[] = []
   private tweens: GSAPTimeline[] = []
   private scenes: ScrollScene[] = []
   private anchorScenes: ScrollScene[] = []
-  private sceneModifiers: { [key: string]: SceneModifier } = {}
-  private registeredAnimations: { [key: string]: AnimationDescriptor } = {}
-  private scrollOffset: number
-  private parser: Parser
-  private defaults: DefaultDescriptors = {}
 
   constructor(options: ScrollViewOptions) {
     gsap.config({
@@ -171,17 +171,15 @@ export default class ScrollXP {
     this.controller.setScrollOffset(offset)
   }
 
-  public registerSceneModifier(modifierName: string, modifierFunction: SceneModifier): void {
-    this.sceneModifiers[modifierName] = modifierFunction
-  }
-
   public register(data: Descriptor | Descriptor[]): void {
-    if (TypeHelper.isAnimationDescriptor(data)) {
+    if (TypeHelper.isSceneDescriptor(data)) {
+      if (data.name === undefined) {
+        throw new Error(`Scene is missing name, it wasn't possible to register it.`)
+      }
+      this.registeredScenes[data.name] = data
+    } else if (TypeHelper.isAnimationDescriptor(data)) {
       if (data.name === undefined) {
         throw new Error(`Animation is missing name, it wasn't possible to register it.`)
-      }
-      if (!TypeHelper.isString(name)) {
-        throw new Error(`Animation name needs to be a string: "${data.name}"`)
       }
       if (data.label !== undefined) {
         throw new Error(
@@ -222,10 +220,20 @@ export default class ScrollXP {
     const elements = parser.getElements(container)
 
     elements.forEach((element) => {
-      const descriptor = parser.parse(element, container)
+      let descriptor = parser.parse(element, container)
+
+      // Is registered scene?
+      if (descriptor.name) {
+        if (descriptor.name in this.registeredScenes) {
+          const registeredDescriptor = this.registeredScenes[descriptor.name]
+          descriptor = registeredDescriptor
+        } else {
+          throw new Error(`Couldn't find scene "${descriptor.name}". Make sure it's registered.`)
+        }
+      }
 
       if (descriptor.enabled) {
-        let scene = new ScrollScene({
+        const scene = new ScrollScene({
           triggerElement: descriptor.trigger || element,
           triggerHook: descriptor.hook,
           duration: descriptor.duration,
@@ -237,6 +245,15 @@ export default class ScrollXP {
           scene.addIndicators({ name: descriptor.indicator })
         }
 
+        // Callbacks
+        if (descriptor.onEnter) {
+          scene.on("enter", (vars?: SceneEventVars) => {
+            if (descriptor.onEnter) {
+              descriptor.onEnter(element, scene, vars)
+            }
+          })
+        }
+
         // 1. Has class toggle?
         if (descriptor.classToggle) {
           scene.setClassToggle(element, descriptor.classToggle)
@@ -245,11 +262,7 @@ export default class ScrollXP {
         else if (descriptor.pin) {
           scene.setPin(element)
         }
-        // 3. Is registered?
-        else if (descriptor.name) {
-          scene = this.applySceneModifier(descriptor.name, scene, element)
-        }
-        // 4. Parse animations
+        // 3. Parse animations
         else {
           this.createAnimation(scene, element)
         }
@@ -306,69 +319,6 @@ export default class ScrollXP {
     scene.setTween(tween, easing)
 
     this.tweens.push(tween)
-  }
-
-  // TODO: Refactor this. Custom scenes must be implemented outside ScrollView and applied here
-  /**
-   * A modifier must be registered in the scroll view in order to be applied.
-   *
-   * As data-* attributes can't cover eveything we want to do with scenes, we can apply custom behavior
-   * to it through scene modifiers.
-   *
-   * @param {*} modifierName
-   * @param {*} scene
-   * @param {*} domScene
-   */
-  private applySceneModifier(modifierName: string, scene: ScrollScene, domScene: HTMLElement): ScrollScene {
-    const modifierFunction = this.sceneModifiers[modifierName]
-
-    if (modifierFunction) {
-      const modifier = modifierFunction(domScene)
-
-      if (modifier.tween !== undefined) {
-        const tween = gsap.timeline().add(modifier.tween)
-
-        scene.setTween(tween)
-
-        this.tweens.push(tween)
-      }
-
-      if (modifier.duration !== undefined) {
-        scene.duration(modifier.duration)
-      }
-
-      if (modifier.triggerHook !== undefined) {
-        scene.triggerHook(modifier.triggerHook)
-      }
-
-      if (modifier.onEnter !== undefined) {
-        scene.on("enter", () => {
-          modifier.onEnter(scene)
-        })
-      }
-
-      if (modifier.onProgress !== undefined) {
-        scene.on("progress", () => {
-          modifier.onProgress(scene)
-        })
-      }
-
-      if (modifier.offset !== undefined) {
-        scene.offset(modifier.offset)
-      }
-
-      if (modifier.pin !== undefined) {
-        scene.setPin(modifier.pin)
-      }
-
-      if (modifier.reverse !== undefined) {
-        scene.reverse(modifier.reverse)
-      }
-
-      this.domElements.push(domScene)
-    }
-
-    return scene
   }
 
   private buildParallaxScenes(): void {

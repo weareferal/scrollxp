@@ -21,27 +21,7 @@ export interface ControllerIndicators {
   updateTriggerGroupLabel: (ControllerIndicators?) => void
 }
 
-export interface ControllerInfo {
-  isVertical: boolean
-  isDocument: boolean
-  container: HTMLElement | Window
-  size: number
-  scrollPos: number
-  scrollDirection: ScrollDirection
-  smoothScrolling: boolean
-}
-
-export interface ControllerOptions {
-  container?: HTMLElement | Window | Document
-  isVertical?: boolean
-  globalSceneOptions?: any // eslint-disable-line
-  logLevel?: number
-  refreshInterval?: number
-  addIndicators?: boolean
-  smoothScrolling?: boolean
-}
-
-export default class Controller {
+export default class Controller implements IController {
   private _scrollPos = 0
   private isDocument = true
   private viewPortSize: number

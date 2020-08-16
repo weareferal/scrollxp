@@ -12,35 +12,15 @@ export default class ScrollContainer extends Component {
 
     this.view = new ScrollXP({
       container: element,
-      smoothScrolling: false,
       breakpoints: breakpoints
     })
 
-    this.view.setDefault(new ScrollXP.Animation().fromAlpha(0).toAlpha(1).build())
-
-    // const sidebar = <HTMLElement>document.querySelector(".scene__sidebar")
-    // if (sidebar) {
-    //   this.view.registerSceneModifier("pin-content",
-    //     (domScene) => {
-    //       return {
-    //         duration: sidebar.offsetHeight - domScene.offsetHeight,
-    //         onEnter(scene: ScrollScene) {
-    //           scene.duration(sidebar.offsetHeight - domScene.offsetHeight)
-    //         },
-    //         pin: domScene
-    //       }
-    //     })
-    // }
-
-    // this.view.registerSceneModifier("slide-in-sidebar",
-    //   (domScene) => {
-    //     return {
-    //       tween: gsap.from(domScene, {
-    //         duration: 1,
-    //         xPercent: 100
-    //       })
-    //     }
-    //   })
+    const sidebar = <HTMLElement>document.querySelector("#sidebar")
+    if (sidebar) {
+      this.view.register(new ScrollXP.Scene("pin-content").pin(true).onEnter((element, scene) => {
+        scene.duration(sidebar.offsetHeight - element.offsetHeight)
+      }).build())
+    }
   }
 
   bindAnchors(anchors) {
