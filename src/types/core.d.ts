@@ -4,5 +4,6 @@ interface IBuilder<D extends Descriptor> {
 
 interface IParser<D extends Descriptor> {
   parse(target: HTMLElement, container?: HTMLElement): D
+  getName(target: HTMLElement): ParamString
   getElements(target: HTMLElement): HTMLElement[]
 }

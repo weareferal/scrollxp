@@ -21,6 +21,8 @@ export default class ScrollContainer extends Component {
         scene.duration(sidebar.offsetHeight - element.offsetHeight)
       }).build())
     }
+
+    this.view.register(new ScrollXP.Animation("fade-out").fromAlpha(1).toAlpha(0).build())
   }
 
   bindAnchors(anchors) {

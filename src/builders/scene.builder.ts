@@ -13,9 +13,7 @@ export default class SceneBuilder implements IBuilder<SceneDescriptor> {
       throw new TypeError(`[${SceneBuilder.NAMESPACE}] Scene name isn't a valid string: "${name}"`)
     }
     if (defaultOptions !== undefined && !TypeHelper.isSceneDescriptor(defaultOptions)) {
-      throw new TypeError(
-        `[${SceneBuilder.NAMESPACE}] Scene default options aren't a valid object: "${defaultOptions}"`,
-      )
+      throw new TypeError(`[${SceneBuilder.NAMESPACE}] Scene default options aren't a valid object.`)
     }
     if (defaultOptions && defaultOptions.name) {
       throw new Error(`[${SceneBuilder.NAMESPACE}] It's not possible to set a default name.`)

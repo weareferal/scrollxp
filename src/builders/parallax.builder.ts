@@ -13,9 +13,7 @@ export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
       throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Parallax name isn't a valid string: "${name}"`)
     }
     if (defaultOptions !== undefined && !TypeHelper.isParallaxDescriptor(defaultOptions)) {
-      throw new TypeError(
-        `[${ParallaxBuilder.NAMESPACE}] Parallax default options aren't a valid object: "${defaultOptions}"`,
-      )
+      throw new TypeError(`[${ParallaxBuilder.NAMESPACE}] Parallax default options aren't a valid object.`)
     }
     if (defaultOptions && defaultOptions.name) {
       throw new Error(`[${ParallaxBuilder.NAMESPACE}] It's not possible to set a default name.`)

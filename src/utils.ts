@@ -67,7 +67,7 @@ export class BreakpointListener {
  * @return {Object} The final merged object
  */
 export function merge<O>(target: O, ...sources: Array<O | undefined>): O {
-  // return the target if no sources passed
+  // Return the target if no sources passed
   if (!sources.length) {
     return target
   }
@@ -88,7 +88,7 @@ export function merge<O>(target: O, ...sources: Array<O | undefined>): O {
               merge(result[key], elm[key])
             } else {
               if (Array.isArray(result[key]) && Array.isArray(elm[key])) {
-                // concatenate the two arrays and remove any duplicate primitive values
+                // Concatenate the two arrays and remove any duplicate primitive values
                 result[key] = Array.from(new Set(result[key].concat(elm[key])))
               } else {
                 result[key] = elm[key]
@@ -100,5 +100,22 @@ export function merge<O>(target: O, ...sources: Array<O | undefined>): O {
     }
   }
   return result
+}
+
+/**
+ * Method to erase properties of objects
+ *
+ * @param {Object} target - The targeted object that needs to be cleared
+ * @param {Array<string>} properties - The properties that will be removed from the @target object
+ *
+ * @return {Object} The final cleared object
+ */
+export function clear<O>(target: O, ...properties: Array<string>): O {
+  if (properties.length) {
+    properties.forEach(property => {
+      delete target[property]
+    })
+  }
+  return target
 }
 

@@ -46,6 +46,17 @@ export default class ParallaxParser implements IParser<ParallaxDescriptor> {
   }
 
   /**
+   * Gets the name of the descriptor.
+   *
+   * @param {HTMLElement} - Element that has or hasn't the name
+   *
+   * @returns {string | undefined} - The name if it exists
+   */
+  public getName(el: HTMLElement): string | undefined {
+    return this.get(el, "name")
+  }
+
+  /**
    * Gets all elements of [data-parallax] inside the container, casting nodes to @HTMLElement
    *
    * @param {HTMLElement} - Container

@@ -27,6 +27,19 @@ describe(`Scene builder "default" test`, () => {
     expect(descriptor.classToggle).to.equal("my-class")
     expect(descriptor.indicator).to.equal("my-indicator")
   })
+  it("Should partially set default options", () => {
+    const defaultOptions = new SceneBuilder().duration("50%").hook(0.2).build()
+
+    const descriptor = new SceneBuilder("custom-name", defaultOptions).build()
+
+    expect(descriptor.name).to.equal(undefined)
+    expect(descriptor.enabled).to.equal(true)
+    expect(descriptor.trigger).to.equal(undefined)
+    expect(descriptor.duration).to.equal("50%")
+    expect(descriptor.hook).to.equal(0.2)
+    expect(descriptor.reverse).to.equal(true)
+    expect(descriptor.pin).to.equal(false)
+  })
   it("Shouldn't be possible to set a default name", () => {
     const defaultOptions = new SceneBuilder("default-name").build()
     expect(() => {

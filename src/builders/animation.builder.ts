@@ -12,9 +12,7 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
       throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Animation name isn't a valid string: "${name}"`)
     }
     if (defaultOptions !== undefined && !TypeHelper.isAnimationDescriptor(defaultOptions)) {
-      throw new TypeError(
-        `[${AnimationBuilder.NAMESPACE}] Animation default options aren't a valid object: "${defaultOptions}"`,
-      )
+      throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Animation default options aren't a valid object."`)
     }
     if (defaultOptions && defaultOptions.name) {
       throw new Error(`[${AnimationBuilder.NAMESPACE}] It's not possible to set a default "name".`)

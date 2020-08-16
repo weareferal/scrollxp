@@ -1,6 +1,6 @@
 import gsap from "gsap"
 
-import { BreakpointListener } from "./utils"
+import { BreakpointListener, clear } from "./utils"
 import ScrollScene from "./scroll-scene"
 import ScrollController from "./scroll-controller"
 import SceneEvent from "./scrollmagic/scene-event"
@@ -176,7 +176,7 @@ export default class ScrollXP {
       if (data.name === undefined) {
         throw new Error(`Scene is missing name, it wasn't possible to register it.`)
       }
-      this.registeredScenes[data.name] = data
+      this.registeredScenes[data.name] = clear(data, "name")
     } else if (TypeHelper.isAnimationDescriptor(data)) {
       if (data.name === undefined) {
         throw new Error(`Animation is missing name, it wasn't possible to register it.`)
@@ -186,7 +186,7 @@ export default class ScrollXP {
           `Animations can't be registered with a label, it can only be set using data-* attributes. Please, review "${data.name}".`,
         )
       }
-      this.registeredAnimations[data.name] = data
+      this.registeredAnimations[data.name] = clear(data, "name")
     } else if (data instanceof Array) {
       data.forEach((item) => this.register(item))
     }
@@ -220,16 +220,23 @@ export default class ScrollXP {
     const elements = parser.getElements(container)
 
     elements.forEach((element) => {
-      let descriptor = parser.parse(element, container)
+      let descriptor: SceneDescriptor
 
       // Is registered scene?
-      if (descriptor.name) {
-        if (descriptor.name in this.registeredScenes) {
-          const registeredDescriptor = this.registeredScenes[descriptor.name]
-          descriptor = registeredDescriptor
+      const name = parser.getName(element)
+      if (name) {
+        // Creates a new parser, so the result is the following composition of descriptors:
+        // Default <- Registered <- Parsed
+        if (name in this.registeredScenes) {
+          const newParser = this.parser.create(SceneParser, this.registeredScenes[name])
+          descriptor = newParser.parse(element, container)
         } else {
-          throw new Error(`Couldn't find scene "${descriptor.name}". Make sure it's registered.`)
+          throw new Error(`Couldn't find scene "${name}". Make sure it's registered.`)
         }
+      } else {
+        // Parses the element, so the result is the following composition of descriptors:
+        // Default <- Parsed
+        descriptor = parser.parse(element, container)
       }
 
       if (descriptor.enabled) {
@@ -283,18 +290,23 @@ export default class ScrollXP {
     const elements = parser.getElements(domScene)
 
     elements.forEach((element) => {
-      let descriptor = parser.parse(element)
+      let descriptor: AnimationDescriptor
 
-      // Is registered animaton?
-      if (descriptor.name) {
-        if (descriptor.name in this.registeredAnimations) {
-          const registeredDescriptor = this.registeredAnimations[descriptor.name]
-          registeredDescriptor.label = descriptor.label
-          registeredDescriptor.position = descriptor.position
-          descriptor = registeredDescriptor
+      // Is registered animation?
+      const name = parser.getName(element)
+      if (name) {
+        // Creates a new parser, so the result is the following composition of descriptors:
+        // Default <- Registered <- Parsed
+        if (name in this.registeredAnimations) {
+          const newParser = this.parser.create(AnimationParser, this.registeredAnimations[name])
+          descriptor = newParser.parse(element)
         } else {
-          throw new Error(`Couldn't find animation "${descriptor.name}". Make sure it's registered.`)
+          throw new Error(`Couldn't find animation "${name}". Make sure it's registered.`)
         }
+      } else {
+        // Parses the element, so the result is the following composition of descriptors:
+        // Default <- Parsed
+        descriptor = parser.parse(element)
       }
 
       // Sets flag to render scene properly

@@ -41,7 +41,7 @@ export default {
    * @return {boolean} Whether or not @item is an object
    */
   isObject(value: any): boolean {
-    return value === Object(value) && !Array.isArray(value) && !this.isDomElement(value)
+    return value === Object(value) && !Array.isArray(value) && !this.isDomElement(value) && !this.isFunction(value)
   },
   isAnimationDescriptor(obj: any): obj is AnimationDescriptor {
     return obj.yoyo !== undefined
