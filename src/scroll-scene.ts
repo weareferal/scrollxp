@@ -117,7 +117,7 @@ export default class ScrollScene implements IScrollScene {
       if (this.controller.smoothScrolling) {
         let elementPosY = 0
 
-        this.pinnedScrollListener = (status: ScrollStatus) => {
+        this.pinnedScrollListener = ((status: ScrollStatus) => {
           if (elementPosY === 0 && this.scene.triggerElement) {
             const elementOffsetY = this.pinnedElement.getBoundingClientRect().top
             const triggerOffsetY = this.scene.triggerElement.getBoundingClientRect().top
@@ -135,10 +135,13 @@ export default class ScrollScene implements IScrollScene {
           this.pinnedElement.style.top = `${top}px`
           this.pinnedElement.style.left = ""
           this.pinnedElement.style.width = `${width}px`
-        }
+        }).bind(this)
 
-        this.pinnedEnterListener = () => this.controller?.addScrollbarListener(this.pinnedScrollListener)
-        this.pinnedLeaveListener = () => this.controller?.removeScrollbarListener(this.pinnedScrollListener)
+        const pinnedEnterListener = () => this.controller?.addScrollbarListener(this.pinnedScrollListener)
+        const pinnedLeaveListener = () => this.controller?.removeScrollbarListener(this.pinnedScrollListener)
+
+        this.pinnedEnterListener = pinnedEnterListener.bind(this)
+        this.pinnedLeaveListener = pinnedLeaveListener.bind(this)
 
         this.scene.on("enter", this.pinnedEnterListener)
         this.scene.on("leave", this.pinnedLeaveListener)
