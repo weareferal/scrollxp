@@ -219,6 +219,64 @@ describe(`Parallax builder "ease" test`, () => {
   })
 })
 
+describe(`Parallax builder "trigger" test`, () => {
+  it("Element input should return element", () => {
+    const div = document.createElement("div")
+
+    const descriptor = new ParallaxBuilder().trigger(div).build()
+
+    expect(descriptor.trigger).to.equal(div)
+  })
+  it("Selector input with container should return element", () => {
+    const container = document.createElement("div")
+
+    const div = document.createElement("div")
+    div.classList.add("box")
+
+    container.appendChild(div)
+
+    const descriptor = new ParallaxBuilder().trigger(".box", container).build()
+
+    expect(descriptor.trigger).to.equal(div)
+  })
+  it("Selector input without container should return element", () => {
+    const div = document.createElement("div")
+    div.classList.add("box")
+
+    document.body.appendChild(div)
+
+    const descriptor = new ParallaxBuilder().trigger(".box").build()
+
+    expect(descriptor.trigger).to.equal(div)
+
+    document.body.removeChild(div)
+  })
+  it("Invalid selector with container should return error", () => {
+    const container = document.createElement("div")
+
+    const div = document.createElement("div")
+    div.classList.add("box")
+
+    container.appendChild(div)
+
+    expect(() => {
+      new ParallaxBuilder().trigger(".inexistent-box", container).build()
+    }).to.throw(Error)
+  })
+  it("Invalid selector without container should return error", () => {
+    const div = document.createElement("div")
+    div.classList.add("box")
+
+    document.body.appendChild(div)
+
+    expect(() => {
+      new ParallaxBuilder().trigger(".inexistent-box").build()
+    }).to.throw(Error)
+
+    document.body.removeChild(div)
+  })
+})
+
 describe(`Parallax builder "duration" test`, () => {
   it("Integer input should return integer number", () => {
     const descriptor = new ParallaxBuilder().duration(55).build()
