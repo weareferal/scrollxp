@@ -52,8 +52,7 @@ export default class SceneBuilder implements IBuilder<SceneDescriptor> {
           if (nodes.length === 1) {
             this.descriptor.trigger = ParamHelper.toHTMLElement(nodes[0])
           } else if (nodes.length > 1) {
-            Logger.log(
-              1,
+            Logger.warning(
               `[${SceneBuilder.NAMESPACE}] There are more than 1 element for trigger "${value}" in the given container. Using the first one.`,
             )
           } else {
@@ -66,8 +65,7 @@ export default class SceneBuilder implements IBuilder<SceneDescriptor> {
           if (nodes.length === 1) {
             this.descriptor.trigger = ParamHelper.toHTMLElement(nodes[0])
           } else if (nodes.length > 1) {
-            Logger.log(
-              1,
+            Logger.warning(
               `[${SceneBuilder.NAMESPACE}] There are more than 1 element for trigger "${value}" in the body. Using the first one.`,
             )
           } else {

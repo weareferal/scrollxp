@@ -1,4 +1,4 @@
-const logLevels = ["error", "warn", "log"]
+const logLevels = ["error", "warn", "info", "log"]
 const console = window.console || {}
 
 console.log =
@@ -16,6 +16,18 @@ for (let i = 0; i < logLevels.length; i++) {
 }
 
 export default {
+  error(...args: any[]): void {
+    this.log(1, ...args)
+  },
+  warning(...args: any[]): void {
+    this.log(2, ...args)
+  },
+  info(...args: any[]): void {
+    this.log(3, ...args)
+  },
+  verbose(...args: any[]): void {
+    this.log(4, ...args)
+  },
   log(...args: any[]): void {
     let logLevel = args[0]
 
@@ -26,13 +38,15 @@ export default {
     const now = new Date()
 
     const time =
+      "[" +
       ("0" + now.getHours()).slice(-2) +
-      ":" +
+      "h" +
       ("0" + now.getMinutes()).slice(-2) +
-      ":" +
+      "m" +
       ("0" + now.getSeconds()).slice(-2) +
-      ":" +
-      ("00" + now.getMilliseconds()).slice(-3)
+      "s" +
+      ("00" + now.getMilliseconds()).slice(-3) +
+      "ms]"
 
     const method = logLevels[logLevel - 1]
 

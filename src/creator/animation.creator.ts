@@ -35,7 +35,7 @@ export default class AnimationCreator {
       const toVars = this.getToVars(descriptor)
       this.timeline.to(target, toVars, descriptor.position)
     } else {
-      Logger.log(1, "No animation property has been set.")
+      Logger.warning("No animation property has been set.")
     }
 
     if (descriptor.label !== undefined) {
