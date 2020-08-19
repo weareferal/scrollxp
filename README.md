@@ -23,7 +23,7 @@ _ScrollXP_ allows you to:
 - [Debugging](https://github.com/weareferal/scrollxp#debugging)
 - [Creating scenes](https://github.com/weareferal/scrollxp#creating-scenes)
 - [Pinned scenes (or sticky elements)](https://github.com/weareferal/scrollxp#pinned-scenes-or-sticky-elements)
-- [Custom scenes](https://github.com/weareferal/scrollxp#custom-scenes)
+- [Reusable scenes](https://github.com/weareferal/scrollxp#reusable-scenes)
 - [Scene limitations](https://github.com/weareferal/scrollxp#scene-limitations)
 - [Adding animations](https://github.com/weareferal/scrollxp#adding-animations)
 - [Reusable animations](https://github.com/weareferal/scrollxp#reusable-animations)
@@ -233,61 +233,82 @@ You can create sticky elements by setting `data-scene-pin="true"`. It's going to
 
 Its duration is defined through `data-scene-duration`. If the scene duration isn't set, the element remains sticky till the page end.
 
-## Custom scenes
+## Reusable scenes
 
-You may wish to setup the same scene in many places of your website, or call a custom method when a scene begin or end, for example.
+Instead of adding the same scene properties for every new scene in your HTML, you can register **custom scenes**.
 
-For those cases, you can't simply use `data-*` attributes, but it's still possible by registering a custom scene.
-
-To create a custom scene, first you need to register a scene modifier on JavaScript.
-
-The first parameter is the name of the scene, the second one is a function that returns the properties.
-
-For the moment, only some properties and methods are supported:
+For example, imagine you have an element like this:
 
 ```
-var view = new ScrollXP(...)
-
-this.view.registerSceneModifier("my-custom-scene",
-  function (domScene) {
-    return {
-      // Animation attributes inside custom scenes don't work, you can specify them here
-      tween: gsap.to('#element', { duration: 1, autoAlpha: 0 }),
-      // Scene duration
-      duration: 400,
-      // Scene hook
-      hook: "onEnter",
-      // Scene start offset in pixels
-      offset: 100,
-      // Scene pin element
-      pin: domScene,
-      // Scene reverse
-      reverse: false,
-      // onEnter callback
-      onEnter(scene) {
-        ...
-      },
-      // onProgress callback
-      onProgress(scene) {
-
-      }
-    }
-  })
+<div class="scene" data-scene data-scene-hook="0.8" data-scene-duration="100%"></div>
 ```
 
-Then, on the HTML you just need to set the scene like:
+You could instead, tell to this element to use a registered scene called `full-scene`:
 
 ```
-<div data-scene="my-custom-scene"></div>
+<div class="scene" data-scene="full-scene"></div>
+```
+
+Then, you need to register that scene on the library. You do that by using an exposed class builder called `Scene`:
+
+```
+import ScrollXP from "scrollxp"
+
+var view = new ScrollXP({
+  container: document.querySelector(".wrapper"),
+})
+
+var fullScene = new ScrollXP.Scene("full-scene").hook(0.8).duration("100%").build()
+
+view.register(fullScene)
+```
+
+All the scene properties are available through the builder method in `camelCase`.
+
+The registered scene properties are set over the default properties, and the `data-scene-[property]`'s are set over the registered scene properties, so:
+
+> **Default** properties <- **Registered** properties <- **Data attribute** properties
+
+That means you can use the registered properties as a base and change it in specific elements.
+
+For example, if you want a scene to start in the middle of the screen, you would do that:
+
+```
+<div class="scene" data-scene="full-scene" data-scene-hook="onCenter"></div>
+```
+
+When registering a scene, you also have some listeners you can add.
+
+At the moment, only `onEnter`, `onProgress` and `onLeave` are available:
+
+```
+import ScrollXP from "scrollxp"
+
+var view = new ScrollXP({
+  container: document.querySelector(".wrapper"),
+})
+
+var customScene = new ScrollXP.Scene("custom-scene")
+.onEnter((element: HTMLElement, scene: IScene, vars?: SceneEventVars) => {
+  // Do something when entering on scene
+})
+.onProgress((element: HTMLElement, scene: IScene, vars?: SceneEventVars) => {
+  // Do something when changing progress
+})
+.onLeave((element: HTMLElement, scene: IScene, vars?: SceneEventVars) => {
+  // Do something when leaving scene
+})
+.build()
+
+view.register(customScene)
 ```
 
 ## Scene limitations
 
 At the moment, scenes have some limitations:
 
-- If you use `data-scene-class-toggle`, pins, animations and scene modifiers won't apply.
-- If you use `data-scene-pin`, animations and scene modifiers won't apply.
-- If you use scene modifiers, animations won't apply.
+- If you use `data-scene-class-toggle`, pins and animations won't apply.
+- If you use `data-scene-pin`, class toggle and animations won't apply.
 
 ## Adding animations
 
@@ -373,7 +394,7 @@ view.register(fadeInAnimation)
 
 All the animation properties are available through the builder method in `camelCase`.
 
-The registered animation properties are set over the default properties, and the `data-animate-[property]` are set over the registered animation properties, so:
+The registered animation properties are set over the default properties, and the `data-animate-[property]`'s are set over the registered animation properties, so:
 
 > **Default** properties <- **Registered** properties <- **Data attribute** properties
 
