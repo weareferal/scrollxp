@@ -22,12 +22,12 @@ _ScrollXP_ allows you to:
 - [Smooth scrolling](https://github.com/weareferal/scrollxp#smooth-scrolling)
 - [Debugging](https://github.com/weareferal/scrollxp#debugging)
 - [Creating scenes](https://github.com/weareferal/scrollxp#creating-scenes)
-- [Pinned scenes (or sticky elements)](https://github.com/weareferal/scrollxp#pinned-scenes-or-sticky-elements)
-- [Reusable scenes](https://github.com/weareferal/scrollxp#reusable-scenes)
-- [Scene limitations](https://github.com/weareferal/scrollxp#scene-limitations)
+  - [Pinned scenes (or sticky elements)](https://github.com/weareferal/scrollxp#pinned-scenes-or-sticky-elements)
+  - [Reusable scenes](https://github.com/weareferal/scrollxp#reusable-scenes)
+  - [Scene limitations](https://github.com/weareferal/scrollxp#scene-limitations)
 - [Adding animations](https://github.com/weareferal/scrollxp#adding-animations)
-- [Reusable animations](https://github.com/weareferal/scrollxp#reusable-animations)
-- [Animations "Under the Hood"](https://github.com/weareferal/scrollxp#animations-under-the-hood)
+  - [Reusable animations](https://github.com/weareferal/scrollxp#reusable-animations)
+  - [Animations "Under the Hood"](https://github.com/weareferal/scrollxp#animations-under-the-hood)
 - [Parallax effect](https://github.com/weareferal/scrollxp#parallax-effect)
   - [Global parallax](https://github.com/weareferal/scrollxp#global-parallax)
   - [Scene parallax](https://github.com/weareferal/scrollxp#scene-parallax)
@@ -227,13 +227,13 @@ Then, in the same DOM element, you can setup the scene by adding properties like
 | `class-toggle`                                                                               |       `string`       | `undefined` | One or more Classnames (separated by space) that should be added to the element during the scene.                                                                                         |
 | `pin`                                                                                        |      `boolean`       |   `false`   | Pin the element for the duration of the scene.                                                                                                                                            |
 
-## Pinned scenes (or sticky elements)
+### Pinned scenes (or sticky elements)
 
 You can create sticky elements by setting `data-scene-pin="true"`. It's going to work like in this [ScrollMagic example](https://scrollmagic.io/examples/basic/simple_pinning.html).
 
 Its duration is defined through `data-scene-duration`. If the scene duration isn't set, the element remains sticky till the page end.
 
-## Reusable scenes
+### Reusable scenes
 
 Instead of adding the same scene properties for every new scene in your HTML, you can register **custom scenes**.
 
@@ -303,7 +303,7 @@ var customScene = new ScrollXP.Scene("custom-scene")
 view.register(customScene)
 ```
 
-## Scene limitations
+### Scene limitations
 
 At the moment, scenes have some limitations:
 
@@ -358,7 +358,7 @@ Then, in the same DOM element, you can setup your animation by adding properties
 | `duration`                                                                                                                                                           | `number`  | `undefined` | Sets the animation's duration.                                                                                                                                                                                     |
 | `stagger`                                                                                                                                                            | `number`  | `undefined` | Amount of time in seconds to stagger the start time of each tween. **The DOM element children will be animated instead.**                                                                                          |
 
-## Reusable animations
+### Reusable animations
 
 Instead of adding the same animation properties for every element you want to animate, you can register **custom animations**.
 
@@ -408,7 +408,7 @@ For example, if you want an element to fade in starting from `0.5` opacity, you 
 </div>
 ```
 
-## Animations "Under the Hood"
+### Animations "Under the Hood"
 
 When you set an attribute of `data-animate-from-*` or `data-animate-to-*`, the _tween_ uses:
 
