@@ -614,6 +614,19 @@ There are still **a ton** of work to do here, below are just a few of them:
 
 ## Versions
 
+### v2.0.0
+
+- Changed how animations are registered
+- Changed how scenes are registered
+- Changed how defaults are set
+- Allowed `data-*` properties to replace registered properties
+- Added `setScrollOffset` method
+- Added parallax "type" property
+- Added scene "onLeave" callback
+- Removed GSAP from bundle
+- Improved logger
+- Added tests
+
 ### v1.0.0
 
 - Initial release
