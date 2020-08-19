@@ -5,13 +5,14 @@ import ScrollScene from "./scroll-scene"
 import ScrollController from "./scroll-controller"
 import SceneEvent from "./scrollmagic/scene-event"
 import AnimationCreator from "./creator/animation.creator"
+import TypeHelper from "./helpers/type.helper"
 import Parser from "./parser"
 import AnimationParser from "./parsers/animation.parser"
-import TypeHelper from "./helpers/type.helper"
-import AnimationBuilder from "./builders/animation.builder"
 import SceneParser from "./parsers/scene.parser"
 import ParallaxParser from "./parsers/parallax.parser"
+import AnimationBuilder from "./builders/animation.builder"
 import SceneBuilder from "./builders/scene.builder"
+import ParallaxBuilder from "./builders/parallax.builder"
 
 declare let __SCROLLXP_VERSION__: string
 
@@ -31,6 +32,7 @@ export default class ScrollXP {
 
   static Animation = AnimationBuilder
   static Scene = SceneBuilder
+  static Parallax = ParallaxBuilder
 
   private parser: Parser
 
