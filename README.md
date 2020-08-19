@@ -502,51 +502,28 @@ All the properties accept this syntax.
 
 ## Changing defaults
 
-You might need all your animations have a duration of `0.3` seconds, for example. Instead of setting `data-animate-duration="0.3"` for all your animations, you could simply change the animations default duration in the constructor:
+You can change all the Animations, Scenes and Parallax default values through the method `setDefault()`. In order to do that, you need to use the exposed class builders.
+
+Fox example:
 
 ```
+import ScrollXP from "scrollxp"
+
 var view = new ScrollXP({
-  container: document.querySelector('main'),
-  defaults: {
-    animation: {
-      duration: 0.3
-    }
-  }
+  container: document.querySelector(".wrapper"),
 })
+
+// Sets all animations to a 300ms duration
+view.setDefault(new ScrollXP.Animation().duration(0.3).build())
+
+// Sets all scenes to trigger on leave
+view.setDefault(new ScrollXP.Scene().hook("onLeave").build())
+
+// Sets all parallax to a specific speed
+view.setDefault(new ScrollXP.Parallax().speed(4).build())
 ```
 
-Check below all the properties default values:
-
-```
-{
-  parallax: {
-    enabled: true,
-    type: "global",
-    speed: 1,
-    momentum: 0.3,
-    ease: "Power0.easeNone",
-    trigger: document.body,
-    duration: "100%",
-    offset: 0,
-    hook: "onCenter",
-  },
-  scene: {
-    triggerHook: 0.5,
-    duration: 0,
-    reverse: true,
-    pin: false,
-    enabled: true,
-  },
-  animation: {
-    duration: 1,
-    position: "+=0",
-    repeat: 0,
-    yoyo: false,
-    delay: 0,
-    momentum: 0,
-  }
-}
-```
+All the animations, scenes and parallax properties are avaiable as methods in their builder classes in `camelCase`.
 
 ## Bind menu to page sections
 
