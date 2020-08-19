@@ -123,7 +123,6 @@ function runTask(options) {
       cpx.copySync(joinRoot("dist/**"), `${BUILD_DIR}/dist`);
       cpx.copySync(joinRoot("package.json"), BUILD_DIR);
       cpx.copySync(joinRoot("README.md"), BUILD_DIR);
-      cpx.copySync(joinRoot("CHANGELOG.md"), BUILD_DIR);
       cpx.copySync(joinRoot("LICENSE"), BUILD_DIR);
     },
   }, {
