@@ -276,34 +276,34 @@
             </div>
           </div>
         </section>
-        <section class="section" id="scene-modifier">
-          <h1 class="section__title">Scene Modifier</h1>
+        <section class="section" id="registered-scene">
+          <h1 class="section__title">Registered Scene</h1>
           <p>
             As <strong>data-* attributes</strong> can't cover eveything we want to do with scenes, we can apply custom
-            behavior to them through scene modifiers.
+            behavior to them through registered scenes.
           </p>
           <div class="scene scene--row">
             <div class="scene__col">
               <div
                 class="scene__content"
                 data-scene="pin-content"
-                data-scene-trigger="#scene-modifier"
+                data-scene-trigger="#registered-scene"
                 data-scene-hook="onLeave"
                 data-xs-scene-enabled="false"
                 data-md-scene-enabled="true"
+                data-md-scene-indicator="pin"
               >
-                scene modifier: "pin-content"
+                data-scene="pin-content"
               </div>
             </div>
             <div class="scene__col">
               <div
                 id="sidebar"
                 data-scene
-                data-scene-trigger="#scene-modifier"
+                data-scene-trigger="#registered-scene"
                 data-scene-duration="25%"
                 data-xs-scene-enabled="false"
                 data-md-scene-enabled="true"
-                data-scene-indicator="slide-in-sidebar"
               >
                 <div class="scene__sidebar" data-animate data-animate-from-x-percent="150">
                   Sidebar
@@ -329,7 +329,7 @@
         <a class="menu__link" href="#pinned-scene">Pinned Scene</a>
       </li>
       <li class="menu__item">
-        <a class="menu__link" href="#scene-modifier">Scene Modifier</a>
+        <a class="menu__link" href="#registered-scene">Registered Scene</a>
       </li>
     </ul>
 
