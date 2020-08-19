@@ -1,8 +1,6 @@
 # ScrollXP
 
-A library for scrolling animations.
-
-It's based on [ScrollMagic](http://scrollmagic.io/) codebase and depends on [GSAP 3](https://greensock.com/).
+It's a library for scrolling animations based on [ScrollMagic](http://scrollmagic.io/) codebase and dependent of [GSAP 3](https://greensock.com/).
 
 See [demo](https://weareferal.github.io/scrollxp/) here.
 
@@ -12,15 +10,15 @@ _ScrollXP_ allows you to:
 
 - Create animated scenes using HTML `data-*` attributes
 - Create parallax effects using HTML `data-*` attributes
-- Make responsive animations
-- Bind menu active item to page section
+- Work with responsive animations
+- Bind active menu item to page section
 - Enable/disable smooth scrolling
 
 ## Quick access
 
 - [Installation](https://github.com/weareferal/scrollxp#installation)
-- [Running local](https://github.com/weareferal/scrollxp#running-local)
 - [Usage](https://github.com/weareferal/scrollxp#usage)
+- [Running local](https://github.com/weareferal/scrollxp#running-local)
 - [Smooth scrolling](https://github.com/weareferal/scrollxp#smooth-scrolling)
 - [Debugging](https://github.com/weareferal/scrollxp#debugging)
 - [Creating scenes](https://github.com/weareferal/scrollxp#creating-scenes)
@@ -48,22 +46,6 @@ $ npm install gsap scrollxp --save
 ```
 
 > **Note**: You need to use GSAP 3 or greater.
-
-## Running local
-
-To get it up and running, run:
-
-```
-$ npm install
-```
-
-Then:
-
-```
-$ npm run start
-```
-
-Then access `http://localhost:3000`
 
 ## Usage
 
@@ -173,15 +155,25 @@ If you just want to make it work to play around, download the [scrollxp.js](http
 
 You should see a black square spinning around when scrolling.
 
+## Running local
+
+To get it up and running for development porposes, run:
+
+```
+$ npm install
+```
+
+Then:
+
+```
+$ npm run start
+```
+
+Then access `http://localhost:3000`
+
 ## Smooth scrolling
 
-First, you need to install [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/):
-
-```
-$ npm install smooth-scrollbar --save
-```
-
-Then, just set the `smoothScrolling` flag in the constructor:
+_ScrollXP_ uses [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/) for that, just set the `smoothScrolling` flag in the constructor:
 
 ```
 var view = new ScrollXP({
@@ -211,6 +203,8 @@ var view = new ScrollXP({
 ```
 
 Labels will be added to your page to show you the triggers and scenes positioning.
+
+It's also possible to add indicators for specific scenes through the `data-scene-indicator` attribute. See more on the next section.
 
 ## Creating scenes
 
@@ -345,33 +339,51 @@ Then, in the same DOM element, you can setup your animation by adding properties
 
 ## Reusable animations
 
-Like [custom scenes](https://github.com/weareferal/scrollxp#custom-scenes), you can avoid adding the same properties for a large amount of elements by creating an animation on JavaScript and setting it on HTML.
+Instead of adding the same animation properties for every element you want to animate, you can register **custom animations**.
 
-It's possible through the method `registerAnimation(name, properties)`.
-
-For example, if you want to create a "fade in up" animation, first you have to register the animation on JS:
+For example, imagine you have an element like this:
 
 ```
-var view = new ScrollXP(...)
+<div class="scene" data-scene>
+  <div class="box" data-animate data-animate-from-alpha="0" data-animate-to-alpha="1"></div>
+</div>
+```
 
-view.registerAnimation("fade-in-up", {
-  duration: 1,
-  from: {
-    autoAlpha: 0,
-    y: 20
-  },
-  to: {
-    autoAlpha: 1,
-    y: 0
-  }
+You could instead, tell to this element to use a registered animation called `fade-in`:
+
+```
+<div class="scene" data-scene>
+  <div class="box" data-animate="fade-in"></div>
+</div>
+```
+
+Then, you need to register that animation on the library. You do that by using an exposed class builder called `Animation`:
+
+```
+import ScrollXP from "scrollxp"
+
+var view = new ScrollXP({
+  container: document.querySelector(".wrapper"),
 })
+
+var fadeInAnimation = new ScrollXP.Animation("fade-in").fromAlpha(0).toAlpha(1).build()
+
+view.register(fadeInAnimation)
 ```
 
-Then, in the HTML, you set the name for the animation:
+All the animation properties are available through the builder method in `camelCase`.
+
+The registered animation properties are set over the default properties, and the `data-animate-[property]` are set over the registered animation properties, so:
+
+> **Default** properties <- **Registered** properties <- **Data attribute** properties
+
+That means you can use the registered properties as a base and change it in specific elements.
+
+For example, if you want an element to fade in starting from `0.5` opacity, you would do that:
 
 ```
-<div data-scene>
-  <div data-animate="fade-in-up"></div>
+<div class="scene" data-scene>
+  <div class="box" data-animate="fade-in" data-animate-from-alpha="0.5"></div>
 </div>
 ```
 
