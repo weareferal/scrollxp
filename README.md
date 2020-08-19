@@ -602,13 +602,12 @@ With that in mind, _ScrollXP_ purposes:
 
 ## TO DO
 
-There are still **a ton** of work to do here, above are just a few of them:
+There are still **a ton** of work to do here, below are just a few of them:
 
-- [ ] Remove GSAP from the packaged library (currently it's being added twice)
-- [ ] Clean up the library
-- [ ] Write tests
+- [ ] Clean up the library by joining Scene + ScrollScene and Controller + ScrollController
+- [ ] Fix listeners not getting removed properly
+- [ ] Allow parallax registering
 - [ ] Add CI
-- [ ] Validate library inputs
 - [ ] Add scene property `data-scene-offset`
 - [ ] Add scene property `data-scene-log-level`
 - [ ] Work on scene limitations
