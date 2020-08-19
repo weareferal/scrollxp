@@ -36,7 +36,6 @@ _ScrollXP_ allows you to:
 - [Bind menu to page sections](https://github.com/weareferal/scrollxp#bind-menu-to-page-sections)
 - [Motivation](https://github.com/weareferal/scrollxp#motivation)
 - [TO DO](https://github.com/weareferal/scrollxp#to-do)
-- [Versions](https://github.com/weareferal/scrollxp#versions)
 - [License](https://github.com/weareferal/scrollxp#license)
 
 ## Installation
@@ -611,25 +610,6 @@ There are still **a ton** of work to do here, below are just a few of them:
 - [ ] Add scene property `data-scene-log-level`
 - [ ] Add more animation options
 - [ ] Support more parameters on custom scenes
-
-## Versions
-
-### v2.0.0
-
-- Changed how animations are registered
-- Changed how scenes are registered
-- Changed how defaults are set
-- Allowed `data-*` properties to replace registered properties
-- Added `setScrollOffset` method
-- Added parallax "type" property
-- Added scene "onLeave" callback
-- Removed GSAP from bundle
-- Improved logger
-- Added tests
-
-### v1.0.0
-
-- Initial release
 
 ## License
 
