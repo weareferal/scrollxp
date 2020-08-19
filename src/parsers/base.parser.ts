@@ -1,4 +1,5 @@
 import ParamHelper from "../helpers/param.helper"
+import { Breakpoints, Descriptor, ParamString, IParser } from "../interfaces"
 
 export default abstract class BaseParser<D extends Descriptor> implements IParser<D> {
   protected breakpoints: Breakpoints

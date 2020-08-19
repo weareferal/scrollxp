@@ -1,6 +1,7 @@
 import gsap from "gsap"
 
 import Logger from "../scrollmagic/utils/logger"
+import { AnimationDescriptor } from "../interfaces"
 
 export default class AnimationCreator {
   private timeline: TimelineMax

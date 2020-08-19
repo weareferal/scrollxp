@@ -5,6 +5,15 @@ import DomUtils, { OffsetParam, CSSProperty } from "./utils/dom"
 import gsap from "gsap"
 import Type from "./utils/type"
 import Indicator, { IndicatorOptions } from "./indicator"
+import {
+  SceneOptions,
+  SceneListener,
+  SceneEventVars,
+  ControllerInfo,
+  PinOptions,
+  ScrollOffset,
+  SceneListeners,
+} from "../interfaces"
 
 export enum SceneState {
   Before = "BEFORE",

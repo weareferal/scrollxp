@@ -18,8 +18,8 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "paths": {
-      "scrollmagic": ["__demo__/src/index"],
-      "scrollmagic/*": ["__demo__/src/*"]
+      "scrollxp": ["__demo__/src/index"],
+      "scrollxp/*": ["__demo__/src/*"]
     }
   },
   "exclude": ["node_modules", "build", "dist"]

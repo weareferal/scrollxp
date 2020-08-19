@@ -1,6 +1,7 @@
 import ParamHelper from "../helpers/param.helper"
 import TypeHelper from "../helpers/type.helper"
 import { merge } from "../utils"
+import { IBuilder, AnimationDescriptor, ParamString, ParamNumber, ParamBoolean } from "../interfaces"
 
 export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
   public static NAMESPACE = "AnimationBuilder"

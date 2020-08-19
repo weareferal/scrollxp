@@ -1,4 +1,4 @@
-interface Breakpoints {
+export interface Breakpoints {
   xs?: number
   sm?: number
   md?: number
@@ -7,7 +7,7 @@ interface Breakpoints {
   xxl?: number
 }
 
-interface BreakpointListenerResult {
+export interface BreakpointListenerResult {
   screenSize: string
   hasChanged: boolean
 }

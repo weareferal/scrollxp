@@ -1,8 +1,10 @@
-interface Descriptor {
+import { IScene, SceneEventVars } from "./scene"
+
+export interface Descriptor {
   name?: string
 }
 
-interface AnimationDescriptor extends Descriptor {
+export interface AnimationDescriptor extends Descriptor {
   duration: number
   repeat: number
   yoyo: boolean
@@ -17,7 +19,7 @@ interface AnimationDescriptor extends Descriptor {
   label?: string
 }
 
-interface SceneDescriptor extends Descriptor {
+export interface SceneDescriptor extends Descriptor {
   enabled: boolean
   trigger?: HTMLElement
   duration: string | number | (() => number)
@@ -31,7 +33,7 @@ interface SceneDescriptor extends Descriptor {
   onProgress?: SceneDescriptorCallback
 }
 
-interface ParallaxDescriptor extends Descriptor {
+export interface ParallaxDescriptor extends Descriptor {
   enabled: boolean
   type: string
   speed: number
@@ -46,7 +48,7 @@ interface ParallaxDescriptor extends Descriptor {
   indicator?: string
 }
 
-interface StateProperty {
+export interface StateProperty {
   alpha?: number
   x?: number
   y?: number
@@ -57,12 +59,12 @@ interface StateProperty {
   width?: number
 }
 
-interface DefaultDescriptors {
+export interface DefaultDescriptors {
   animation?: AnimationDescriptor
   scene?: SceneDescriptor
   parallax?: ParallaxDescriptor
 }
 
-interface SceneDescriptorCallback {
+export interface SceneDescriptorCallback {
   (element: HTMLElement, scene: IScene, vars?: SceneEventVars): void
 }

@@ -1,8 +1,10 @@
-interface IScrollScene {
+import { IBaseController } from "./controller"
+
+export interface IScene {
   duration(value?: string | number | (() => number)): number
 }
 
-interface SceneOptions {
+export interface SceneOptions {
   duration?: number | string | (() => number)
   offset?: number
   triggerElement?: HTMLElement
@@ -12,7 +14,7 @@ interface SceneOptions {
   tweenChanges?: boolean
 }
 
-interface SceneEventVars {
+export interface SceneEventVars {
   type?: string
   what?: string
   reason?: string
@@ -24,24 +26,24 @@ interface SceneEventVars {
   scrollDirection?: string
   state?: string
   reset?: boolean
-  controller?: IController
+  controller?: IBaseController
 }
 
-interface SceneListener {
+export interface SceneListener {
   namespace: string
   callback: (e?: SceneEventVars) => void
 }
 
-interface SceneListeners {
+export interface SceneListeners {
   [eventName: string]: SceneListener[]
 }
 
-interface ScrollOffset {
+export interface ScrollOffset {
   start: number
   end: number
 }
 
-interface PinOptions {
+export interface PinOptions {
   spacer: HTMLElement
   inFlow: boolean
   pushFollowers: boolean

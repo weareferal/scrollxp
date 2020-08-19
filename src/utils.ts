@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 import TypeHelper from "./helpers/type.helper"
+import { Breakpoints, BreakpointListenerResult } from "./interfaces";
 
 /**
  * BreakpointListener

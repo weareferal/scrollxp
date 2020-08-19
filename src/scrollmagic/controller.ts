@@ -7,6 +7,7 @@ import Scene from "./scene"
 import SceneEvent from "./scene-event"
 import { Scrollbar } from "smooth-scrollbar/scrollbar"
 import { ScrollListener } from "smooth-scrollbar/interfaces"
+import { IBaseController, ControllerInfo, ControllerOptions } from "../interfaces"
 
 export enum ScrollDirection {
   Forward = "FORWARD",
@@ -21,7 +22,7 @@ export interface ControllerIndicators {
   updateTriggerGroupLabel: (ControllerIndicators?) => void
 }
 
-export default class Controller implements IController {
+export default class Controller implements IBaseController {
   private _scrollPos = 0
   private isDocument = true
   private viewPortSize: number

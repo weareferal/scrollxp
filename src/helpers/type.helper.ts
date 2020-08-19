@@ -1,5 +1,7 @@
 /* eslint-disable */
 
+import { AnimationDescriptor, SceneDescriptor, ParallaxDescriptor } from "../interfaces";
+
 function type(value: any): string {
   return Object.prototype.toString
     .call(value)

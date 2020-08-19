@@ -1,3 +1,5 @@
+import { IParser, Descriptor, Breakpoints } from "./interfaces"
+
 export default class Parser {
   public readonly breakpoints: Breakpoints
 

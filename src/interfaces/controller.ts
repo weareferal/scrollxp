@@ -1,12 +1,12 @@
-interface IScrollController {
+export interface IController {
   smoothScrolling: boolean
 }
 
-interface IController {
+export interface IBaseController {
   setScrollPos(pos: number): void
 }
 
-interface ControllerInfo {
+export interface ControllerInfo {
   isVertical: boolean
   isDocument: boolean
   container: HTMLElement | Window
@@ -16,7 +16,7 @@ interface ControllerInfo {
   smoothScrolling: boolean
 }
 
-interface ControllerOptions {
+export interface ControllerOptions {
   container?: HTMLElement | Window | Document
   isVertical?: boolean
   globalSceneOptions?: any // eslint-disable-line

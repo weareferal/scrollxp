@@ -1,5 +1,6 @@
 import BaseParser from "./base.parser"
 import ParallaxBuilder from "../builders/parallax.builder"
+import { Breakpoints, ParallaxDescriptor } from "../interfaces"
 
 export default class ParallaxParser extends BaseParser<ParallaxDescriptor> {
   constructor(breakpoints: Breakpoints, defaultOptions?: ParallaxDescriptor) {

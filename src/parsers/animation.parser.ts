@@ -1,5 +1,6 @@
 import BaseParser from "./base.parser"
 import AnimationBuilder from "../builders/animation.builder"
+import { Breakpoints, AnimationDescriptor } from "../interfaces"
 
 export default class AnimationParser extends BaseParser<AnimationDescriptor> {
   constructor(breakpoints: Breakpoints, defaultOptions?: AnimationDescriptor) {

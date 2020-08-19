@@ -1,5 +1,7 @@
 /* eslint-disable */
 
+import { ParamString, Breakpoints } from "../interfaces";
+
 function type(value: any): string {
   return Object.prototype.toString
     .call(value)

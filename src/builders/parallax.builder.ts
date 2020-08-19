@@ -2,6 +2,17 @@ import ParamHelper from "../helpers/param.helper"
 import Logger from "../scrollmagic/utils/logger"
 import TypeHelper from "../helpers/type.helper"
 import { merge } from "../utils"
+import {
+  IBuilder,
+  ParallaxDescriptor,
+  ParamString,
+  ParamNumber,
+  ParamBoolean,
+  ParamCallback,
+  ParamDuration,
+  ParamElement,
+  ParamSelector,
+} from "../interfaces"
 
 export default class ParallaxBuilder implements IBuilder<ParallaxDescriptor> {
   public static NAMESPACE = "ParallaxBuilder"

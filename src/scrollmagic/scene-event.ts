@@ -1,4 +1,5 @@
 import Scene from "./scene"
+import { SceneEventVars } from "../interfaces"
 
 export default class SceneEvent {
   type: string

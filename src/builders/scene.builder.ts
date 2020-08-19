@@ -2,6 +2,18 @@ import ParamHelper from "../helpers/param.helper"
 import Logger from "../scrollmagic/utils/logger"
 import TypeHelper from "../helpers/type.helper"
 import { merge } from "../utils"
+import {
+  IBuilder,
+  SceneDescriptor,
+  SceneDescriptorCallback,
+  ParamString,
+  ParamBoolean,
+  ParamNumber,
+  ParamElement,
+  ParamDuration,
+  ParamSelector,
+  ParamCallback,
+} from "../interfaces"
 
 export default class SceneBuilder implements IBuilder<SceneDescriptor> {
   public static NAMESPACE = "SceneBuilder"

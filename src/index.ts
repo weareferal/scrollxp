@@ -13,6 +13,17 @@ import ParallaxParser from "./parsers/parallax.parser"
 import AnimationBuilder from "./builders/animation.builder"
 import SceneBuilder from "./builders/scene.builder"
 import ParallaxBuilder from "./builders/parallax.builder"
+import {
+  IScene,
+  SceneEventVars,
+  Breakpoints,
+  BreakpointListenerResult,
+  Descriptor,
+  AnimationDescriptor,
+  SceneDescriptor,
+  ParallaxDescriptor,
+  DefaultDescriptors,
+} from "./interfaces"
 
 declare let __SCROLLXP_VERSION__: string
 
@@ -25,7 +36,7 @@ export interface ScrollViewOptions {
   anchors?: HTMLAnchorElement[]
 }
 
-export { ScrollScene }
+export { IScene }
 
 export default class ScrollXP {
   static version = __SCROLLXP_VERSION__

@@ -1,5 +1,6 @@
 import BaseParser from "./base.parser"
 import SceneBuilder from "../builders/scene.builder"
+import { Breakpoints, SceneDescriptor } from "../interfaces"
 
 export default class SceneParser extends BaseParser<SceneDescriptor> {
   constructor(breakpoints: Breakpoints, defaultOptions?: SceneDescriptor) {
