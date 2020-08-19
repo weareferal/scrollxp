@@ -442,7 +442,7 @@ Then, in the same DOM element, you can setup the parallax effect by adding prope
 
 This type of parallax effect has a start and an end, behaving like a common animation scene.
 
-To define the element, you need to add the attribute `data-parallax="scene"`.
+To define the element, you need to add the attribute `data-parallax-type="scene"`.
 
 All the global parallax properties are used for this type of effect too, but you can also provide properties for the scene itself.
 
@@ -631,7 +631,6 @@ There are still **a ton** of work to do here, below are just a few of them:
 - [ ] Add CI
 - [ ] Add scene property `data-scene-offset`
 - [ ] Add scene property `data-scene-log-level`
-- [ ] Work on scene limitations
 - [ ] Add more animation options
 - [ ] Support more parameters on custom scenes
 
