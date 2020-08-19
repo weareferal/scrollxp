@@ -176,6 +176,28 @@ export default class SceneBuilder implements IBuilder<SceneDescriptor> {
     return this
   }
 
+  public onLeave(value?: SceneDescriptorCallback): SceneBuilder {
+    if (value !== undefined) {
+      if (ParamHelper.isFunction(value)) {
+        this.descriptor.onLeave = <SceneDescriptorCallback>value
+      } else {
+        throw new TypeError(`[${SceneBuilder.NAMESPACE}] Value for "onLeave" isn't a valid function: "${value}"`)
+      }
+    }
+    return this
+  }
+
+  public onProgress(value?: SceneDescriptorCallback): SceneBuilder {
+    if (value !== undefined) {
+      if (ParamHelper.isFunction(value)) {
+        this.descriptor.onProgress = <SceneDescriptorCallback>value
+      } else {
+        throw new TypeError(`[${SceneBuilder.NAMESPACE}] Value for "onProgress" isn't a valid function: "${value}"`)
+      }
+    }
+    return this
+  }
+
   public build(): SceneDescriptor {
     return this.descriptor
   }

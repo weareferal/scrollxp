@@ -27,6 +27,8 @@ interface SceneDescriptor extends Descriptor {
   pin?: boolean
   indicator?: string
   onEnter?: SceneDescriptorCallback
+  onLeave?: SceneDescriptorCallback
+  onProgress?: SceneDescriptorCallback
 }
 
 interface ParallaxDescriptor extends Descriptor {

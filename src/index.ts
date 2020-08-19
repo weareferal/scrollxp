@@ -252,11 +252,29 @@ export default class ScrollXP {
           scene.addIndicators({ name: descriptor.indicator })
         }
 
-        // Callbacks
+        // onEnter callback
         if (descriptor.onEnter) {
           scene.on("enter", (vars?: SceneEventVars) => {
             if (descriptor.onEnter) {
               descriptor.onEnter(element, scene, vars)
+            }
+          })
+        }
+
+        // onLeave callback
+        if (descriptor.onLeave) {
+          scene.on("leave", (vars?: SceneEventVars) => {
+            if (descriptor.onLeave) {
+              descriptor.onLeave(element, scene, vars)
+            }
+          })
+        }
+
+        // onProgress callback
+        if (descriptor.onProgress) {
+          scene.on("progress", (vars?: SceneEventVars) => {
+            if (descriptor.onProgress) {
+              descriptor.onProgress(element, scene, vars)
             }
           })
         }
