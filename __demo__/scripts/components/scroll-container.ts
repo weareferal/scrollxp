@@ -23,6 +23,17 @@ export default class ScrollContainer extends Component {
     }
 
     this.view.register(new ScrollXP.Animation("fade-out").fromAlpha(1).toAlpha(0).build())
+
+    this.view.register(
+      new ScrollXP.Animation("stagger-fade-in-up")
+        .duration(0.5)
+        .stagger(0.2)
+        .fromAlpha(0)
+        .toAlpha(1)
+        .fromY(20)
+        .toY(0)
+        .build()
+    );
   }
 
   bindAnchors(anchors) {
