@@ -36,6 +36,7 @@ npm run ghpages
 # Copy files
 echo "Copying new contents"
 cp -v ./__demo__/index.html ./out
+cp -v ./__demo__/stagger.html ./out
 cp -vr ./__demo__/assets ./out
 cp -vr ./.tmp/* ./out
 cd ./out

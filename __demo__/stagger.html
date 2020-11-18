@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Scroll XP</title>
+    <link rel="stylesheet" href="assets/css/styles.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/ScrollToPlugin.min.js"></script>
+  </head>
+  <body>
+    <main class="page" data-component="scrollContainer">
+      <div class="content">
+        <section class="section">
+          <div data-scene data-scene-indicator="fade in stagger" class="scene" style="margin-top: 500px;">
+            <div
+              class="scene__stagger"
+              data-animate="stagger-fade-in-up"
+            >
+              <span class="scene__index">1</span>
+              <span class="scene__index">2</span>
+              <span class="scene__index">3</span>
+              <span class="scene__index">4</span>
+              <span class="scene__index">5</span>
+              <span class="scene__index">6</span>
+              <span class="scene__index">7</span>
+              <span class="scene__index">8</span>
+              <span class="scene__index">9</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <button class="toggle-button" data-component="toggleButton">Smooth Scrolling <span class="off">Off</span></button>
+
+    <!-- <script src="assets/js/vendor.min.js"></script> -->
+    <!-- <script src="assets/js/scripts.min.js"></script> -->
+    <script src="app.js"></script>
+  </body>
+</html>
