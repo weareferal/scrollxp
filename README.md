@@ -598,6 +598,12 @@ With that in mind, _ScrollXP_ purposes:
 - Easily allow responsive animations
 - Enabling/disabling smooth scrolling with one line
 
+## How to release
+
+It's not necessary to run `npm run compile` nor `npm run bundle` first.
+
+To release, just commit all changes then run `npm run release`.
+
 ## TO DO
 
 There are still **a ton** of work to do here, below are just a few of them:
