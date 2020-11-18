@@ -138,9 +138,9 @@ export default class AnimationCreator {
     const vars: gsap.TweenVars = {}
 
     vars.duration = descriptor.duration
-    vars.stagger = descriptor.stagger
     vars.repeat = descriptor.repeat
     vars.yoyo = descriptor.yoyo
+    vars.stagger = descriptor.stagger
 
     if (descriptor.momentum > 0) {
       vars.data = {
