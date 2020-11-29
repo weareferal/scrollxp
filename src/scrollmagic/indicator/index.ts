@@ -23,7 +23,7 @@ export interface IndicatorGroup {
 const DEFAULT = {
   colorStart: "green",
   colorEnd: "red",
-  colorTrigger: "blue",
+  colorTrigger: "#000",
 }
 
 export default class Indicator {
@@ -39,9 +39,10 @@ export default class Indicator {
   public bounds: HTMLElement
   public triggerGroup?: IndicatorGroup
 
-  public static FONT_SIZE = "0.85em"
+  public static FONT_SIZE = "14px"
+  public static LINE_HEIGHT = "16px"
   public static ZINDEX = "9999"
-  public static EDGE_OFFSET = 15
+  public static EDGE_OFFSET = 0
 
   constructor(scene: Scene, options?: IndicatorOptions, autoIndex?: number) {
     this.scene = scene
@@ -216,12 +217,11 @@ export default class Indicator {
 
     const css = {}
     css[this.isVertical ? "right" : "bottom"] = 0
-    css[this.isVertical ? "border-top-width" : "border-left-width"] = 1
 
     DomUtils.css(<HTMLElement>triggerElem.firstChild, css)
 
-    DomUtils.css(<HTMLElement>triggerElem.firstChild?.firstChild, {
-      padding: this.isVertical ? "0 8px 3px 8px" : "3px 4px",
+    DomUtils.css(<HTMLElement>triggerElem.firstChild?.lastChild, {
+      padding: this.isVertical ? "4px 8px 6px 8px" : "3px 4px",
     })
 
     document.body.appendChild(triggerElem) // Directly add to body

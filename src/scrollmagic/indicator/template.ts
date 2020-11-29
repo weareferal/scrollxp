@@ -53,36 +53,55 @@ export default {
     return elem
   },
   trigger(color: string): HTMLElement {
-    // Inner to be above or below line but keep position
-    const inner = document.createElement("div")
-    inner.textContent = "trigger"
-    domUtils.css(inner, {
-      position: "relative",
+    const tagBackArrow = document.createElement("div")
+    domUtils.css(tagBackArrow, {
+      width: 0,
+      height: 0,
+      position: "absolute",
+      left: "-3px",
+      "z-index": -1,
     })
 
-    // Inner wrapper for right: 0 and main element has no size
-    const wrapper = document.createElement("div")
-    domUtils.css(wrapper, {
+    const tagFrontArrow = document.createElement("div")
+    domUtils.css(tagFrontArrow, {
+      width: 0,
+      height: 0,
+      position: "relative",
+      "z-index": 2,
+    })
+
+    const tagBlock = document.createElement("div")
+    tagBlock.textContent = "trigger"
+    domUtils.css(tagBlock, {
+      "font-family": "Arial, sans-serif",
+      "font-weight": "bold",
+      "font-size": Indicator.FONT_SIZE,
+      "line-height": Indicator.LINE_HEIGHT,
+      "background-color": color,
+      color: "#fff",
+      border: "2px solid white",
+      "box-shadow": "4px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.2)",
+    })
+
+    const tag = document.createElement("div")
+    domUtils.css(tag, {
       position: "absolute",
       overflow: "visible",
-      "border-width": 0,
-      "border-style": "solid",
-      color: color,
-      "border-color": color,
+      display: "flex",
     })
-    wrapper.appendChild(inner)
+    tag.appendChild(tagBackArrow)
+    tag.appendChild(tagFrontArrow)
+    tag.appendChild(tagBlock)
 
-    // Wrapper
     const elem = document.createElement("div")
     domUtils.css(elem, {
       position: "fixed",
       overflow: "visible",
       "white-space": "nowrap",
       "pointer-events": "none",
-      "font-size": Indicator.FONT_SIZE,
     })
     elem.style.zIndex = Indicator.ZINDEX
-    elem.appendChild(wrapper)
+    elem.appendChild(tag)
 
     return elem
   },

@@ -139,25 +139,104 @@ export default class Controller implements IBaseController {
           let group
           let elem
           let pos
-          let elemSize
           let transform
+
+          let tag
+          let tagBackArrow
+          let tagFrontArrow
+          let tagBlock
 
           let i = groups.length
           while (i--) {
             group = groups[i]
             elem = group.element
             pos = group.triggerHook * this.info().size
-            elemSize = this.isVertical
-              ? DomUtils.getWidth(elem.firstChild.firstChild)
-              : DomUtils.getHeight(elem.firstChild.firstChild)
-            transform = pos > elemSize ? `translate${this.isVertical ? "Y" : "X"}(-100%)` : ""
+
+            tag = elem.firstChild
+            tagBackArrow = elem.firstChild.children[0]
+            tagFrontArrow = elem.firstChild.children[1]
+            tagBlock = elem.firstChild.children[2]
+
+            // Indicator on top
+            if (group.triggerHook == 0) {
+              transform = `translate${this.isVertical ? "Y" : "X"}(0%)`
+              DomUtils.css(tag, {
+                "align-items": "flex-start",
+              })
+              DomUtils.css(tagBackArrow, {
+                top: 0,
+                "border-top": "0 solid transparent",
+                "border-bottom": "24px solid transparent",
+                "border-right": "10px solid white",
+              })
+              DomUtils.css(tagFrontArrow, {
+                "margin-top": "2px",
+                "border-top": "0 solid transparent",
+                "border-bottom": "19px solid transparent",
+                "border-right": "8px solid black",
+                "margin-right": "-2px",
+              })
+              DomUtils.css(tagBlock, {
+                "border-top-right-radius": "9px",
+                "border-bottom-right-radius": "9px",
+                "border-bottom-left-radius": "11px",
+              })
+            }
+            // Indicator on bottom
+            else if (group.triggerHook == 1) {
+              transform = `translate${this.isVertical ? "Y" : "X"}(-100%)`
+              DomUtils.css(tag, {
+                "align-items": "flex-end",
+              })
+              DomUtils.css(tagBackArrow, {
+                bottom: 0,
+                "border-top": "24px solid transparent",
+                "border-bottom": "0 solid transparent",
+                "border-right": "10px solid white",
+              })
+              DomUtils.css(tagFrontArrow, {
+                "margin-bottom": "2px",
+                "border-top": "19px solid transparent",
+                "border-bottom": "0 solid transparent",
+                "border-right": "8px solid black",
+                "margin-right": "-2px",
+              })
+              DomUtils.css(tagBlock, {
+                "border-top-right-radius": "9px",
+                "border-bottom-right-radius": "9px",
+                "border-top-left-radius": "11px",
+              })
+            }
+            // Indicator between
+            else {
+              transform = `translate${this.isVertical ? "Y" : "X"}(-50%)`
+              DomUtils.css(tag, {
+                "align-items": "center",
+              })
+              DomUtils.css(tagBackArrow, {
+                top: "50%",
+                transform: "translate3d(0, -50%, 0)",
+                "border-top": "12px solid transparent",
+                "border-bottom": "12px solid transparent",
+                "border-right": "12px solid white",
+              })
+              DomUtils.css(tagFrontArrow, {
+                "border-top": "10px solid transparent",
+                "border-bottom": "10px solid transparent",
+                "border-right": "9px solid black",
+                "margin-right": "-3px",
+              })
+              DomUtils.css(tagBlock, {
+                "border-radius": "9px",
+              })
+            }
 
             DomUtils.css(elem, {
               top: containerOffset.top + (this.isVertical ? pos : edge - group.members[0].options.indent),
               left: containerOffset.left + (this.isVertical ? edge - group.members[0].options.indent : pos),
             })
 
-            DomUtils.css(elem.firstChild.firstChild, {
+            DomUtils.css(elem.firstChild, {
               "-ms-transform": transform,
               "-webkit-transform": transform,
               transform: transform,
@@ -169,7 +248,7 @@ export default class Controller implements IBaseController {
       updateTriggerGroupLabel: (group?: IndicatorGroup) => {
         if (group) {
           const text = `trigger${group.members.length > 1 ? "" : " " + group.members[0].options.name}`
-          const elem = group.element.firstChild?.firstChild
+          const elem = group.element.firstChild?.lastChild
           const doUpdate = elem?.textContent !== text
 
           if (doUpdate) {
