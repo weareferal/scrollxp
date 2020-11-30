@@ -1,17 +1,16 @@
 # ScrollXP
 
-It's a library for scrolling animations based on [ScrollMagic](http://scrollmagic.io/) codebase and dependent of [GSAP 3](https://greensock.com/).
+_ScrollXP_ is a library for scrolling animations based on [ScrollMagic](http://scrollmagic.io/) and [GSAP](https://greensock.com/).
 
 See [demo](https://weareferal.github.io/scrollxp/) here.
 
-Other examples:
+### Examples
+
 - [Fade In Down Animation](https://codepen.io/weareferal/full/eYdNNzq)
 - [Piano Key Animation](https://codepen.io/weareferal/full/WNGvvpY)
 - [Parallax Animation](https://codepen.io/weareferal/full/abmOOwd)
 
-## Features
-
-_ScrollXP_ allows you to:
+### Features
 
 - Create animated scenes using HTML `data-*` attributes
 - Create parallax effects using HTML `data-*` attributes
@@ -19,28 +18,29 @@ _ScrollXP_ allows you to:
 - Bind active menu item to page section
 - Enable/disable smooth scrolling
 
-## Quick access
+## Quick Access
 
 - [Installation](https://github.com/weareferal/scrollxp#installation)
 - [Usage](https://github.com/weareferal/scrollxp#usage)
-- [Running local](https://github.com/weareferal/scrollxp#running-local)
-- [Smooth scrolling](https://github.com/weareferal/scrollxp#smooth-scrolling)
-- [Debugging](https://github.com/weareferal/scrollxp#debugging)
-- [Creating scenes](https://github.com/weareferal/scrollxp#creating-scenes)
-  - [Pinned scenes (or sticky elements)](https://github.com/weareferal/scrollxp#pinned-scenes-or-sticky-elements)
-  - [Reusable scenes](https://github.com/weareferal/scrollxp#reusable-scenes)
-  - [Scene limitations](https://github.com/weareferal/scrollxp#scene-limitations)
-- [Adding animations](https://github.com/weareferal/scrollxp#adding-animations)
-  - [Reusable animations](https://github.com/weareferal/scrollxp#reusable-animations)
+- [Smooth Scrolling](https://github.com/weareferal/scrollxp#smooth-scrolling)
+- [How to Debug](https://github.com/weareferal/scrollxp#how-to-debug)
+- [Create Scenes](https://github.com/weareferal/scrollxp#create-scenes)
+  - [Pinned Scenes (or sticky elements)](https://github.com/weareferal/scrollxp#pinned-scenes-or-sticky-elements)
+  - [Reusable Scenes](https://github.com/weareferal/scrollxp#reusable-scenes)
+  - [Scene Limitations](https://github.com/weareferal/scrollxp#scene-limitations)
+- [Add Animations](https://github.com/weareferal/scrollxp#add-animations)
+  - [Reusable Animations](https://github.com/weareferal/scrollxp#reusable-animations)
   - [Animations "Under the Hood"](https://github.com/weareferal/scrollxp#animations-under-the-hood)
-- [Parallax effect](https://github.com/weareferal/scrollxp#parallax-effect)
-  - [Global parallax](https://github.com/weareferal/scrollxp#global-parallax)
-  - [Scene parallax](https://github.com/weareferal/scrollxp#scene-parallax)
-- [Working with breakpoints](https://github.com/weareferal/scrollxp#working-with-breakpoints)
-- [Changing defaults](https://github.com/weareferal/scrollxp#changing-defaults)
-- [Bind menu to page sections](https://github.com/weareferal/scrollxp#bind-menu-to-page-sections)
+- [Parallax Effect](https://github.com/weareferal/scrollxp#parallax-effect)
+  - [Global Parallax](https://github.com/weareferal/scrollxp#global-parallax)
+  - [Scene Parallax](https://github.com/weareferal/scrollxp#scene-parallax)
+- [Work with Breakpoints](https://github.com/weareferal/scrollxp#work-with-breakpoints)
+- [Change Defaults](https://github.com/weareferal/scrollxp#change-defaults)
+- [Menu Links and Page Sections](https://github.com/weareferal/scrollxp#menu-links-and-page-sections)
 - [Motivation](https://github.com/weareferal/scrollxp#motivation)
-- [TO DO](https://github.com/weareferal/scrollxp#to-do)
+- [Run Local](https://github.com/weareferal/scrollxp#run-local)
+- [How to Release](https://github.com/weareferal/scrollxp#how-to-release)
+- [To Do](https://github.com/weareferal/scrollxp#to-do)
 - [License](https://github.com/weareferal/scrollxp#license)
 
 ## Installation
@@ -53,64 +53,39 @@ $ npm install gsap scrollxp --save
 
 ## Usage
 
-First, you need to make sure you're initializing it into a scrollable container.
-
-⚠️ **It won't work directly in the `body` element.**
-
-To make it work in the body, here is what you have to do:
-
-Add this to its styles:
-
-```
-body {
-  height: 100vh;
-  overflow: hidden;
-}
-```
-
-Then, create a container to wrap up your content:
-
-```
-.wrapper {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-}
-```
-
 Since this package has a [pkg.module](https://github.com/rollup/rollup/wiki/pkg.module) field, it's highly recommended to import it as an ES6 module with some bundlers like [webpack](https://webpack.js.org/) or [rollup](https://rollupjs.org/):
 
 ```js
 import ScrollXP from "scrollxp"
 
 var view = new ScrollXP({
-  container: document.querySelector(".wrapper"),
+  container: document.body
 })
 ```
 
-If you are not using any bundlers, you can just load the UMD bundles:
+If you are not using any bundlers, you can just load the CDN files:
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/gsap.min.js"></script>
-<script src="dist/scrollxp.js"></script>
+<script src="https://cdn.weareferal.com/scrollxp-2.0.3.js"></script>
 
 <script>
   var view = new ScrollXP({
-    container: document.querySelector(".wrapper"),
+    container: document.body
   })
 </script>
 ```
 
-### Full example
+### Full Example
 
-If you just want to make it work to play around, download the [scrollxp.js](https://github.com/weareferal/scrollxp/blob/master/dist/scrollxp.js) file and create a page with the following:
+If you just want to make it work to play around, you can copy this code:
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/gsap.min.js"></script>
-    <script src="scrollxp.js"></script>
+    <script src="https://cdn.weareferal.com/scrollxp-2.0.3.js"></script>
     <style>
       body {
         height: 100vh;
@@ -159,27 +134,38 @@ If you just want to make it work to play around, download the [scrollxp.js](http
 
 You should see a black square spinning around when scrolling.
 
-## Running local
+## Smooth Scrolling
 
-To get it up and running for development porposes, run:
+_ScrollXP_ uses [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/) for that.
 
+First, you need to make sure you're initializing it into a scrollable container.
+
+⚠️ **It won't work directly in the `body` element.**
+
+To make it work in the body, here is what you have to do:
+
+Add this to its styles:
+
+```css
+body {
+  height: 100vh;
+  overflow: hidden;
+}
 ```
-$ npm install
+
+Then, create a container to wrap up your content:
+
+```css
+.wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
 ```
 
-Then:
+And initialize the library in the `.wrapper` element, making sure to set the `smoothScrolling` flag in the constructor:
 
-```
-$ npm run start
-```
-
-Then access `http://localhost:3000`
-
-## Smooth scrolling
-
-_ScrollXP_ uses [Smooth Scrollbar](https://idiotwu.github.io/smooth-scrollbar/) for that, just set the `smoothScrolling` flag in the constructor:
-
-```
+```js
 var view = new ScrollXP({
   container: document.querySelector('.wrapper'),
   smoothScrolling: true
@@ -188,18 +174,18 @@ var view = new ScrollXP({
 
 Or call the method:
 
-```
+```js
 var view = new ScrollXP({
   container: document.querySelector('.wrapper')
 })
 view.smoothScrolling(true)
 ```
 
-## Debugging
+## How to Debug
 
 To debug your scenes and animations you can add indicators to all of them through a flag in the library constructor:
 
-```
+```js
 var view = new ScrollXP({
   container: document.querySelector('.wrapper'),
   addIndicators: true
@@ -210,7 +196,7 @@ Labels will be added to your page to show you the triggers and scenes positionin
 
 It's also possible to add indicators for specific scenes through the `data-scene-indicator` attribute. See more on the next section.
 
-## Creating scenes
+## Create Scenes
 
 A scene works like a [ScrollMagic scene](https://scrollmagic.io/docs/ScrollMagic.Scene.html).
 
@@ -231,31 +217,31 @@ Then, in the same DOM element, you can setup the scene by adding properties like
 | `class-toggle`                                                                               |       `string`       | `undefined` | One or more Classnames (separated by space) that should be added to the element during the scene.                                                                                         |
 | `pin`                                                                                        |      `boolean`       |   `false`   | Pin the element for the duration of the scene.                                                                                                                                            |
 
-### Pinned scenes (or sticky elements)
+### Pinned Scenes (or sticky elements)
 
 You can create sticky elements by setting `data-scene-pin="true"`. It's going to work like in this [ScrollMagic example](https://scrollmagic.io/examples/basic/simple_pinning.html).
 
 Its duration is defined through `data-scene-duration`. If the scene duration isn't set, the element remains sticky till the page end.
 
-### Reusable scenes
+### Reusable Scenes
 
 Instead of adding the same scene properties for every new scene in your HTML, you can register **custom scenes**.
 
 For example, imagine you have an element like this:
 
-```
+```html
 <div class="scene" data-scene data-scene-hook="0.8" data-scene-duration="100%"></div>
 ```
 
 You could instead, tell to this element to use a registered scene called `full-scene`:
 
-```
+```html
 <div class="scene" data-scene="full-scene"></div>
 ```
 
 Then, you need to register that scene on the library. You do that by using an exposed class builder called `Scene`:
 
-```
+```js
 import ScrollXP from "scrollxp"
 
 var view = new ScrollXP({
@@ -277,7 +263,7 @@ That means you can use the registered properties as a base and change it in spec
 
 For example, if you want a scene to start in the middle of the screen, you would do that:
 
-```
+```html
 <div class="scene" data-scene="full-scene" data-scene-hook="onCenter"></div>
 ```
 
@@ -285,7 +271,7 @@ When registering a scene, you also have some listeners you can add.
 
 At the moment, only `onEnter`, `onProgress` and `onLeave` are available:
 
-```
+```js
 import ScrollXP from "scrollxp"
 
 var view = new ScrollXP({
@@ -307,14 +293,14 @@ var customScene = new ScrollXP.Scene("custom-scene")
 view.register(customScene)
 ```
 
-### Scene limitations
+### Scene Limitations
 
 At the moment, scenes have some limitations:
 
 - If you use `data-scene-class-toggle`, pins and animations won't apply.
 - If you use `data-scene-pin`, class toggle and animations won't apply.
 
-## Adding animations
+## Add Animations
 
 When you create a scene, _ScrollXP_ will generate a [Timeline](https://greensock.com/docs/v3/GSAP/Timeline).
 
@@ -362,13 +348,13 @@ Then, in the same DOM element, you can setup your animation by adding properties
 | `duration`                                                                                                                                                           | `number`  | `undefined` | Sets the animation's duration.                                                                                                                                                                                     |
 | `stagger`                                                                                                                                                            | `number`  | `undefined` | Amount of time in seconds to stagger the start time of each tween. **The DOM element children will be animated instead.**                                                                                          |
 
-### Reusable animations
+### Reusable Animations
 
 Instead of adding the same animation properties for every element you want to animate, you can register **custom animations**.
 
 For example, imagine you have an element like this:
 
-```
+```html
 <div class="scene" data-scene>
   <div class="box" data-animate data-animate-from-alpha="0" data-animate-to-alpha="1"></div>
 </div>
@@ -376,7 +362,7 @@ For example, imagine you have an element like this:
 
 You could instead, tell to this element to use a registered animation called `fade-in`:
 
-```
+```html
 <div class="scene" data-scene>
   <div class="box" data-animate="fade-in"></div>
 </div>
@@ -384,7 +370,7 @@ You could instead, tell to this element to use a registered animation called `fa
 
 Then, you need to register that animation on the library. You do that by using an exposed class builder called `Animation`:
 
-```
+```js
 import ScrollXP from "scrollxp"
 
 var view = new ScrollXP({
@@ -406,7 +392,7 @@ That means you can use the registered properties as a base and change it in spec
 
 For example, if you want an element to fade in starting from `0.5` opacity, you would do that:
 
-```
+```html
 <div class="scene" data-scene>
   <div class="box" data-animate="fade-in" data-animate-from-alpha="0.5"></div>
 </div>
@@ -420,13 +406,13 @@ When you set an attribute of `data-animate-from-*` or `data-animate-to-*`, the _
 - gsap method `from()` in the case you're only using `data-animate-from-*`. See [reference](<https://greensock.com/docs/v3/GSAP/gsap.from()>).
 - gsap method `to()` in the case you're only using `data-animate-to-*`. See [reference](<https://greensock.com/docs/v3/GSAP/gsap.to()>).
 
-## Parallax effect
+## Parallax Effect
 
 There are two ways to set up parallax elements with _ScrollXP_, you have **global** elements and **scene** elements.
 
 For default, every parallax element is created as a **global** element.
 
-### Global parallax
+### Global Parallax
 
 A global parallax element will be active throughout the extension of the _ScrollXP_ container.
 
@@ -443,7 +429,7 @@ Then, in the same DOM element, you can setup the parallax effect by adding prope
 | `stagger`  | `number`  |    `undefined`    | Amount of time in seconds to stagger the start time of each tween. **The DOM element children will be animated instead.**                                                                                                     |
 | `enabled`  | `boolean` |      `true`       | Use it to disable the parallax for other screen sizes. Check out the breakpoints section.                                                                                                                                     |
 
-### Scene parallax
+### Scene Parallax
 
 This type of parallax effect has a start and an end, behaving like a common animation scene.
 
@@ -461,13 +447,13 @@ So, in the same DOM element, you can add the properties below:
 | `offset`    |       `number`       |     `0`     | The offset in pixels for the scene start.                                                                                                                                                 |
 | `indicator` |       `string`       | `undefined` | Add visual indicators. Use it to debug.                                                                                                                                                   |
 
-## Working with breakpoints
+## Work with Breakpoints
 
 One of the most useful things about _ScrollXP_ is its capability of working with breakpoints.
 
 For default, the breakpoints that the library works with looks like:
 
-```
+```js
 {
   sm: 576,
   md: 768,
@@ -479,7 +465,7 @@ For default, the breakpoints that the library works with looks like:
 
 You can change those values by setting a new JSON object when initializing the library, for example:
 
-```
+```js
 var view = new ScrollXP({
   container: document.querySelector('main'),
   breakpoints: {
@@ -498,19 +484,19 @@ The breakpoint key comes right after `data` and before the property.
 
 For example, if you want to enable a scene for the `md` breakpoint only, you need to disable the scene for `xs` and then enable it for `md`, like:
 
-```
+```html
 <div data-scene data-xs-scene-enable="false" data-md-scene-enable="true"></div>
 ```
 
 All the properties accept this syntax.
 
-## Changing defaults
+## Change Defaults
 
 You can change all the Animations, Scenes and Parallax default values through the method `setDefault()`. In order to do that, you need to use the exposed class builders.
 
 Fox example:
 
-```
+```js
 import ScrollXP from "scrollxp"
 
 var view = new ScrollXP({
@@ -529,7 +515,7 @@ view.setDefault(new ScrollXP.Parallax().speed(4).build())
 
 All the animations, scenes and parallax properties are avaiable as methods in their builder classes in `camelCase`.
 
-## Bind menu to page sections
+## Menu Links and Page Sections
 
 Two common features request that comes up when working with scroll animations are:
 
@@ -542,7 +528,7 @@ You just need to pass a list of DOM elements with the **anchors** for the sectio
 
 For example, you have an HTML like this:
 
-```
+```html
 <ul>
   <li>
     <a href="#section1">Section 1</a>
@@ -562,7 +548,7 @@ For example, you have an HTML like this:
 
 Then, you can call the method for those anchors like:
 
-```
+```js
 var view = new ScrollXP(...)
 
 var anchors = document.querySelectorAll("a[href^='#']")
@@ -585,7 +571,7 @@ gsap.registerPlugin(ScrollToPlugin);
 
 If not, just add the script:
 
-```
+```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/ScrollToPlugin.min.js"></script>
 ```
 
@@ -603,13 +589,31 @@ With that in mind, _ScrollXP_ purposes:
 - Easily allow responsive animations
 - Enabling/disabling smooth scrolling with one line
 
-## How to release
+## Development
+
+### Run Local
+
+To get it up and running for development porposes, run:
+
+```
+$ npm install
+```
+
+Then:
+
+```
+$ npm run start
+```
+
+Then access `http://localhost:3000`
+
+### How to Release
 
 It's not necessary to run `npm run compile` nor `npm run bundle` first.
 
 To release, just commit all changes then run `npm run release`.
 
-## TO DO
+### To Do
 
 There are still **a ton** of work to do here, below are just a few of them:
 
