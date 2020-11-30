@@ -3,19 +3,48 @@ import Indicator from "."
 
 export default {
   start(color: string): HTMLElement {
-    // Inner element (for bottom offset -1, while keeping top position 0)
-    const inner = document.createElement("div")
-    inner.textContent = "start"
-    domUtils.css(inner, {
+    const tagBackArrow = document.createElement("div")
+    domUtils.css(tagBackArrow, {
+      width: 0,
+      height: 0,
       position: "absolute",
-      overflow: "visible",
-      "border-width": 0,
-      "border-style": "solid",
-      color: color,
-      "border-color": color,
+      right: "-3px",
+      "z-index": -1,
     })
 
-    // Wrapper
+    const tagFrontArrow = document.createElement("div")
+    domUtils.css(tagFrontArrow, {
+      width: 0,
+      height: 0,
+      position: "relative",
+      "z-index": 2,
+    })
+
+    const tagBlock = document.createElement("div")
+    tagBlock.textContent = "start"
+    domUtils.css(tagBlock, {
+      "font-family": "Arial, sans-serif",
+      "font-weight": "bold",
+      "font-size": Indicator.FONT_SIZE,
+      "line-height": Indicator.LINE_HEIGHT,
+      "background-color": "#fff",
+      color: "currentColor",
+      border: "2px solid white",
+      "box-shadow": "4px 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.1)",
+      "border-color": "currentColor",
+    })
+
+    const tag = document.createElement("div")
+    domUtils.css(tag, {
+      position: "absolute",
+      overflow: "visible",
+      display: "flex",
+      color: color,
+    })
+    tag.appendChild(tagBlock)
+    tag.appendChild(tagBackArrow)
+    tag.appendChild(tagFrontArrow)
+
     const elem = document.createElement("div")
     domUtils.css(elem, {
       position: "absolute",
@@ -23,21 +52,61 @@ export default {
       width: 0,
       height: 0,
     })
-    elem.appendChild(inner)
+    elem.appendChild(tag)
 
     return elem
   },
   end(color: string): HTMLElement {
+    const tagBackArrow = document.createElement("div")
+    domUtils.css(tagBackArrow, {
+      width: 0,
+      height: 0,
+      position: "absolute",
+      right: "-3px",
+      "z-index": -1,
+    })
+
+    const tagFrontArrow = document.createElement("div")
+    domUtils.css(tagFrontArrow, {
+      width: 0,
+      height: 0,
+      position: "relative",
+      "z-index": 2,
+    })
+
+    const tagBlock = document.createElement("div")
+    tagBlock.textContent = "end"
+    domUtils.css(tagBlock, {
+      "font-family": "Arial, sans-serif",
+      "font-weight": "bold",
+      "font-size": Indicator.FONT_SIZE,
+      "line-height": Indicator.LINE_HEIGHT,
+      "background-color": "#fff",
+      color: "currentColor",
+      border: "2px solid white",
+      "box-shadow": "4px 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.1)",
+      "border-color": "currentColor",
+    })
+
+    const tag = document.createElement("div")
+    domUtils.css(tag, {
+      position: "absolute",
+      overflow: "visible",
+      display: "flex",
+      color: color,
+    })
+    tag.appendChild(tagBlock)
+    tag.appendChild(tagBackArrow)
+    tag.appendChild(tagFrontArrow)
+
     const elem = document.createElement("div")
-    elem.textContent = "end"
     domUtils.css(elem, {
       position: "absolute",
       overflow: "visible",
-      "border-width": 0,
-      "border-style": "solid",
-      color: color,
-      "border-color": color,
+      width: 0,
+      height: 0,
     })
+    elem.appendChild(tag)
     return elem
   },
   bounds(): HTMLElement {
@@ -99,6 +168,7 @@ export default {
       overflow: "visible",
       "white-space": "nowrap",
       "pointer-events": "none",
+      color: color,
     })
     elem.style.zIndex = Indicator.ZINDEX
     elem.appendChild(tag)

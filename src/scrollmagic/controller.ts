@@ -173,7 +173,7 @@ export default class Controller implements IBaseController {
                 "margin-top": "2px",
                 "border-top": "0 solid transparent",
                 "border-bottom": "19px solid transparent",
-                "border-right": "8px solid black",
+                "border-right": "8px solid currentColor",
                 "margin-right": "-2px",
               })
               DomUtils.css(tagBlock, {
@@ -198,7 +198,7 @@ export default class Controller implements IBaseController {
                 "margin-bottom": "2px",
                 "border-top": "19px solid transparent",
                 "border-bottom": "0 solid transparent",
-                "border-right": "8px solid black",
+                "border-right": "8px solid currentColor",
                 "margin-right": "-2px",
               })
               DomUtils.css(tagBlock, {
@@ -223,7 +223,7 @@ export default class Controller implements IBaseController {
               DomUtils.css(tagFrontArrow, {
                 "border-top": "10px solid transparent",
                 "border-bottom": "10px solid transparent",
-                "border-right": "9px solid black",
+                "border-right": "9px solid currentColor",
                 "margin-right": "-3px",
               })
               DomUtils.css(tagBlock, {
