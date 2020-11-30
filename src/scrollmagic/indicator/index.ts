@@ -21,9 +21,9 @@ export interface IndicatorGroup {
 }
 
 const DEFAULT = {
-  colorStart: "green",
-  colorEnd: "red",
-  colorTrigger: "blue",
+  colorStart: "#4385f4",
+  colorEnd: "#ff0a16",
+  colorTrigger: "#4385f4",
 }
 
 export default class Indicator {
@@ -39,9 +39,10 @@ export default class Indicator {
   public bounds: HTMLElement
   public triggerGroup?: IndicatorGroup
 
-  public static FONT_SIZE = "0.85em"
+  public static FONT_SIZE = "14px"
+  public static LINE_HEIGHT = "16px"
   public static ZINDEX = "9999"
-  public static EDGE_OFFSET = 15
+  public static EDGE_OFFSET = 0
 
   constructor(scene: Scene, options?: IndicatorOptions, autoIndex?: number) {
     this.scene = scene
@@ -52,10 +53,12 @@ export default class Indicator {
     this.elemEnd = Template.end(this.options.colorEnd || DEFAULT.colorEnd)
 
     // Prepare bounds elements
-    if (this.elemStart.firstChild) {
-      this.elemStart.firstChild.textContent += ` ${this.options.name}`
+    if (this.elemStart.firstChild && this.elemStart.firstChild.firstChild) {
+      this.elemStart.firstChild.firstChild.textContent += ` ${this.options.name}`
     }
-    this.elemEnd.textContent += ` ${this.options.name}`
+    if (this.elemEnd.firstChild && this.elemEnd.firstChild.firstChild) {
+      this.elemEnd.firstChild.firstChild.textContent += ` ${this.options.name}`
+    }
     this.elemBounds.appendChild(this.elemStart)
     this.elemBounds.appendChild(this.elemEnd)
 
@@ -155,22 +158,26 @@ export default class Indicator {
     const isVertical: boolean = this.controller.info().isVertical
 
     // Apply stuff we didn't know before...
+
+    // ...to start element
     DomUtils.css(<HTMLElement>this.elemStart.firstChild, {
-      "border-bottom-width": isVertical ? 1 : 0,
-      "border-right-width": isVertical ? 0 : 1,
-      bottom: isVertical ? -1 : this.options.indent,
       right: isVertical ? this.options.indent : -1,
-      padding: isVertical ? "0 8px" : "2px 4px",
+    })
+    DomUtils.css(<HTMLElement>this.elemStart.firstChild?.firstChild, {
+      padding: isVertical ? "4px 8px 6px 8px" : "2px 4px",
     })
 
-    DomUtils.css(this.elemEnd, {
-      "border-top-width": isVertical ? "1" : "0",
-      "border-left-width": isVertical ? "0" : "1",
+    // ...to end element
+    DomUtils.css(<HTMLElement>this.elemEnd, {
       top: isVertical ? "100%" : "",
+      left: isVertical ? "" : "100%",
+    })
+    DomUtils.css(<HTMLElement>this.elemEnd.firstChild, {
       right: isVertical ? this.options.indent : "",
       bottom: isVertical ? "" : this.options.indent,
-      left: isVertical ? "" : "100%",
-      padding: isVertical ? "0 8px" : "2px 4px",
+    })
+    DomUtils.css(<HTMLElement>this.elemEnd.firstChild?.firstChild, {
+      padding: isVertical ? "4px 8px 6px 8px" : "2px 4px",
     })
 
     // Append
@@ -199,9 +206,97 @@ export default class Indicator {
 
     DomUtils.css(this.elemBounds, css)
 
-    DomUtils.css(this.elemEnd, {
-      display: this.scene.duration > 0 ? "" : "none",
-    })
+    const startTag = <HTMLElement>this.elemStart.firstChild
+    const startTagBlock = <HTMLElement>startTag.children[0]
+    const startTagBackArrow = <HTMLElement>startTag.children[1]
+    const startTagFrontArrow = <HTMLElement>startTag.children[2]
+
+    const endTag = <HTMLElement>this.elemEnd.firstChild
+    const endTagBlock = <HTMLElement>endTag.children[0]
+    const endTagBackArrow = <HTMLElement>endTag.children[1]
+    const endTagFrontArrow = <HTMLElement>endTag.children[2]
+
+    // Has duration?
+    if (this.scene.duration > 0) {
+      // Modify start tag style
+      DomUtils.css(startTag, {
+        "align-items": "flex-start",
+        transform: "translate3d(-5px, 0, 0)",
+      })
+      DomUtils.css(startTagBlock, {
+        "border-top-left-radius": "9px",
+        "border-top-right-radius": "0",
+        "border-bottom-left-radius": "9px",
+        "border-bottom-right-radius": "11px",
+      })
+      DomUtils.css(startTagBackArrow, {
+        top: 0,
+        transform: "",
+        "border-top": "0 solid transparent",
+        "border-bottom": "24px solid transparent",
+        "border-left": "10px solid currentColor",
+      })
+      DomUtils.css(startTagFrontArrow, {
+        "margin-top": "2px",
+        "border-top": "0 solid transparent",
+        "border-bottom": "19px solid transparent",
+        "border-left": "8px solid #fff",
+        "margin-left": "-2px",
+      })
+      // Modify end tag style
+      DomUtils.css(this.elemEnd, {
+        display: "",
+      })
+      DomUtils.css(endTag, {
+        "align-items": "flex-end",
+        transform: "translate3d(-5px, -100%, 0)",
+      })
+      DomUtils.css(endTagBlock, {
+        "border-top-left-radius": "9px",
+        "border-bottom-left-radius": "9px",
+        "border-top-right-radius": "11px",
+      })
+      DomUtils.css(endTagBackArrow, {
+        bottom: 0,
+        "border-top": "24px solid transparent",
+        "border-bottom": "0 solid transparent",
+        "border-left": "10px solid currentColor",
+      })
+      DomUtils.css(endTagFrontArrow, {
+        "margin-bottom": "2px",
+        "border-top": "19px solid transparent",
+        "border-bottom": "0 solid transparent",
+        "border-left": "8px solid #fff",
+        "margin-left": "-2px",
+      })
+    } else {
+      // Modify start tag style
+      DomUtils.css(startTag, {
+        "align-items": "center",
+        transform: "translate3d(-5px, -50%, 0)",
+      })
+      DomUtils.css(startTagBlock, {
+        "border-radius": "9px",
+      })
+      DomUtils.css(startTagBackArrow, {
+        top: "50%",
+        transform: "translate3d(0, -50%, 0)",
+        "border-top": "12px solid transparent",
+        "border-bottom": "12px solid transparent",
+        "border-left": "12px solid currentColor",
+      })
+      DomUtils.css(startTagFrontArrow, {
+        "margin-top": "",
+        "border-top": "10px solid transparent",
+        "border-bottom": "10px solid transparent",
+        "border-left": "9px solid #fff",
+        "margin-left": "-3px",
+      })
+      // Hide end tag
+      DomUtils.css(this.elemEnd, {
+        display: "none",
+      })
+    }
   }
 
   /*
@@ -216,12 +311,11 @@ export default class Indicator {
 
     const css = {}
     css[this.isVertical ? "right" : "bottom"] = 0
-    css[this.isVertical ? "border-top-width" : "border-left-width"] = 1
 
     DomUtils.css(<HTMLElement>triggerElem.firstChild, css)
 
-    DomUtils.css(<HTMLElement>triggerElem.firstChild?.firstChild, {
-      padding: this.isVertical ? "0 8px 3px 8px" : "3px 4px",
+    DomUtils.css(<HTMLElement>triggerElem.firstChild?.lastChild, {
+      padding: this.isVertical ? "4px 8px 6px 8px" : "3px 4px",
     })
 
     document.body.appendChild(triggerElem) // Directly add to body
