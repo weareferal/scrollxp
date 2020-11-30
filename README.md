@@ -38,9 +38,10 @@ See [demo](https://weareferal.github.io/scrollxp/) here.
 - [Change Defaults](https://github.com/weareferal/scrollxp#change-defaults)
 - [Menu Links and Page Sections](https://github.com/weareferal/scrollxp#menu-links-and-page-sections)
 - [Motivation](https://github.com/weareferal/scrollxp#motivation)
-- [Run Local](https://github.com/weareferal/scrollxp#run-local)
-- [How to Release](https://github.com/weareferal/scrollxp#how-to-release)
-- [To Do](https://github.com/weareferal/scrollxp#to-do)
+- [Development](https://github.com/weareferal/scrollxp#development)
+  - [Run Local](https://github.com/weareferal/scrollxp#run-local)
+  - [How to Release](https://github.com/weareferal/scrollxp#how-to-release)
+  - [To Do](https://github.com/weareferal/scrollxp#to-do)
 - [License](https://github.com/weareferal/scrollxp#license)
 
 ## Installation
