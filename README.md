@@ -4,6 +4,11 @@ It's a library for scrolling animations based on [ScrollMagic](http://scrollmagi
 
 See [demo](https://weareferal.github.io/scrollxp/) here.
 
+Other examples:
+- [Fade In Down Animation](https://codepen.io/weareferal/full/eYdNNzq)
+- [Piano Key Animation](https://codepen.io/weareferal/full/WNGvvpY)
+- [Parallax Animation](https://codepen.io/weareferal/full/abmOOwd)
+
 ## Features
 
 _ScrollXP_ allows you to:
