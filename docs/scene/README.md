@@ -30,14 +30,14 @@ This way you can reuse the same scene configuration throughout your project.
 
 There are some properties you can change on a scene. They are:
 
-- [Trigger Element](scene-properties#trigger-element)
-- [Hook](scene-properties#hook)
-- [Duration](scene-properties#duration)
-- [Reverse](scene-properties#reverse)
-- [Enabled](scene-properties#enabled)
-- [Indicator](scene-properties#indicator)
-- [Class Toggle](scene-properties#class-toggle)
-- [Pin](scene-properties#pin)
+- [Trigger Element](scene-properties.md#trigger-element)
+- [Hook](scene-properties.md#hook)
+- [Duration](scene-properties.md#duration)
+- [Reverse](scene-properties.md#reverse)
+- [Enabled](scene-properties.md#enabled)
+- [Indicator](scene-properties.md#indicator)
+- [Class Toggle](scene-properties.md#class-toggle)
+- [Pin](scene-properties.md#pin)
 
 And there are 4 ways to set scene properties:
 
@@ -160,8 +160,8 @@ See full [documentation](scene-properties.md).
 
 At the moment, there are 3 different listeners you can add to a scene:
 
-- [`onEnter` listener](scene-listeners#onenter-listener)
-- [`onLeave` listener](scene-listeners#onleave-listener)
-- [`onProgress` listener](scene-listeners#onprogress-listener)
+- [`onEnter` listener](scene-listeners.md#onenter-listener)
+- [`onLeave` listener](scene-listeners.md#onleave-listener)
+- [`onProgress` listener](scene-listeners.md#onprogress-listener)
 
 See full [documentation](scene-listeners.md).
