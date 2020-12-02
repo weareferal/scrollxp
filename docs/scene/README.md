@@ -1,6 +1,6 @@
 # Scene
 
-A scene defines a scope for the animations, and they can only work inside of it.
+A scene defines a scope for animations, and they can only work inside of it.
 
 ## Declaration
 
@@ -28,7 +28,7 @@ This way you can reuse the same scene configuration throughout your project.
 
 ## Properties
 
-There are some properties you can change on a scene. They are:
+These are the properties you can change on a scene:
 
 - [Trigger Element](scene-properties.md#trigger-element)
 - [Hook](scene-properties.md#hook)
@@ -39,7 +39,9 @@ There are some properties you can change on a scene. They are:
 - [Class Toggle](scene-properties.md#class-toggle)
 - [Pin](scene-properties.md#pin)
 
-And there are 4 ways to set scene properties:
+## Properties Attribution
+
+There are 4 ways to set scene properties:
 
 - [Default Properties](#default-properties)
 - [Registered Properties](#registered-properties)
