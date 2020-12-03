@@ -42,33 +42,34 @@ There are two different types of properties you can set to animations: **state p
 
 These are properties that change the animation **look**.
 
-- Alpha (Opacity)
-- X Position
-- Y Position
-- X Percent Position
-- Y Percent Position
-- Scale
-- Rotation
-- Rotation X
-- Rotation Y
-- Skew X
-- Skew Y
-- Width
-- Height
+- [Alpha (Opacity)](animation-properties.md#alpha-opacity)
+- [X Position](animation-properties.md#x-position)
+- [Y Position](animation-properties.md#y-position)
+- [X Percent Position](animation-properties.md#x-percent-position)
+- [Y Percent Position](animation-properties.md#y-percent-position)
+- [Scale](animation-properties.md#scale)
+- [Rotation](animation-properties.md#rotation)
+- [Rotation X](animation-properties.md#rotation-x)
+- [Rotation Y](animation-properties.md#rotation-y)
+- [Skew X](animation-properties.md#skew-x)
+- [Skew Y](animation-properties.md#skew-y)
+- [Width](animation-properties.md#width)
+- [Height](animation-properties.md#height)
 
 ### Control Properties
 
 These are properties that change the animation **behavior**.
 
-- Delay
-- Label
-- Position
-- Ease
-- Repeat
-- Yoyo
-- Transform Origin
-- Duration
-- Stagger
+- [Delay](animation-properties.md#delay)
+- [Label](animation-properties.md#label)
+- [Position](animation-properties.md#position)
+- [Ease](animation-properties.md#ease)
+- [Repeat](animation-properties.md#repeat)
+- [Yoyo](animation-properties.md#yoyo)
+- [Transform Origin](animation-properties.md#transform-origin)
+- [Duration](animation-properties.md#duration)
+- [Stagger](animation-properties.md#stagger)
+- [Momentum](animation-properties.md#momentum)
 
 ## Properties Attribution
 

@@ -380,9 +380,9 @@ In the above example, the **Animation 3** will start running at the same time th
 
 Sets the timing of the animation.
 
-| Property            | Builder Method | Type     |
-| ------------------- | -------------- | -------- |
-| `data-animate-ease` | `.ease()`      | `string` |
+| Property            | Builder Method | Type     | Default      |
+| ------------------- | -------------- | -------- | ------------ |
+| `data-animate-ease` | `.ease()`      | `string` | `power1.out` |
 
 Accepted values:
 
@@ -435,10 +435,145 @@ In the above example, the `<div>` will animate from 100px bottom to -100px top b
 
 ## Repeat
 
+Sets how many times the animation should repeat after its first iteration.
+
+| Property              | Builder Method | Type     | Default |
+| --------------------- | -------------- | -------- | ------- |
+| `data-animate-repeat` | `.repeat()`    | `number` | `0`     |
+
+**Example:**
+
+```html
+<div data-scene>
+  <div data-animate data-animate-from-alpha="0" data-animate-to-alpha="1" data-animate-repeat="1"></div>
+</div>
+```
+
+In the above example, the `<div>` will animate 2 times, restarting from opacity `0` to opacity `1` in the second time.
+
+> **Note:** In case you need the animation runs backwards, check the [yoyo](#yoyo) property.
+
 ## Yoyo
+
+Sets the timeline's yoyo state.
+
+When it's `true` causes the animation to go back and forth, alternating backward and forward on each [repeat](#repeat).
+
+| Property            | Builder Method | Type      | Default |
+| ------------------- | -------------- | --------- | ------- |
+| `data-animate-yoyo` | `.yoyo()`      | `boolean` | `false` |
+
+**Example:**
+
+```html
+<div data-scene>
+  <div
+    data-animate
+    data-animate-from-alpha="0"
+    data-animate-to-alpha="1"
+    data-animate-repeat="1"
+    data-animate-yoyo="true"
+  ></div>
+</div>
+```
+
+In the above example, the `<div>` will animate 2 times, the first one from opacity `0` to opacity `1`, the second one from opacity `1` to opacity `0`.
 
 ## Transform Origin
 
+Sets the animation transform reference.
+
+It works like the [CSS property](https://developer.mozilla.org/en-US/docs/Web/CSS/transform-origin), and applies for:
+
+- [X Position](#x-position)
+- [Y Position](#y-position)
+- [X Percent Position](#x-percent-position)
+- [Y Percent Position](#y-percent-position)
+- [Scale](#scale)
+- [Rotation](#rotation)
+- [Rotation X](#rotation-x)
+- [Rotation Y](#rotation-y)
+- [Skew X](#skew-x)
+- [Skew Y](#skew-y)
+
+| Property                        | Builder Method       | Type     | Default  |
+| ------------------------------- | -------------------- | -------- | -------- |
+| `data-animate-transform-origin` | `.transformOrigin()` | `string` | `center` |
+
+**Example:**
+
+```html
+<div data-scene>
+  <div data-animate data-animate-from-scale="1" data-animate-to-scale="2" data-animate-tranform-origin="top left"></div>
+</div>
+```
+
+In the above example, the `<div>` will grow to 2x its original size from the top left corner.
+
 ## Duration
 
+Sets the animation duration in seconds.
+
+> **Note:** It only works when the scene duration is `0`.
+
+| Property                | Builder Method | Type     | Default |
+| ----------------------- | -------------- | -------- | ------- |
+| `data-animate-duration` | `.duration()`  | `number` | `1`     |
+
+**Example:**
+
+```html
+<div data-scene>
+  <div data-animate data-animate-from-scale="1" data-animate-to-scale="2" data-animate-duration="2"></div>
+</div>
+```
+
+In the above example, the `<div>` will grow to 2x its original size in 2 seconds.
+
 ## Stagger
+
+It's used to create a sequential animation with the **HTML element children**.
+
+Sets the amount of time in seconds that separates each animation.
+
+> **Note:** When adding this property, all the other properties will use the HTML element children instead of itself.
+
+| Property               | Builder Method | Type     |
+| ---------------------- | -------------- | -------- |
+| `data-animate-stagger` | `.stagger()`   | `number` |
+
+**Example:**
+
+```html
+<div data-scene>
+  <div data-animate data-animate-from-alpha="0" data-animate-to-alpha="1" data-animate-stagger="0.2">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+```
+
+In the above example, the `<span>`s will animate sequentially from opacity `0` to opacity `1`, and each transition will start with an interval of 200ms between them.
+
+## Momentum
+
+Sets the amount of time in seconds that the animation will continue running after the scroll stops.
+
+It's used to create a smooth effect.
+
+> **Note:** It's only useful for scenes with duration > 0.
+
+| Property               | Builder Method | Type     | Default |
+| ---------------------- | -------------- | -------- | ------- |
+| `data-animate-stagger` | `.stagger()`   | `number` | `0`     |
+
+**Example:**
+
+```html
+<div data-scene data-scene-duration="600">
+  <div data-animate data-animate-from-scale="1" data-animate-to-scale="2" data-animate-momentum="0.5"></div>
+</div>
+```
+
+In the above example, the `<div>` will continue animating for 500ms after the scroll stops.
