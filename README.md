@@ -54,6 +54,8 @@ let view = new ScrollXP({
 })
 ```
 
+Check the documentation about how to create [scenes](/docs/scene/README.md), [animations](/docs/animation/README.md) and [parallax effect](/docs/parallax/README.md).
+
 ## Questions?
 
 File a [GitHub issue](https://github.com/weareferal/scrollxp/issues/new) please.
