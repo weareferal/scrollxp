@@ -13,15 +13,15 @@ _ScrollXP_ is a library that makes it easy to create scrolling animations using 
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Configuration](/docs/configuration.md)
-  - [Debug](/docs/configuration.md#debug)
-  - [Breakpoints](/docs/configuration.md#breakpoints)
-  - [Scroll To Anchors](/docs/configuration.md#scroll-to-anchors)
-  - [Smooth Scrolling](/docs/configuration.md#smooth-scrolling)
-- [Scene](/docs/scene/README.md)
-- [Animation](/docs/animation/README.md)
-- [Parallax](/docs/parallax/README.md)
-- [Development](/docs/development.md)
+- [Configuration](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md)
+  - [Debug](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md#debug)
+  - [Breakpoints](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md#breakpoints)
+  - [Scroll To Anchors](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md#scroll-to-anchors)
+  - [Smooth Scrolling](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md#smooth-scrolling)
+- [Scene](https://github.com/weareferal/scrollxp/blob/master/docs/scene/README.md)
+- [Animation](https://github.com/weareferal/scrollxp/blob/master/docs/animation/README.md)
+- [Parallax](https://github.com/weareferal/scrollxp/blob/master/docs/parallax/README.md)
+- [Development](https://github.com/weareferal/scrollxp/blob/master/docs/development.md)
 
 ## Installation
 
@@ -54,7 +54,7 @@ let view = new ScrollXP({
 })
 ```
 
-Check the documentation about how to create [scenes](/docs/scene/README.md), [animations](/docs/animation/README.md) and [parallax effect](/docs/parallax/README.md).
+Check the documentation about how to create [scenes](https://github.com/weareferal/scrollxp/blob/master/docs/scene/README.md), [animations](https://github.com/weareferal/scrollxp/blob/master/docs/animation/README.md) and [parallax effect](https://github.com/weareferal/scrollxp/blob/master/docs/parallax/README.md).
 
 ## Questions?
 
