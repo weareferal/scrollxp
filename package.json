@@ -72,6 +72,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "execa": "^0.8.0",
     "fs": "0.0.1-security",
+    "gsap": "^3.5.1",
     "inquirer": "^6.5.2",
     "ip": "^1.1.5",
     "jsdom": "^16.4.0",
@@ -83,6 +84,7 @@
     "nyc": "^15.1.0",
     "path": "^0.12.7",
     "prettier": "^2.1.2",
+    "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "semver": "^5.7.1",
     "source-map-support": "^0.5.19",
@@ -96,8 +98,6 @@
     "webpack-merge": "^5.4.0"
   },
   "dependencies": {
-    "gsap": "^3.5.1",
-    "reflect-metadata": "^0.1.13",
     "smooth-scrollbar": "^8.5.3"
   }
 }
