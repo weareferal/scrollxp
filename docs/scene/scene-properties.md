@@ -69,9 +69,9 @@ It accepts two types of values:
 
    A value of `0` means that the scene is "open end" and no end will be triggered. Pins will never unpin and animations will play independently of scroll progress.
 
-2. `string`: Always updates the duration relative to parent scroll container.
+2. `string`: Always updates the duration relative to the screen viewport height.
 
-   For example, "100%" will keep the duration always exactly at the inner height of the scroll container.
+   For example, "100%" will keep the duration the same than the viewport height.
 
 **Example:**
 
@@ -79,7 +79,7 @@ It accepts two types of values:
 <div data-scene data-scene-duration="200"></div>
 ```
 
-In the above example, the animations inside the scene will run during the next `200px` once triggered.
+In the above example, the animations inside the scene will run during the next 200px once triggered.
 
 ## Reverse
 
@@ -97,7 +97,9 @@ Sets whether the scene animations should reverse when scrolling up.
 
 ## Enabled
 
-Sets whether the scene is enabled or not. It's used with breakpoints to enable/disable scenes for different screen resolutions.
+Sets whether the scene is enabled or not.
+
+It's used with breakpoints to enable/disable scenes for different screen resolutions.
 
 | Property             | Builder Method | Type      | Default Value |
 | -------------------- | -------------- | --------- | ------------- |

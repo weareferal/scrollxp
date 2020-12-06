@@ -534,7 +534,7 @@ In the above example, the `<div>` will grow to 2x its original size in 2 seconds
 
 It's used to create a sequential animation with the **HTML element children**.
 
-Sets the amount of time in seconds that separates each animation.
+Sets the time in seconds that separates each animation.
 
 > **Note:** When adding this property, all the other properties will use the HTML element children instead of itself.
 
@@ -558,7 +558,7 @@ In the above example, the `<span>`s will animate sequentially from opacity `0` t
 
 ## Momentum
 
-Sets the amount of time in seconds that the animation will continue running after the scroll stops.
+Sets the time in seconds that the animation will continue running after you stop scrolling.
 
 It's used to create a smooth effect.
 
