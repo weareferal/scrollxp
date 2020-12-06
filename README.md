@@ -11,8 +11,8 @@ _ScrollXP_ is a library that makes it easy to create scrolling animations using 
 
 ## Quick Access
 
-- [Install](#install)
-- [Use](#use)
+- [Installation](#installation)
+- [Usage](#usage)
 - [Configuration](/docs/configuration.md)
   - [Debug](/docs/configuration.md#debug)
   - [Breakpoints](/docs/configuration.md#breakpoints)
@@ -23,7 +23,9 @@ _ScrollXP_ is a library that makes it easy to create scrolling animations using 
 - [Parallax](/docs/parallax/README.md)
 - [Development](/docs/development.md)
 
-## Install
+## Installation
+
+Via **NPM**:
 
 ```
 $ npm install gsap scrollxp --save
@@ -31,27 +33,25 @@ $ npm install gsap scrollxp --save
 
 > **Note**: You need to use GSAP 3 or greater.
 
-## Use
+Include it in your script.
 
 ```js
 import ScrollXP from "scrollxp"
-
-let view = new ScrollXP({
-  container: document.body,
-})
 ```
 
-Or:
+Or via **CDN**:
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/gsap.min.js"></script>
 <script src="https://cdn.weareferal.com/scrollxp-2.0.3.js"></script>
+```
 
-<script>
-  var view = new ScrollXP({
-    container: document.body,
-  })
-</script>
+## Usage
+
+```js
+let view = new ScrollXP({
+  container: document.body,
+})
 ```
 
 ## Questions?
