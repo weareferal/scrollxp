@@ -109,14 +109,14 @@ function runTask(options) {
       );
     },
   }, {
+    title: `Bump NPM version: ${pkg.version} -> ${options.version}`,
+    task: () => execa.command(`npm version ${options.version}`),
+  }, {
     title: "Commit changes",
     task: async () => {
       await execa.command("git add --all");
       await execa.command(`git commit -m "[Build] ${options.version}"`);
-    }
-  }, {
-    title: `Bump NPM version: ${pkg.version} -> ${options.version}`,
-    task: () => execa.command(`npm version ${options.version}`),
+    },
   }, {
     title: "Copy files to working directory",
     task: () => {
