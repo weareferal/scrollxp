@@ -2,7 +2,7 @@
 
 _ScrollXP_ is a library that makes it easy to create scrolling animations using HTML data attributes.
 
-<img src="https://res.cloudinary.com/djst7cf98/image/upload/v1607392236/animation-gif.gif" width="100%">
+<img src="https://res.cloudinary.com/djst7cf98/image/upload/v1607394295/scroll-animations.gif" width="100%">
 
 ## Demos
 
