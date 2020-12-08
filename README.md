@@ -33,7 +33,7 @@ $ npm install gsap scrollxp --save
 
 > **Note**: You need to use GSAP 3 or greater.
 
-Include it in your script.
+Include it in your script:
 
 ```js
 import ScrollXP from "scrollxp"
@@ -49,7 +49,7 @@ Or via **CDN**:
 ## Usage
 
 ```js
-let view = new ScrollXP({
+new ScrollXP({
   container: document.body,
 })
 ```
