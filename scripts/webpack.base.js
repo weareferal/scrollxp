@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-// const CircularDependencyPlugin = require('circular-dependency-plugin');
 
 const joinRoot = path.join.bind(path, __dirname, '..')
 
@@ -31,12 +30,8 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      __SCROLLXP_VERSION__: JSON.stringify(process.env.SCROLLMAGIC_VERSION || require('../package.json').version),
+      __SCROLLXP_VERSION__: JSON.stringify(process.env.SCROLLXP_VERSION || require('../package.json').version),
     }),
-    // new CircularDependencyPlugin({
-    //   exclude: /node_modules/,
-    //   failOnError: true,
-    // }),
   ],
   stats: {
     modules: false,

@@ -1,7 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
 const { merge } = require("webpack-merge");
-const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 
 const baseConfig = require("./webpack.base")
 
@@ -12,7 +11,7 @@ module.exports = merge(baseConfig, {
   entry: [joinRoot("src/index.ts")],
   output: {
     path: joinRoot("dist/"),
-    filename: "scrollxp.js",
+    filename: "scrollxp.min.js",
     library: "ScrollXP",
     libraryTarget: "umd",
     libraryExport: "default",
@@ -26,5 +25,4 @@ module.exports = merge(baseConfig, {
       root: "gsap"
     }
   },
-  plugins: [new UglifyJSPlugin(), new webpack.optimize.ModuleConcatenationPlugin()],
-});
+})

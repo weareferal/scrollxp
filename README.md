@@ -42,8 +42,8 @@ import ScrollXP from "scrollxp"
 Or via **CDN**:
 
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/gsap.min.js"></script>
-<script src="https://cdn.weareferal.com/scrollxp-2.0.3.js"></script>
+<script src="https://unpkg.com/gsap/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/scrollxp/dist/scrollxp.min.js"></script>
 ```
 
 ## Usage
