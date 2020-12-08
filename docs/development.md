@@ -22,6 +22,14 @@ It's not necessary to run `npm run compile` nor `npm run bundle` first.
 
 To release, just commit all changes then run `npm run release`.
 
+## GitHub Pages
+
+To update GitHub Pages with the demos, run:
+
+```
+$ npm run deploy
+```
+
 ## To Do
 
 There are still **a ton** of work to do here, below are just a few of them:
