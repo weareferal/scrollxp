@@ -1,8 +1,18 @@
 # ScrollXP
 
-_ScrollXP_ is a library that makes it easy to drop scroll-related animations into your website using HTML data attributes. It's a bit like Alpine.js or Tailwind.css, but for animations.
+_ScrollXP_ is a library that makes it easy to drop scroll-related animations into 
+your website using HTML data attributes. It's a bit like Alpine.js or Tailwind.css 
+... but for animations.
 
 <img src="https://res.cloudinary.com/djst7cf98/image/upload/v1607394295/scroll-animations.gif" width="100%">
+
+## Overview
+
+Creating animations can be tedious. It's not always clear where the code should go 
+and there are a number of common animations you'll likely write over and over again.
+If you're not careful you JavaScript files can end up a mess. ScrollXP helps you 
+avoid this by exposing a set of data attributes that you can drop directly into 
+your HTML, making common animations quick and easy.
 
 ## Demos
 
@@ -44,9 +54,18 @@ new ScrollXP({
 })
 ```
 
+ScrollXP uses [GSAP (GreenSock)](https://github.com/greensock/GSAP) and 
+[ScrollMagic](https://github.com/janpaepke/ScrollMagic) under-the-hood.
+
+ScrollXP relies on the concept of "scenes" from ScrollMagic. A scene is a 
+section of page that will act as a container or scope for particular animations.
+You define these scenes by adding the `data-scene` attribute to elements.
+
+Within this scene you then add the animations you want to perform within the scene.
+
 Check the documentation about how to create [scenes](https://github.com/weareferal/scrollxp/blob/master/docs/scene/README.md), [animations](https://github.com/weareferal/scrollxp/blob/master/docs/animation/README.md) and [parallax effect](https://github.com/weareferal/scrollxp/blob/master/docs/parallax/README.md).
 
-## Example
+### Example
 
 ```html
 <!DOCTYPE html>
