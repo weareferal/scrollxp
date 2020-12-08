@@ -14,7 +14,7 @@ const joinRoot = path.join.bind(path, __dirname, "..");
 const BUILD_DIR = joinRoot("build");
 
 function checkBranch() {
-  return execa.shell("git rev-parse --abbrev-ref HEAD").then((result) => {
+  return execa.command("git rev-parse --abbrev-ref HEAD").then((result) => {
     if (result.stdout !== "master") {
       throw new Error(chalk.bold.red("Please run release script on master branch."));
     }
@@ -22,7 +22,7 @@ function checkBranch() {
 }
 
 function compareWithDevelop() {
-  return execa.shell("git rev-list --count master..develop").then((result) => {
+  return execa.command("git rev-list --count master..develop").then((result) => {
     if (result.stdout !== "0") {
       throw new Error(chalk.bold.red("master branch is not up-to-date with develop branch"));
     }
@@ -30,7 +30,7 @@ function compareWithDevelop() {
 }
 
 function checkWorkingTree() {
-  return execa.shell("git status -s").then((result) => {
+  return execa.command("git status -s").then((result) => {
     if (result.stdout !== "") {
       throw new Error(chalk.bold.red("Please commit local changes before releasing."));
     }
@@ -91,7 +91,7 @@ function runTask(options) {
 
   const tasks = new Listr([{
     title: "Create bundle",
-    task: () => execa.shell("npm run bundle", {
+    task: () => execa.command("npm run bundle", {
       env: {
         SCROLLXP_VERSION: options.version,
       },
@@ -99,7 +99,7 @@ function runTask(options) {
   }, {
     title: "Compile TypeScript",
     task: async () => {
-      await execa.shell("npm run compile");
+      await execa.command("npm run compile");
 
       const entry = `${BUILD_DIR}/index.js`;
       const content = fs.readFileSync(entry, "utf8");
@@ -111,12 +111,12 @@ function runTask(options) {
   }, {
     title: "Commit changes",
     task: async () => {
-      await execa.shell("git add --all");
-      await execa.shell(`git commit -m "[Build] ${options.version}"`);
+      await execa.command("git add --all");
+      await execa.command(`git commit -m "[Build] ${options.version}"`);
     }
   }, {
     title: `Bump NPM version: ${pkg.version} -> ${options.version}`,
-    task: () => execa.shell(`npm version ${options.version}`),
+    task: () => execa.command(`npm version ${options.version}`),
   }, {
     title: "Copy files to working directory",
     task: () => {
@@ -129,14 +129,14 @@ function runTask(options) {
     title: `Publish ${options.version}`,
     task: () => {
       return semver.prerelease(options.version) ?
-        execa.shell(`cd ${BUILD_DIR} && npm publish --tag beta`) :
-        execa.shell(`cd ${BUILD_DIR} && npm publish`);
+        execa.command(`cd ${BUILD_DIR} && npm publish --tag beta`) :
+        execa.command(`cd ${BUILD_DIR} && npm publish`);
     },
   }, {
     title: "Push to GitHub",
     task: async () => {
-      await execa.shell("git push");
-      await execa.shell("git push --tags");
+      await execa.command("git push");
+      await execa.command("git push --tags");
     },
   }]);
 
