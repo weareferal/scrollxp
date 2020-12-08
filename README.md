@@ -1,29 +1,17 @@
 # ScrollXP
 
-_ScrollXP_ is a library that makes it easy to create scrolling animations using HTML data attributes.
+_ScrollXP_ is a library that makes it easy to drop scroll-related animations into your website using HTML data attributes. It's a bit like Alpine.js or Tailwind.css, but for animations.
 
 <img src="https://res.cloudinary.com/djst7cf98/image/upload/v1607394295/scroll-animations.gif" width="100%">
 
 ## Demos
 
+See some simple examples in action:
+
 - [Fade In Down Animation](https://codepen.io/weareferal/full/eYdNNzq)
 - [Piano Key Animation](https://codepen.io/weareferal/full/WNGvvpY)
 - [Parallax Animation](https://codepen.io/weareferal/full/abmOOwd)
 - [Full Example](https://weareferal.github.io/scrollxp/)
-
-## Quick Access
-
-- [Installation](#installation)
-- [Usage](#usage)
-- [Configuration](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md)
-  - [Debug](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md#debug)
-  - [Breakpoints](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md#breakpoints)
-  - [Scroll To Anchors](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md#scroll-to-anchors)
-  - [Smooth Scrolling](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md#smooth-scrolling)
-- [Scene](https://github.com/weareferal/scrollxp/blob/master/docs/scene/README.md)
-- [Animation](https://github.com/weareferal/scrollxp/blob/master/docs/animation/README.md)
-- [Parallax](https://github.com/weareferal/scrollxp/blob/master/docs/parallax/README.md)
-- [Development](https://github.com/weareferal/scrollxp/blob/master/docs/development.md)
 
 ## Installation
 
@@ -48,7 +36,7 @@ Or via **CDN**:
 <script src="https://unpkg.com/scrollxp/dist/scrollxp.min.js"></script>
 ```
 
-## Usage
+## Quick Start
 
 ```js
 new ScrollXP({
@@ -106,6 +94,20 @@ Check the documentation about how to create [scenes](https://github.com/wearefer
   </body>
 </html>
 ```
+
+## Usage
+
+Check out our documentation for more detailed configuration and usage:
+
+- [Configuration](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md)
+  - [Debug](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md#debug)
+  - [Breakpoints](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md#breakpoints)
+  - [Scroll To Anchors](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md#scroll-to-anchors)
+  - [Smooth Scrolling](https://github.com/weareferal/scrollxp/blob/master/docs/configuration.md#smooth-scrolling)
+- [Scene](https://github.com/weareferal/scrollxp/blob/master/docs/scene/README.md)
+- [Animation](https://github.com/weareferal/scrollxp/blob/master/docs/animation/README.md)
+- [Parallax](https://github.com/weareferal/scrollxp/blob/master/docs/parallax/README.md)
+- [Development](https://github.com/weareferal/scrollxp/blob/master/docs/development.md)
 
 ## Questions?
 
