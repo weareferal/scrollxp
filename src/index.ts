@@ -29,7 +29,7 @@ declare let __SCROLLXP_VERSION__: string
 
 export interface ScrollViewOptions {
   container?: HTMLElement | Window
-  breakpoints: Breakpoints
+  breakpoints?: Breakpoints
   smoothScrolling?: boolean
   addIndicators?: boolean
   scrollOffset?: number
@@ -215,6 +215,14 @@ export default class ScrollXP {
     } else {
       throw new TypeError(`Default value is not a valid descriptor: ${descriptor}`)
     }
+  }
+
+  public getRegisteredScenes(): { [key: string]: SceneDescriptor } {
+    return this.registeredScenes
+  }
+
+  public getRegisteredAnimations(): { [key: string]: AnimationDescriptor } {
+    return this.registeredAnimations
   }
 
   private rebuild(): void {
