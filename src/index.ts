@@ -39,7 +39,7 @@ export interface ScrollViewOptions {
 export { IScene }
 
 export default class ScrollXP {
-  static version = __SCROLLXP_VERSION__
+  static version = typeof __SCROLLXP_VERSION__ !== "undefined" ? __SCROLLXP_VERSION__ : "test"
 
   static Animation = AnimationBuilder
   static Scene = SceneBuilder
