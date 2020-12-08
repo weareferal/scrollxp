@@ -59,9 +59,8 @@ ScrollXP uses [GSAP (GreenSock)](https://github.com/greensock/GSAP) and
 
 ScrollXP relies on the concept of "scenes" from ScrollMagic. A scene is a 
 section of page that will act as a container or scope for particular animations.
-You define these scenes by adding the `data-scene` attribute to elements.
-
-Within this scene you then add the animations you want to perform within the scene.
+You define these scenes by adding the `data-scene` attribute to elements. You 
+then add the animations you want to perform within the scene.
 
 Check the documentation about how to create [scenes](https://github.com/weareferal/scrollxp/blob/master/docs/scene/README.md), [animations](https://github.com/weareferal/scrollxp/blob/master/docs/animation/README.md) and [parallax effect](https://github.com/weareferal/scrollxp/blob/master/docs/parallax/README.md).
 
