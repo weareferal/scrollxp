@@ -107,7 +107,7 @@ function runTask(options) {
         const content = fs.readFileSync(entry, "utf8");
 
         fs.writeFileSync(entry,
-          content.replace("__SCROLLXP_VERSION__", JSON.stringify(options.version)),
+          content.replace(/__SCROLLXP_VERSION__/g, JSON.stringify(options.version)),
         );
       },
     },
