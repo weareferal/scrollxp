@@ -21,7 +21,7 @@ export default class AnimationCreator {
   public add(element: HTMLElement, descriptor: AnimationDescriptor): AnimationCreator {
     const target = descriptor.stagger ? element.children : element
 
-    if (descriptor.delay !== undefined) {
+    if (descriptor.delay !== undefined && descriptor.delay > 0) {
       this.timeline.delay(descriptor.delay)
     }
 
@@ -40,7 +40,11 @@ export default class AnimationCreator {
     }
 
     if (descriptor.label !== undefined) {
-      this.timeline.add(descriptor.label)
+      if (this.hasFromVars(descriptor) || this.hasToVars(descriptor)) {
+        this.timeline.add(descriptor.label)
+      } else {
+        this.timeline.add(descriptor.label, descriptor.position)
+      }
     }
 
     return this

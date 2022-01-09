@@ -72,7 +72,7 @@
     "eslint-plugin-prettier": "^3.2.0",
     "execa": "^5.0.0",
     "fs": "0.0.1-security",
-    "gsap": "^3.5.1",
+    "gsap": "^3.9.1",
     "include-media": "^1.4.10",
     "inquirer": "^7.3.3",
     "ip": "^1.1.5",
