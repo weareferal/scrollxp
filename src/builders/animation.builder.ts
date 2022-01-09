@@ -327,6 +327,28 @@ export default class AnimationBuilder implements IBuilder<AnimationDescriptor> {
     return this
   }
 
+  public fromHeight(value?: ParamNumber): AnimationBuilder {
+    if (value !== undefined) {
+      if (ParamHelper.isNumber(value)) {
+        this.descriptor.from.height = ParamHelper.toInteger(value)
+      } else {
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "fromHeight" isn't a valid number: "${value}"`)
+      }
+    }
+    return this
+  }
+
+  public toHeight(value?: ParamNumber): AnimationBuilder {
+    if (value !== undefined) {
+      if (ParamHelper.isNumber(value)) {
+        this.descriptor.to.height = ParamHelper.toInteger(value)
+      } else {
+        throw new TypeError(`[${AnimationBuilder.NAMESPACE}] Value for "toHeight" isn't a valid number: "${value}"`)
+      }
+    }
+    return this
+  }
+
   public build(): AnimationDescriptor {
     return this.descriptor
   }

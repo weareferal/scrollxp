@@ -57,6 +57,7 @@ export interface StateProperty {
   scale?: number
   rotation?: number
   width?: number
+  height?: number
 }
 
 export interface DefaultDescriptors {

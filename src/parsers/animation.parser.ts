@@ -56,6 +56,8 @@ export default class AnimationParser extends BaseParser<AnimationDescriptor> {
     builder.toRotation(this.get(el, "to-rotation"))
     builder.fromWidth(this.get(el, "from-width"))
     builder.toWidth(this.get(el, "to-width"))
+    builder.fromHeight(this.get(el, "from-height"))
+    builder.toHeight(this.get(el, "to-height"))
     return builder.build()
   }
 }

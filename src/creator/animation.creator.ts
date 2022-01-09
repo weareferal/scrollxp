@@ -85,6 +85,10 @@ export default class AnimationCreator {
       vars.width = descriptor.from.width
     }
 
+    if (descriptor.from.height !== undefined) {
+      vars.height = descriptor.from.height
+    }
+
     return vars
   }
 
@@ -121,6 +125,10 @@ export default class AnimationCreator {
 
     if (descriptor.to.width !== undefined) {
       vars.width = descriptor.to.width
+    }
+
+    if (descriptor.to.height !== undefined) {
+      vars.height = descriptor.to.height
     }
 
     return vars

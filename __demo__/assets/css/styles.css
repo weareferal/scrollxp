@@ -1,0 +1,250 @@
+@import url(../../../node_modules/normalize.css/normalize.css);
+/* Default */
+/* Colors */
+/* Font Weights */
+/* Breakpoints */
+html {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 62.5%; }
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit; }
+
+body {
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Courier New", sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.1;
+  color: #010101;
+  background-color: #ffffff; }
+
+a {
+  color: #010101;
+  text-decoration: none;
+  cursor: pointer; }
+
+a:hover {
+  text-decoration: underline; }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure {
+  margin: 0; }
+
+img {
+  display: block;
+  max-width: 100%; }
+
+ul,
+ol {
+  padding: 0;
+  margin: 0;
+  list-style: none; }
+
+button {
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  background-color: transparent;
+  border-width: 0; }
+
+hr {
+  margin: 0;
+  border: 0; }
+
+.content {
+  width: 100%;
+  overflow: hidden; }
+
+.menu {
+  display: none; }
+  @media (min-width: 30em) {
+    .menu {
+      position: fixed;
+      top: 1rem;
+      bottom: 7rem;
+      left: 1rem;
+      z-index: 2;
+      display: block;
+      width: 23rem;
+      padding: 2rem 3.5rem 2rem 4rem;
+      list-style-type: disc;
+      border: 1px dashed #010101; } }
+
+.menu__item {
+  padding-top: 1rem;
+  padding-bottom: 1rem; }
+
+.menu__link {
+  transition: color .3s; }
+
+.menu__link.is-active {
+  color: #ff0000; }
+
+.page {
+  width: 100%;
+  height: 100vh;
+  overflow: auto; }
+
+.scene {
+  position: relative;
+  display: flex;
+  flex-direction: column; }
+
+.scene--row {
+  flex-direction: row; }
+
+.scene__row {
+  display: flex;
+  width: 100vw; }
+
+.scene__square {
+  position: relative;
+  width: 10rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  margin: 2.5rem 0;
+  border: 2px solid #010101; }
+  @media (min-width: 30em) {
+    .scene__square {
+      width: 20rem;
+      height: 20rem;
+      margin: 5rem; } }
+
+.scene__square--less-margin {
+  margin: 1rem; }
+
+.scene__square--aligned-start {
+  align-self: flex-start; }
+
+.scene__square--aligned-center {
+  align-self: center; }
+
+.scene__square--aligned-end {
+  align-self: flex-end; }
+
+.scene__vertical-line {
+  width: 1px;
+  height: 100vw;
+  background-color: #000; }
+
+.scene__horizontal-line {
+  height: 1px;
+  width: 100vw;
+  background-color: #000; }
+
+.scene__index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: #010101;
+  border-radius: 50%; }
+
+.scene__index--right-corner {
+  position: absolute;
+  top: -2rem;
+  right: 2rem; }
+
+.scene__col {
+  width: 50%; }
+
+.scene__content {
+  width: 100%;
+  height: 200px;
+  padding: 2rem;
+  background-color: #f2f2f2; }
+
+.scene__sidebar {
+  width: 100%;
+  height: 600px;
+  padding: 2rem;
+  border: 2px solid #010101; }
+
+.scrollbar-track {
+  display: none !important; }
+  @media (min-width: 64em) {
+    .scrollbar-track {
+      display: block !important;
+      background-color: transparent !important; } }
+
+.scrollbar-thumb {
+  display: none !important; }
+  @media (min-width: 64em) {
+    .scrollbar-thumb {
+      display: block !important;
+      background-color: #010101 !important;
+      border-radius: 0 !important; } }
+
+.scrollbar-track-x,
+.scrollbar-thumb-x {
+  display: none !important; }
+
+.section {
+  width: 100%;
+  height: 200vh;
+  padding-top: 2rem;
+  padding-right: 1rem;
+  padding-left: 1rem; }
+  @media (min-width: 30em) {
+    .section {
+      padding-top: 10vh;
+      padding-right: 5vw;
+      padding-left: 20vw; } }
+
+.section__title {
+  margin-bottom: 2rem; }
+
+.section > p {
+  margin-bottom: 5rem; }
+
+.square {
+  width: 200px;
+  height: 200px;
+  margin-top: 100px;
+  border: 1px solid #010101; }
+
+.toggle-button {
+  display: none; }
+  @media (min-width: 30em) {
+    .toggle-button {
+      position: fixed;
+      bottom: 1rem;
+      left: 1rem;
+      z-index: 2;
+      display: block;
+      padding: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      cursor: pointer;
+      background-color: #010101;
+      border: 0;
+      outline: 0; } }
+
+.toggle-button > span {
+  display: inline-block;
+  padding: 1rem;
+  margin-left: 0.5rem;
+  font-size: 1.2rem;
+  text-transform: uppercase; }
+
+.toggle-button > .off {
+  background-color: #b60303; }
+
+.toggle-button > .on {
+  background-color: #47b147; }

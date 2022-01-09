@@ -28,6 +28,8 @@ describe(`Animation builder "default" test`, () => {
       .toRotation(360)
       .fromWidth(35)
       .toWidth(70)
+      .fromHeight(40)
+      .toHeight(55)
       .build()
 
     const descriptor = new AnimationBuilder("custom-name", defaultOptions).build()
@@ -56,6 +58,8 @@ describe(`Animation builder "default" test`, () => {
     expect(descriptor.to.rotation).to.equal(360)
     expect(descriptor.from.width).to.equal(35)
     expect(descriptor.to.width).to.equal(70)
+    expect(descriptor.from.height).to.equal(40)
+    expect(descriptor.to.height).to.equal(55)
   })
   it("Shouldn't be possible to set a default name", () => {
     const defaultOptions = new AnimationBuilder("default-name").build()
@@ -696,6 +700,54 @@ describe(`Animation builder "toWidth" test`, () => {
   it("Any other input should return error", () => {
     expect(() => {
       new AnimationBuilder().toWidth("bla").build()
+    }).to.throw(TypeError)
+  })
+})
+
+describe(`Animation builder "fromHeight" test`, () => {
+  it("Integer input should return integer number", () => {
+    const descriptor = new AnimationBuilder().fromHeight(100).build()
+    expect(100).to.equal(descriptor.from.height)
+  })
+  it("Float input should return integer number", () => {
+    const descriptor = new AnimationBuilder().fromHeight(50.3).build()
+    expect(50).to.equal(descriptor.from.height)
+  })
+  it("String input should return number", () => {
+    const descriptor = new AnimationBuilder().fromHeight("45.6").build()
+    expect(45).to.equal(descriptor.from.height)
+  })
+  it("Empty input should return undefined", () => {
+    const descriptor = new AnimationBuilder().fromHeight().build()
+    expect(undefined).to.equal(descriptor.from.height)
+  })
+  it("Any other input should return error", () => {
+    expect(() => {
+      new AnimationBuilder().fromHeight("bla").build()
+    }).to.throw(TypeError)
+  })
+})
+
+describe(`Animation builder "toHeight" test`, () => {
+  it("Integer input should return integer number", () => {
+    const descriptor = new AnimationBuilder().toHeight(100).build()
+    expect(100).to.equal(descriptor.to.height)
+  })
+  it("Float input should return integer number", () => {
+    const descriptor = new AnimationBuilder().toHeight(50.3).build()
+    expect(50).to.equal(descriptor.to.height)
+  })
+  it("String input should return number", () => {
+    const descriptor = new AnimationBuilder().toHeight("45.6").build()
+    expect(45).to.equal(descriptor.to.height)
+  })
+  it("Empty input should return undefined", () => {
+    const descriptor = new AnimationBuilder().toHeight().build()
+    expect(undefined).to.equal(descriptor.to.height)
+  })
+  it("Any other input should return error", () => {
+    expect(() => {
+      new AnimationBuilder().toHeight("bla").build()
     }).to.throw(TypeError)
   })
 })

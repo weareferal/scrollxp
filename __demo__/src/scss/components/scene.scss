@@ -45,6 +45,18 @@
   align-self: flex-end;
 }
 
+.scene__vertical-line {
+  width: 1px;
+  height: 100vw;
+  background-color: #000;
+}
+
+.scene__horizontal-line {
+  height: 1px;
+  width: 100vw;
+  background-color: #000;
+}
+
 .scene__index {
   display: inline-flex;
   align-items: center;

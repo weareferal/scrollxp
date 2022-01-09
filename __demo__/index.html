@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Scroll XP</title>
-    <link rel="stylesheet" href="assets/css/styles.min.css" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/ScrollToPlugin.min.js"></script>
   </head>
@@ -312,6 +312,19 @@
             </div>
           </div>
         </section>
+        <section class="section" id="others">
+          <h1 class="section__title">Others</h1>
+          <p>Some examples with animation properties.</p>
+          <p><strong>Width and Height</strong></p>
+          <div class="scene" data-scene data-scene-duration="100%">
+            <div class="scene__row">
+              <div class="scene__horizontal-line" data-animate data-animate-from-width="0" data-animate-position="start"></div>
+            </div>
+            <div class="scene__row">
+              <div class="scene__vertical-line" data-animate data-animate-from-height="0" data-animate-position="start"></div>
+            </div>
+          </div>
+        </section>
       </div>
     </main>
 
@@ -330,6 +343,9 @@
       </li>
       <li class="menu__item">
         <a class="menu__link" href="#registered-scene">Registered Scene</a>
+      </li>
+      <li class="menu__item">
+        <a class="menu__link" href="#others">Others</a>
       </li>
     </ul>
 
