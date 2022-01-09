@@ -40,7 +40,11 @@ export default class AnimationCreator {
     }
 
     if (descriptor.label !== undefined) {
-      this.timeline.add(descriptor.label, descriptor.position)
+      if (this.hasFromVars(descriptor) || this.hasToVars(descriptor)) {
+        this.timeline.add(descriptor.label)
+      } else {
+        this.timeline.add(descriptor.label, descriptor.position)
+      }
     }
 
     return this
