@@ -134,10 +134,10 @@
       },
       {
         title: `Publish ${options.version}`,
-        task: () => {
+        task: async () => {
           return semver.prerelease(options.version) ?
-            execa(`cd ${BUILD_DIR} && npm publish --tag beta`) :
-            execa(`cd ${BUILD_DIR} && npm publish`);
+            await execa(`cd ${BUILD_DIR} && npm publish --tag beta`) :
+            await execa(`cd ${BUILD_DIR} && npm publish`);
         },
       },
       {
