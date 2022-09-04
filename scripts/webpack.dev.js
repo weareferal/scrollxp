@@ -2,6 +2,7 @@ const ip = require('ip');
 const path = require('path');
 const { merge } = require('webpack-merge');
 const baseConfig = require('./webpack.base');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const joinRoot = path.join.bind(path, __dirname, '..')
 
@@ -17,19 +18,8 @@ module.exports = merge(baseConfig, {
     filename: 'app.js',
     publicPath: '/',
   },
-  module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        enforce: 'pre',
-        use: [
-          {
-            loader: 'eslint-loader',
-          },
-        ],
-        include: [joinRoot('src'),joinRoot('__demo__')],
-      },
-    ],
-  }
+  plugins: [new ESLintPlugin({
+    extensions: ['ts'],
+  })]
 });
 
